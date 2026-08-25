@@ -1,26 +1,33 @@
 // Chart utility functions for the dashboard
+import i18n from "@/lib/i18n";
 import { formatCompactNumber } from "@/lib/utils/numbers";
+
+// 时间格式化跟随当前界面语言（在渲染时读取 i18n.language）
+function getChartLocale(): string {
+	return i18n.language || "en";
+}
 
 // Format timestamp based on bucket size
 export function formatTimestamp(timestamp: string, bucketSizeSeconds: number): string {
 	const date = new Date(timestamp);
+	const locale = getChartLocale();
 
 	if (bucketSizeSeconds >= 86400) {
 		// Daily buckets: "Jan 20"
-		return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+		return date.toLocaleDateString(locale, { month: "short", day: "numeric" });
 	} else if (bucketSizeSeconds >= 3600) {
 		// Hourly buckets: "10:00"
-		return date.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: false });
+		return date.toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit", hour12: false });
 	} else {
 		// Sub-hourly: "10:15"
-		return date.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: false });
+		return date.toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit", hour12: false });
 	}
 }
 
 // Format full timestamp for tooltip
 export function formatFullTimestamp(timestamp: string): string {
 	const date = new Date(timestamp);
-	return date.toLocaleString("en-US", {
+	return date.toLocaleString(getChartLocale(), {
 		month: "short",
 		day: "numeric",
 		hour: "2-digit",
@@ -67,17 +74,23 @@ export function getModelColor(index: number): string {
 // the legend already says "+N more", so the data path follows the palette.
 export const TOP_SERIES_LIMIT = MODEL_COLORS.length;
 export const OTHER_SERIES_KEY = "__other__";
-export const OTHER_SERIES_LABEL = "Other";
 export const OTHER_SERIES_COLOR = "#94a3b8"; // slate-400
 
-export const UNNAMED_MODEL_LABEL = "(unnamed)";
+// 聚合系列的展示文案，在渲染时通过 i18n 取值（跟随界面语言）
+export function getOtherSeriesLabel(): string {
+	return i18n.t("dashboard:chart.otherSeries");
+}
+
+export function getUnnamedModelLabel(): string {
+	return i18n.t("dashboard:chart.unnamedModel");
+}
 
 // Resolves a raw model value to its display label: the canonical model name
 // when one is known (e.g. Bedrock inference-profile IDs mapped via key
 // aliases), the raw value otherwise.
 export function displayModelLabel(model: string, labels?: Record<string, string>): string {
-	if (model === OTHER_SERIES_KEY) return OTHER_SERIES_LABEL;
-	if (model === "") return UNNAMED_MODEL_LABEL;
+	if (model === OTHER_SERIES_KEY) return getOtherSeriesLabel();
+	if (model === "") return getUnnamedModelLabel();
 	return labels?.[model] ?? model;
 }
 

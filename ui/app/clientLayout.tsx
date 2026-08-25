@@ -132,19 +132,21 @@ function MinimalShell({ children }: { children: React.ReactNode }) {
 	return (
 		<div className="dark:bg-card custom-scrollbar content-container my-[0.5rem] h-[calc(100dvh-1rem)] w-full overflow-auto rounded-md border border-gray-200 bg-white px-10 dark:border-zinc-800">
 			<main className="custom-scrollbar content-container-inner relative mx-auto flex h-full min-h-0 flex-col overflow-y-hidden p-4">
-				{children}
+				<Suspense fallback={<FullPageLoader />}>{children}</Suspense>
 			</main>
 		</div>
 	);
 }
 
+// 页面级 i18n namespace 懒加载时会触发 Suspense；边界只包页面内容，
+// 侧边栏等外壳（仅用 common 包，已随主 bundle 加载）不受影响。
 function FullPage({ config, children }: { config: BifrostConfig | undefined; children: React.ReactNode }) {
 	const pathname = useLocation({ select: (l) => l.pathname });
 	if (config && config.is_db_connected) {
-		return children;
+		return <Suspense fallback={<FullPageLoader />}>{children}</Suspense>;
 	}
 	if (config && config.is_logs_connected && pathname.startsWith("/workspace/logs")) {
-		return children;
+		return <Suspense fallback={<FullPageLoader />}>{children}</Suspense>;
 	}
 	return <NotAvailableBanner />;
 }

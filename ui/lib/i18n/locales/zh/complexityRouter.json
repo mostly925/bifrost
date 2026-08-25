@@ -1,0 +1,60 @@
+{
+	"noPermissionEntity": "复杂度路由",
+	"title": "复杂度路由",
+	"description": "调整传入请求划分到四个层级的方式。阈值与关键词列表共同决定 <1>complexity_tier</1> 字段，供路由规则引用。",
+	"docs": "文档",
+	"retry": "重试",
+	"noConfig": "暂无可用的复杂度路由配置。",
+	"spectrum": {
+		"title": "复杂度谱"
+	},
+	"boundaries": {
+		"title": "层级边界",
+		"simpleMedium": {
+			"label": "Simple → Medium",
+			"description": "分数等于或低于该值的请求归类为 SIMPLE。"
+		},
+		"mediumComplex": {
+			"label": "Medium → Complex",
+			"description": "分数高于 simple_medium 且等于或低于该值的请求归类为 MEDIUM。"
+		},
+		"complexReasoning": {
+			"label": "Complex → Reasoning",
+			"description": "分数高于该值的请求归类为 REASONING，介于两者之间的为 COMPLEX。"
+		}
+	},
+	"errors": {
+		"numberBetween": "请输入 0 到 1 之间的数字",
+		"greaterThanZero": "必须大于 0",
+		"lessThanOne": "必须小于 1",
+		"greaterThanSimpleMedium": "必须大于 Simple → Medium",
+		"greaterThanMediumComplex": "必须大于 Medium → Complex",
+		"simpleKeywordsEmpty": "Simple 关键词不能为空",
+		"codeKeywordsEmpty": "Code 关键词不能为空",
+		"technicalKeywordsEmpty": "Technical 关键词不能为空",
+		"reasoningKeywordsEmpty": "Reasoning 关键词不能为空"
+	},
+	"keywords": {
+		"title": "关键词列表",
+		"hint": "保存时自动转为小写并去重。每个列表至少需要一条关键词。",
+		"countOne": "条",
+		"countMany": "条",
+		"placeholder": "输入关键词后按回车"
+	},
+	"toasts": {
+		"resetToDefaults": "已恢复默认配置",
+		"saved": "配置已保存"
+	},
+	"footer": {
+		"restoreDefaults": "恢复默认",
+		"discardChanges": "放弃更改",
+		"saving": "保存中…",
+		"saveChanges": "保存更改"
+	},
+	"restoreDialog": {
+		"title": "恢复默认",
+		"description": "此操作会将所有层级边界和关键词列表重置为出厂默认值，当前配置将丢失且无法撤销。",
+		"cancel": "取消",
+		"confirm": "恢复默认"
+	}
+}

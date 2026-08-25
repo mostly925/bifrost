@@ -1,0 +1,66 @@
+{
+	"sidebar": {
+		"showFilters": "Show filters",
+		"title": "Filters",
+		"reset": "Reset",
+		"hideFilters": "Hide filters"
+	},
+	"list": {
+		"searchPlaceholder": "Search...",
+		"noResults": "No results",
+		"useValue": "Use <1>\"{{value}}\"</1>"
+	},
+	"sections": {
+		"status": "Status",
+		"stopReason": "Stop Reason",
+		"app": "App",
+		"providers": "Providers",
+		"type": "Type",
+		"models": "Models",
+		"aliases": "Aliases",
+		"selectedKeys": "Selected Keys",
+		"virtualKeys": "Virtual Keys",
+		"routingEngines": "Routing Engines",
+		"routingRules": "Routing Rules",
+		"session": "Session",
+		"user": "User",
+		"teams": "Teams",
+		"customers": "Customers",
+		"businessUnits": "Business Units",
+		"cost": "Cost",
+		"localCaching": "Local Caching",
+		"metadata": "Metadata",
+		"toolNames": "Tool Names",
+		"servers": "Servers"
+	},
+	"placeholders": {
+		"stopReason": "Search or add a stop reason",
+		"apps": "Search apps",
+		"providers": "Search providers",
+		"models": "Search or add a model",
+		"aliases": "Search or add an alias",
+		"keys": "Search keys",
+		"virtualKeys": "Search virtual keys",
+		"engines": "Search engines",
+		"rules": "Search rules",
+		"parentRequestId": "Parent request ID",
+		"user": "Search or add a user",
+		"team": "Search or add a team",
+		"customer": "Search or add a customer",
+		"businessUnit": "Search or add a business unit",
+		"metadata": "Search metadata...",
+		"customValue": "Custom value...",
+		"tool": "Search or add a tool",
+		"server": "Search or add a server"
+	},
+	"cost": {
+		"showMissingOnly": "Show missing cost only"
+	},
+	"localCaching": {
+		"direct": "Direct cache",
+		"semantic": "Semantic cache"
+	},
+	"metadata": {
+		"noKeys": "No metadata keys"
+	}
+}

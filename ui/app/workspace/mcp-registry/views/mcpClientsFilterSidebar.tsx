@@ -5,8 +5,10 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scrollArea";
 import { useGetVirtualKeysQuery } from "@/lib/store";
 import { cn } from "@/lib/utils";
+import type { TFunction } from "i18next";
 import { ChevronDown, LoaderCircle, PanelLeftClose, PanelLeftOpen, RotateCcw, Search } from "lucide-react";
 import { type Ref, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const COLLAPSE_STORAGE_KEY = "mcp-clients-filter-sidebar-collapsed";
 const VK_PAGE_SIZE = 25;
@@ -46,38 +48,48 @@ interface FilterOption {
 
 // Facet values are fixed enums (schemas.MCPConnectionType / MCPAuthType) so we
 // hardcode them here rather than fetching a distinct-values endpoint.
+// Connection types are protocol names and stay untranslated.
 const CONNECTION_TYPE_OPTIONS: FilterOption[] = [
 	{ value: "http", label: "HTTP" },
 	{ value: "sse", label: "SSE" },
 	{ value: "stdio", label: "STDIO" },
 ];
 
-const AUTH_TYPE_OPTIONS: FilterOption[] = [
-	{ value: "none", label: "None" },
-	{ value: "headers", label: "Headers" },
-	{ value: "oauth", label: "OAuth" },
-	{ value: "per_user_oauth", label: "Per-User OAuth" },
-	{ value: "per_user_headers", label: "Per-User Headers" },
-	{ value: "token_exchange", label: "Token Exchange" },
-];
+// Labels resolved at render time so they follow the UI language.
+function buildAuthTypeOptions(t: TFunction<"mcpRegistry">): FilterOption[] {
+	return [
+		{ value: "none", label: t("clients.filters.authType.none") },
+		{ value: "headers", label: t("clients.filters.authType.headers") },
+		{ value: "oauth", label: t("clients.filters.authType.oauth") },
+		{ value: "per_user_oauth", label: t("clients.filters.authType.perUserOauth") },
+		{ value: "per_user_headers", label: t("clients.filters.authType.perUserHeaders") },
+		{ value: "token_exchange", label: t("clients.filters.authType.tokenExchange") },
+	];
+}
 
 // Connection state is runtime, not a column — the backend resolves these
 // against live engine state. "unstable" covers everything not healthy.
-const STATE_OPTIONS: FilterOption[] = [
-	{ value: "healthy", label: "Healthy" },
-	{ value: "unstable", label: "Unstable" },
-];
+function buildStateOptions(t: TFunction<"mcpRegistry">): FilterOption[] {
+	return [
+		{ value: "healthy", label: t("clients.filters.state.healthy") },
+		{ value: "unstable", label: t("clients.filters.state.unstable") },
+	];
+}
 
-const CODE_MODE_OPTIONS: FilterOption[] = [
-	{ value: "true", label: "Enabled" },
-	{ value: "false", label: "Disabled" },
-];
+function buildCodeModeOptions(t: TFunction<"mcpRegistry">): FilterOption[] {
+	return [
+		{ value: "true", label: t("clients.filters.enabled") },
+		{ value: "false", label: t("clients.filters.disabled") },
+	];
+}
 
 // Status maps to the `disabled` column: an enabled client has disabled=false.
-const STATUS_OPTIONS: FilterOption[] = [
-	{ value: "false", label: "Enabled" },
-	{ value: "true", label: "Disabled" },
-];
+function buildStatusOptions(t: TFunction<"mcpRegistry">): FilterOption[] {
+	return [
+		{ value: "false", label: t("clients.filters.enabled") },
+		{ value: "true", label: t("clients.filters.disabled") },
+	];
+}
 
 interface SidebarProps {
 	filters: MCPClientFilters;
@@ -89,6 +101,7 @@ interface SidebarProps {
 // ---------------------------------------------------------------------------
 
 export function MCPClientsFilterSidebar({ filters, onFiltersChange }: SidebarProps) {
+	const { t } = useTranslation("mcpRegistry");
 	const [collapsed, setCollapsed] = useState(false);
 
 	useEffect(() => {
@@ -129,12 +142,12 @@ export function MCPClientsFilterSidebar({ filters, onFiltersChange }: SidebarPro
 				type="button"
 				onClick={toggleCollapsed}
 				className="bg-card group flex h-full w-10 shrink-0 cursor-pointer flex-col items-center gap-3 rounded-r-md py-4 text-sm font-medium"
-				title="Show filters"
-				aria-label="Show filters"
+				title={t("clients.filters.showAria")}
+				aria-label={t("clients.filters.showAria")}
 				data-testid="mcpClientsFilterSidebar-toggle-show"
 			>
 				<PanelLeftOpen className="text-muted-foreground group-hover:text-foreground size-4 transition-colors" />
-				<span className="rotate-180 select-none [writing-mode:vertical-rl]">Filters</span>
+				<span className="rotate-180 select-none [writing-mode:vertical-rl]">{t("clients.filters.title")}</span>
 				{activeFilterCount > 0 && (
 					<span className="bg-primary/10 text-primary flex size-6 items-center justify-center rounded-full text-xs font-medium">
 						{activeFilterCount}
@@ -147,7 +160,7 @@ export function MCPClientsFilterSidebar({ filters, onFiltersChange }: SidebarPro
 	return (
 		<div className="bg-card flex h-full w-64 shrink-0 flex-col rounded-r-md">
 			<div className="flex h-11 items-center justify-between border-b pr-2 pl-5">
-				<span className="text-sm font-semibold">Filters</span>
+				<span className="text-sm font-semibold">{t("clients.filters.title")}</span>
 				<div className="flex items-center gap-1">
 					{activeFilterCount > 0 && (
 						<Button
@@ -158,7 +171,7 @@ export function MCPClientsFilterSidebar({ filters, onFiltersChange }: SidebarPro
 							data-testid="mcpClientsFilterSidebar-reset-button"
 						>
 							<RotateCcw className="size-3" />
-							Reset
+							{t("clients.filters.reset")}
 						</Button>
 					)}
 					<Button
@@ -166,8 +179,8 @@ export function MCPClientsFilterSidebar({ filters, onFiltersChange }: SidebarPro
 						size="icon"
 						className="size-7"
 						onClick={toggleCollapsed}
-						title="Hide filters"
-						aria-label="Hide filters"
+						title={t("clients.filters.hideAria")}
+						aria-label={t("clients.filters.hideAria")}
 						data-testid="mcpClientsFilterSidebar-toggle-hide"
 					>
 						<PanelLeftClose className="size-4" />
@@ -178,7 +191,7 @@ export function MCPClientsFilterSidebar({ filters, onFiltersChange }: SidebarPro
 			<ScrollArea className="flex flex-1 overflow-y-auto p-2 pb-0" viewportClassName="no-table">
 				<div className="flex grow flex-col gap-1">
 					<CheckboxFilterSection
-						title="Connection Type"
+						title={t("clients.filters.sections.connectionType")}
 						options={CONNECTION_TYPE_OPTIONS}
 						selected={filters.connection_types}
 						defaultOpen
@@ -186,29 +199,29 @@ export function MCPClientsFilterSidebar({ filters, onFiltersChange }: SidebarPro
 						testIdPrefix="mcp-clients-filter-connection-type"
 					/>
 					<CheckboxFilterSection
-						title="Auth Type"
-						options={AUTH_TYPE_OPTIONS}
+						title={t("clients.filters.sections.authType")}
+						options={buildAuthTypeOptions(t)}
 						selected={filters.auth_types}
 						onChange={(auth_types) => onFiltersChange({ ...filters, auth_types })}
 						testIdPrefix="mcp-clients-filter-auth-type"
 					/>
 					<CheckboxFilterSection
-						title="State"
-						options={STATE_OPTIONS}
+						title={t("clients.filters.sections.state")}
+						options={buildStateOptions(t)}
 						selected={filters.states}
 						onChange={(states) => onFiltersChange({ ...filters, states })}
 						testIdPrefix="mcp-clients-filter-state"
 					/>
 					<CheckboxFilterSection
-						title="Code Mode"
-						options={CODE_MODE_OPTIONS}
+						title={t("clients.filters.sections.codeMode")}
+						options={buildCodeModeOptions(t)}
 						selected={filters.code_mode}
 						onChange={(code_mode) => onFiltersChange({ ...filters, code_mode })}
 						testIdPrefix="mcp-clients-filter-code-mode"
 					/>
 					<CheckboxFilterSection
-						title="Status"
-						options={STATUS_OPTIONS}
+						title={t("clients.filters.sections.status")}
+						options={buildStatusOptions(t)}
 						selected={filters.status}
 						onChange={(status) => onFiltersChange({ ...filters, status })}
 						testIdPrefix="mcp-clients-filter-status"
@@ -346,7 +359,7 @@ function SearchableCheckboxList({
 	pinnedItems = [],
 	isSelected,
 	onToggle,
-	placeholder = "Search...",
+	placeholder,
 	inputRef,
 	testIdPrefix,
 	onSearch,
@@ -364,6 +377,8 @@ function SearchableCheckboxList({
 	onSearch?: (query: string) => void;
 	fetching?: boolean;
 }) {
+	const { t } = useTranslation("mcpRegistry");
+	const resolvedPlaceholder = placeholder ?? t("clients.filters.searchPlaceholder");
 	const [query, setQuery] = useState("");
 	const normalized = query.trim().toLowerCase();
 	const filtered = normalized ? items.filter((item) => item.label.toLowerCase().includes(normalized)) : items;
@@ -395,7 +410,7 @@ function SearchableCheckboxList({
 					ref={inputRef}
 					value={query}
 					onChange={(e) => setQuery(e.target.value)}
-					placeholder={placeholder}
+					placeholder={resolvedPlaceholder}
 					className="h-8 border-0 pl-8 text-xs"
 					data-testid={testIdPrefix ? `${testIdPrefix}-search` : undefined}
 				/>
@@ -409,7 +424,7 @@ function SearchableCheckboxList({
 					testId={testIdPrefix ? `${testIdPrefix}-checkbox-${item.key}` : undefined}
 				/>
 			))}
-			{filtered.length === 0 && <div className="text-muted-foreground flex h-9 items-center px-3 text-xs">No results</div>}
+			{filtered.length === 0 && <div className="text-muted-foreground flex h-9 items-center px-3 text-xs">{t("clients.filters.noResults")}</div>}
 		</>
 	);
 }
@@ -426,6 +441,7 @@ function SearchableCheckboxList({
 const ALL_VKS_KEY = "__all_virtual_keys__";
 
 function VKAccessFilterSection({ filters, onFiltersChange }: SidebarProps) {
+	const { t } = useTranslation("mcpRegistry");
 	const hasActive = filters.only_all_vks || filters.virtual_keys.length > 0;
 	const [opened, setOpened] = useState(hasActive);
 	const [searchQuery, setSearchQuery] = useState("");
@@ -450,11 +466,11 @@ function VKAccessFilterSection({ filters, onFiltersChange }: SidebarProps) {
 	};
 
 	return (
-		<FilterSection title="VK Access" defaultOpen={hasActive} onOpenChange={setOpened} testId="mcp-clients-filter-vk-access-toggle">
+		<FilterSection title={t("clients.filters.sections.vkAccess")} defaultOpen={hasActive} onOpenChange={setOpened} testId="mcp-clients-filter-vk-access-toggle">
 			<SearchableCheckboxList
 				inputRef={searchInputRef}
-				placeholder="Search virtual keys"
-				pinnedItems={[{ key: ALL_VKS_KEY, label: "All virtual keys" }]}
+				placeholder={t("clients.filters.searchVirtualKeys")}
+				pinnedItems={[{ key: ALL_VKS_KEY, label: t("clients.filters.allVirtualKeys") }]}
 				items={virtualKeys.map((vk) => ({ key: vk.id, label: vk.name }))}
 				isSelected={isSelected}
 				onToggle={toggle}

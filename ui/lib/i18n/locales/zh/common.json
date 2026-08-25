@@ -1,0 +1,186 @@
+{
+	"nav": {
+		"observability": {
+			"label": "可观测性",
+			"dashboard": "仪表盘",
+			"llmLogs": "LLM 日志",
+			"mcpLogs": "MCP 日志",
+			"connectors": "连接器",
+			"logsSettings": "日志设置"
+		},
+		"models": {
+			"label": "模型",
+			"catalog": "模型目录",
+			"providers": "模型供应商",
+			"budgetsLimits": "预算与限额",
+			"routingRules": "路由规则",
+			"complexityRouter": "复杂度路由",
+			"circuitBreaker": "熔断器",
+			"pricingOverrides": "定价覆盖",
+			"settings": "模型设置"
+		},
+		"mcpGateway": {
+			"label": "MCP 网关",
+			"catalog": "MCP 目录",
+			"library": "MCP 库",
+			"toolGroups": "工具组",
+			"authSessions": "授权会话",
+			"oauthGrants": "OAuth 授权",
+			"settings": "MCP 设置"
+		},
+		"plugins": "插件",
+		"alerting": {
+			"label": "告警",
+			"channels": "通知渠道",
+			"rules": "规则",
+			"history": "历史"
+		},
+		"governance": {
+			"label": "治理",
+			"virtualKeys": "虚拟密钥",
+			"users": "用户",
+			"teams": "团队",
+			"businessUnits": "业务单元",
+			"customers": "客户",
+			"userProvisioning": "用户同步",
+			"rolesPermissions": "角色与权限",
+			"accessProfiles": "访问配置",
+			"auditLogs": "审计日志"
+		},
+		"guardrails": {
+			"label": "护栏",
+			"rules": "规则",
+			"providers": "供应商"
+		},
+		"webhooks": "Webhooks",
+		"edgeControl": {
+			"label": "边缘控制",
+			"devices": "设备",
+			"approvals": "审批",
+			"settings": "边缘设置"
+		},
+		"clusterConfig": "集群配置",
+		"adaptiveRouting": {
+			"label": "自适应路由",
+			"dashboard": "仪表盘",
+			"settings": "设置"
+		},
+		"promptRepository": "提示词仓库",
+		"skillsRepository": "技能仓库",
+		"evals": "评测",
+		"settings": {
+			"label": "设置",
+			"clientSettings": "客户端设置",
+			"compatibility": "兼容性",
+			"caching": "缓存",
+			"security": "安全",
+			"proxy": "代理",
+			"apiKeys": "API 密钥",
+			"performanceTuning": "性能调优",
+			"featureFlags": "功能开关",
+			"branding": "品牌",
+			"licenseInfo": "许可证信息"
+		},
+		"external": {
+			"discord": "Discord 服务器",
+			"github": "GitHub 仓库",
+			"reportBug": "报告问题",
+			"docs": "完整文档"
+		}
+	},
+	"sidebar": {
+		"searchPlaceholder": "搜索...",
+		"searchAria": "搜索侧边栏导航",
+		"collapseAria": "收起侧边栏",
+		"expandAria": "展开侧边栏",
+		"userMenuAria": "用户菜单",
+		"logout": "退出登录",
+		"logoutAria": "退出登录",
+		"toggleThemeAria": "切换主题",
+		"toggleLanguageAria": "切换语言",
+		"restartRequired": {
+			"title": "需要重启",
+			"defaultReason": "配置更改需要重启服务器才能生效。"
+		},
+		"onboardingIncomplete": {
+			"title": "初始化清单未完成",
+			"stepsLeft_one": "剩余 {{count}} 个设置步骤。未完成这些步骤会使你的 Bifrost 配置存在风险。",
+			"stepsLeft_other": "剩余 {{count}} 个设置步骤。未完成这些步骤会使你的 Bifrost 配置存在风险。",
+			"resume": "继续设置"
+		},
+		"newRelease": {
+			"available": "{{name}} 现已发布。",
+			"viewNotes": "查看发布说明"
+		},
+		"productionSetup": {
+			"title": "需要生产环境部署帮助吗？",
+			"offer": "我们提供生产环境部署帮助，包括定制集成和专属支持。",
+			"bookDemo": "与我们的团队<1>预约演示</1>。"
+		}
+	},
+	"theme": {
+		"light": "浅色",
+		"dark": "深色",
+		"system": "跟随系统"
+	},
+	"language": {
+		"en": "English",
+		"zh": "中文"
+	},
+	"error": {
+		"serverError": {
+			"title": "出错了",
+			"description": "出错了，请刷新页面。",
+			"reload": "重新加载"
+		},
+		"notFound": {
+			"title": "页面未找到",
+			"description": "你访问的页面不存在或已被移动",
+			"goHome": "返回首页"
+		}
+	},
+	"notAvailableBanner": {
+		"title": "缺少配置存储设置。",
+		"description": "UI 需要数据库连接来存储配置数据，但当前未配置数据库。",
+		"enableHint": "要启用 UI，请在你的 config.json 中添加数据库设置（参见<1>文档</1>）。"
+	},
+	"login": {
+		"checkingAuth": "正在检查认证..."
+	},
+	"quarterStart": {
+		"fiscalYearStarts": "财年开始月份",
+		"nextReset": "下次重置时间为 <1>{{nextReset}}</1>，当前季度截止于 {{quarterEnd}}。"
+	},
+	"datePicker": {
+		"placeholder": "选择日期和时间"
+	},
+	"actions": {
+		"save": "保存",
+		"saving": "保存中...",
+		"cancel": "取消",
+		"close": "关闭",
+		"confirm": "确认",
+		"create": "创建",
+		"edit": "编辑",
+		"delete": "删除",
+		"remove": "移除",
+		"add": "添加",
+		"search": "搜索",
+		"copy": "复制",
+		"copied": "已复制",
+		"retry": "重试",
+		"refresh": "刷新",
+		"apply": "应用",
+		"reset": "重置",
+		"clear": "清除",
+		"back": "返回",
+		"next": "下一步",
+		"view": "查看",
+		"loading": "加载中...",
+		"noResults": "未找到结果",
+		"yes": "是",
+		"no": "否",
+		"enabled": "已启用",
+		"disabled": "已禁用"
+	}
+}

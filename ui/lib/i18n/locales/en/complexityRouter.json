@@ -1,0 +1,60 @@
+{
+	"noPermissionEntity": "complexity router",
+	"title": "Complexity Router",
+	"description": "Tune how incoming requests are classified into four tiers. Thresholds and keyword lists feed the <1>complexity_tier</1> field that routing rules can target.",
+	"docs": "Docs",
+	"retry": "Retry",
+	"noConfig": "No complexity router configuration is available.",
+	"spectrum": {
+		"title": "Complexity Spectrum"
+	},
+	"boundaries": {
+		"title": "Tier Boundaries",
+		"simpleMedium": {
+			"label": "Simple → Medium",
+			"description": "Scores at or below this are classified as SIMPLE."
+		},
+		"mediumComplex": {
+			"label": "Medium → Complex",
+			"description": "Scores above simple_medium and at or below this are MEDIUM."
+		},
+		"complexReasoning": {
+			"label": "Complex → Reasoning",
+			"description": "Scores above this are REASONING. Everything in between is COMPLEX."
+		}
+	},
+	"errors": {
+		"numberBetween": "Enter a number between 0 and 1",
+		"greaterThanZero": "Must be greater than 0",
+		"lessThanOne": "Must be less than 1",
+		"greaterThanSimpleMedium": "Must be greater than Simple → Medium",
+		"greaterThanMediumComplex": "Must be greater than Medium → Complex",
+		"simpleKeywordsEmpty": "Simple keywords cannot be empty",
+		"codeKeywordsEmpty": "Code keywords cannot be empty",
+		"technicalKeywordsEmpty": "Technical keywords cannot be empty",
+		"reasoningKeywordsEmpty": "Reasoning keywords cannot be empty"
+	},
+	"keywords": {
+		"title": "Keyword Lists",
+		"hint": "Lowercased and deduplicated on save. Each list requires at least one entry.",
+		"countOne": "entry",
+		"countMany": "entries",
+		"placeholder": "Type a keyword and press Enter"
+	},
+	"toasts": {
+		"resetToDefaults": "Reset to defaults",
+		"saved": "Configuration saved"
+	},
+	"footer": {
+		"restoreDefaults": "Restore defaults",
+		"discardChanges": "Discard changes",
+		"saving": "Saving…",
+		"saveChanges": "Save changes"
+	},
+	"restoreDialog": {
+		"title": "Restore defaults",
+		"description": "This will reset all tier boundaries and keyword lists to the factory defaults. Your current configuration will be lost. This action cannot be undone.",
+		"cancel": "Cancel",
+		"confirm": "Restore defaults"
+	}
+}

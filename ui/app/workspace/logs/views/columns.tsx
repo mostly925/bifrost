@@ -16,6 +16,7 @@ import {
 } from "@/lib/constants/logs";
 import { ChatMessageContent, DisplayLogEntry, LogEntry, ResponsesMessageContentBlock } from "@/lib/types/logs";
 import { cn } from "@/lib/utils";
+import { getDateFnsLocale } from "@/lib/utils/dateLocale";
 import { formatCompactNumber } from "@/lib/utils/numbers";
 import { ColumnDef } from "@tanstack/react-table";
 import { format, formatDistanceToNow } from "date-fns";
@@ -343,8 +344,10 @@ export const createColumns = (
 				}
 				return (
 					<div className="flex flex-col leading-tight">
-						<span className="font-mono text-xs tabular-nums">{format(date, "MMM dd  HH:mm:ss")}</span>
-						<span className="text-muted-foreground text-[10.5px] tabular-nums">{formatDistanceToNow(date, { addSuffix: true })}</span>
+						<span className="font-mono text-xs tabular-nums">{format(date, "MMM dd  HH:mm:ss", { locale: getDateFnsLocale() })}</span>
+						<span className="text-muted-foreground text-[10.5px] tabular-nums">
+							{formatDistanceToNow(date, { addSuffix: true, locale: getDateFnsLocale() })}
+						</span>
 					</div>
 				);
 			},

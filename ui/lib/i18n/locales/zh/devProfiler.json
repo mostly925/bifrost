@@ -1,0 +1,63 @@
+{
+	"panel": {
+		"title": "开发性能分析器",
+		"showTitle": "显示开发性能分析器",
+		"collapseTitle": "收起",
+		"expandTitle": "展开",
+		"minimizeTitle": "最小化",
+		"dismissTitle": "关闭",
+		"loadError": "加载性能数据失败"
+	},
+	"stats": {
+		"cpuUsage": "CPU 使用率",
+		"heapAlloc": "堆分配",
+		"heapInUse": "堆使用中",
+		"system": "系统",
+		"goroutines": "Goroutines",
+		"gcPause": "GC 暂停"
+	},
+	"charts": {
+		"cpuTitle": "CPU 使用率（最近 5 分钟）",
+		"memoryTitle": "内存（最近 5 分钟）",
+		"cpuPercent": "CPU %",
+		"goroutines": "Goroutines",
+		"alloc": "分配",
+		"heapInUse": "堆使用中"
+	},
+	"topAllocations": {
+		"title": "内存分配排行",
+		"allocCount": "{{num}} 次分配"
+	},
+	"goroutineHealth": {
+		"title": "Goroutine 健康状态",
+		"growingTitle": "Goroutine 数量持续增长",
+		"stuckBadge": "卡死",
+		"longWaitBadge": "长等待",
+		"healthyBadge": "健康",
+		"total": "总计",
+		"background": "后台",
+		"perRequest": "按请求",
+		"stuck": "卡死",
+		"potentialLeaks": "潜在泄漏",
+		"clearHiddenTitle": "清除所有隐藏的 goroutines",
+		"hiddenCount": "{{count}} 个已隐藏",
+		"waitingMinutes": "等待 {{minutes}} 分钟",
+		"hideFileTitle": "隐藏此文件的 goroutines",
+		"stateLabel": "状态：",
+		"waitLabel": "等待：",
+		"moreFrames": "... 还有 {{count}} 帧",
+		"allHidden": "所有潜在泄漏均已隐藏",
+		"longAndStuck": "{{longWaiting}} 个长时间等待、{{stuck}} 个卡死的 goroutines（已过滤后台任务）",
+		"longWaitingOnly": "{{longWaiting}} 个长时间等待的 goroutines（已过滤后台任务）",
+		"stuckOnly": "{{stuck}} 个卡死的 goroutines（已过滤后台任务）",
+		"noLeaks": "未检测到 goroutine 泄漏"
+	},
+	"footer": {
+		"runtime": "CPU 数：{{cpus}} | GOMAXPROCS：{{gomaxprocs}} | GC：{{gcs}} | 对象数：{{objects}}"
+	},
+	"collapsed": {
+		"cpu": "CPU：{{value}}",
+		"heap": "堆：{{value}}",
+		"goroutines": "Goroutines：{{value}}"
+	}
+}

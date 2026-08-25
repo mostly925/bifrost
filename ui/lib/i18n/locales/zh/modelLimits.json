@@ -1,0 +1,102 @@
+{
+	"header": {
+		"title": "预算与限额",
+		"description": "在任意范围配置预算与速率限制：虚拟密钥、用户、供应商或指定模型。",
+		"addLimit": "添加限额"
+	},
+	"errors": {
+		"loadConfigs": "加载模型配置失败：{{error}}",
+		"loadLimit": "加载模型限额失败：{{error}}"
+	},
+	"toasts": {
+		"deleted": "限额已删除"
+	},
+	"filters": {
+		"searchAria": "按模型名称搜索模型限额",
+		"searchPlaceholder": "按模型名称搜索...",
+		"allScopes": "全部范围",
+		"allProviders": "全部供应商",
+		"clear": "清除筛选"
+	},
+	"table": {
+		"headers": {
+			"model": "模型",
+			"provider": "供应商",
+			"scope": "范围",
+			"scopeTarget": "范围目标",
+			"budget": "预算",
+			"rateLimit": "速率限制"
+		},
+		"actionsAria": "模型限额 {{model}} 的操作",
+		"loading": "加载限额中...",
+		"noMatches": "未找到匹配的限额。",
+		"allModels": "所有模型",
+		"limitReached": "已达限额",
+		"resets": "重置周期：{{duration}}",
+		"resetsCalendar": "重置周期：{{duration}}（日历对齐）",
+		"tokens": "{{value}} tokens",
+		"tokensUsed": "{{current}} / {{max}} tokens",
+		"requests": "{{value}} 次请求",
+		"requestsUsed": "{{current}} / {{max}} 次请求"
+	},
+	"pagination": {
+		"entries": "第 {{from}}-{{to}} 条，共 {{total}} 条",
+		"page": "第",
+		"of": "页，共 {{total}} 页",
+		"prevAria": "上一页",
+		"nextAria": "下一页"
+	},
+	"deleteDialog": {
+		"title": "删除限额",
+		"description": "确定要删除 \"{{name}}\" 的限额吗？此操作无法撤销。",
+		"cancel": "取消",
+		"deleting": "删除中...",
+		"delete": "删除"
+	},
+	"actions": {
+		"edit": "编辑",
+		"delete": "删除"
+	},
+	"empty": {
+		"title": "预算与速率限制",
+		"description": "在任意范围设置消费上限与速率限制：虚拟密钥、用户、供应商或指定模型。",
+		"readMoreAria": "了解更多预算与限额信息（在新标签页打开）",
+		"readMore": "了解更多",
+		"addAria": "添加第一个限额",
+		"addLimit": "添加限额"
+	},
+	"sheet": {
+		"titleEdit": "编辑限额",
+		"titleCreate": "创建限额",
+		"descriptionEdit": "更新预算与速率限制配置。",
+		"descriptionCreate": "为指定范围设置预算与速率限制。",
+		"provider": "供应商",
+		"modelName": "模型名称",
+		"modelSearchPlaceholder": "搜索模型...",
+		"scope": "范围",
+		"globalPlaceholder": "全局",
+		"budget": "预算",
+		"rateLimits": "速率限制",
+		"maximumTokens": "最大 Token 数",
+		"maximumRequests": "最大请求数",
+		"currentUsage": "当前用量",
+		"currentBudget": "预算（{{duration}}）",
+		"tokens": "Token",
+		"requests": "请求",
+		"cancel": "取消",
+		"saving": "保存中...",
+		"saveChanges": "保存更改",
+		"submitCreate": "创建限额",
+		"ownerLabel": "限额",
+		"errors": {
+			"modelNameRequired": "模型名称为必填项",
+			"virtualKeyRequired": "选择虚拟密钥范围时必须指定虚拟密钥",
+			"noPermission": "你没有执行此操作的权限",
+			"atLeastOneLimit": "至少需要配置一项预算或速率限制"
+		},
+		"toasts": {
+			"updated": "限额已更新",
+			"created": "限额已创建"
+		}
+	}
+}

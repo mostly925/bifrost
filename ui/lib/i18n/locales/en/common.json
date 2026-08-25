@@ -1,0 +1,186 @@
+{
+	"nav": {
+		"observability": {
+			"label": "Observability",
+			"dashboard": "Dashboard",
+			"llmLogs": "LLM Logs",
+			"mcpLogs": "MCP Logs",
+			"connectors": "Connectors",
+			"logsSettings": "Logs Settings"
+		},
+		"models": {
+			"label": "Models",
+			"catalog": "Model Catalog",
+			"providers": "Model Providers",
+			"budgetsLimits": "Budgets & Limits",
+			"routingRules": "Routing Rules",
+			"complexityRouter": "Complexity Router",
+			"circuitBreaker": "Circuit Breaker",
+			"pricingOverrides": "Pricing Overrides",
+			"settings": "Model Settings"
+		},
+		"mcpGateway": {
+			"label": "MCP Gateway",
+			"catalog": "MCP Catalog",
+			"library": "MCP Library",
+			"toolGroups": "Tool Groups",
+			"authSessions": "Auth Sessions",
+			"oauthGrants": "OAuth Grants",
+			"settings": "MCP Settings"
+		},
+		"plugins": "Plugins",
+		"alerting": {
+			"label": "Alerting",
+			"channels": "Channels",
+			"rules": "Rules",
+			"history": "History"
+		},
+		"governance": {
+			"label": "Governance",
+			"virtualKeys": "Virtual Keys",
+			"users": "Users",
+			"teams": "Teams",
+			"businessUnits": "Business Units",
+			"customers": "Customers",
+			"userProvisioning": "User Provisioning",
+			"rolesPermissions": "Roles & Permissions",
+			"accessProfiles": "Access Profiles",
+			"auditLogs": "Audit Logs"
+		},
+		"guardrails": {
+			"label": "Guardrails",
+			"rules": "Rules",
+			"providers": "Providers"
+		},
+		"webhooks": "Webhooks",
+		"edgeControl": {
+			"label": "Edge Control",
+			"devices": "Devices",
+			"approvals": "Approvals",
+			"settings": "Edge Settings"
+		},
+		"clusterConfig": "Cluster Config",
+		"adaptiveRouting": {
+			"label": "Adaptive Routing",
+			"dashboard": "Dashboard",
+			"settings": "Settings"
+		},
+		"promptRepository": "Prompt Repository",
+		"skillsRepository": "Skills Repository",
+		"evals": "Evals",
+		"settings": {
+			"label": "Settings",
+			"clientSettings": "Client Settings",
+			"compatibility": "Compatibility",
+			"caching": "Caching",
+			"security": "Security",
+			"proxy": "Proxy",
+			"apiKeys": "API Keys",
+			"performanceTuning": "Performance Tuning",
+			"featureFlags": "Feature Flags",
+			"branding": "Branding",
+			"licenseInfo": "License Info"
+		},
+		"external": {
+			"discord": "Discord Server",
+			"github": "GitHub Repository",
+			"reportBug": "Report a bug",
+			"docs": "Full Documentation"
+		}
+	},
+	"sidebar": {
+		"searchPlaceholder": "Search...",
+		"searchAria": "Search sidebar navigation",
+		"collapseAria": "Collapse sidebar",
+		"expandAria": "Expand sidebar",
+		"userMenuAria": "User menu",
+		"logout": "Logout",
+		"logoutAria": "Logout",
+		"toggleThemeAria": "Toggle theme",
+		"toggleLanguageAria": "Change language",
+		"restartRequired": {
+			"title": "Restart Required",
+			"defaultReason": "Configuration changes require a server restart to take effect."
+		},
+		"onboardingIncomplete": {
+			"title": "Setup checklist incomplete",
+			"stepsLeft_one": "{{count}} setup step left. Not completing these steps keeps your Bifrost setup vulnerable.",
+			"stepsLeft_other": "{{count}} setup steps left. Not completing these steps keeps your Bifrost setup vulnerable.",
+			"resume": "Resume setup"
+		},
+		"newRelease": {
+			"available": "{{name}} is now available.",
+			"viewNotes": "View release notes"
+		},
+		"productionSetup": {
+			"title": "Need help with production setup?",
+			"offer": "We offer help with production setup including custom integrations and dedicated support.",
+			"bookDemo": "Book a demo with our team <1>here</1>."
+		}
+	},
+	"theme": {
+		"light": "Light",
+		"dark": "Dark",
+		"system": "System"
+	},
+	"language": {
+		"en": "English",
+		"zh": "中文"
+	},
+	"error": {
+		"serverError": {
+			"title": "Something went wrong",
+			"description": "Something went wrong. Please refresh the page.",
+			"reload": "Reload"
+		},
+		"notFound": {
+			"title": "Page not found",
+			"description": "The page you are looking for doesn’t exist or has been moved",
+			"goHome": "Go home"
+		}
+	},
+	"notAvailableBanner": {
+		"title": "Config store setup is missing.",
+		"description": "The UI requires a database connection to store configuration data, but no database is currently configured.",
+		"enableHint": "To enable the UI, please add the database settings to your config.json (see <1>documentation</1>)."
+	},
+	"login": {
+		"checkingAuth": "Checking authentication..."
+	},
+	"quarterStart": {
+		"fiscalYearStarts": "Fiscal year starts",
+		"nextReset": "Next reset on <1>{{nextReset}}</1>. The current quarter ends {{quarterEnd}}."
+	},
+	"datePicker": {
+		"placeholder": "Pick a date and time"
+	},
+	"actions": {
+		"save": "Save",
+		"saving": "Saving...",
+		"cancel": "Cancel",
+		"close": "Close",
+		"confirm": "Confirm",
+		"create": "Create",
+		"edit": "Edit",
+		"delete": "Delete",
+		"remove": "Remove",
+		"add": "Add",
+		"search": "Search",
+		"copy": "Copy",
+		"copied": "Copied",
+		"retry": "Retry",
+		"refresh": "Refresh",
+		"apply": "Apply",
+		"reset": "Reset",
+		"clear": "Clear",
+		"back": "Back",
+		"next": "Next",
+		"view": "View",
+		"loading": "Loading...",
+		"noResults": "No results found",
+		"yes": "Yes",
+		"no": "No",
+		"enabled": "Enabled",
+		"disabled": "Disabled"
+	}
+}

@@ -10,6 +10,7 @@ import {
 import { getErrorMessage, useDeletePluginMutation } from "@/lib/store";
 import { Plugin } from "@/lib/types/plugins";
 import { AlertDialogTitle } from "@radix-ui/react-alert-dialog";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 interface Props {
@@ -21,6 +22,7 @@ interface Props {
 
 export default function ConfirmDeletePluginDialog({ show, onCancel, onDelete, plugin }: Props) {
 	const [deletePlugin, { isLoading: isDeletingPlugin }] = useDeletePluginMutation();
+	const { t } = useTranslation(["plugins", "common"]);
 
 	const onDeleteHandler = () => {
 		deletePlugin(plugin.name)
@@ -29,7 +31,7 @@ export default function ConfirmDeletePluginDialog({ show, onCancel, onDelete, pl
 				onDelete();
 			})
 			.catch((err) => {
-				toast.error("Failed to delete plugin", {
+				toast.error(t("deleteDialog.failed"), {
 					description: getErrorMessage(err),
 				});
 			});
@@ -39,15 +41,13 @@ export default function ConfirmDeletePluginDialog({ show, onCancel, onDelete, pl
 		<AlertDialog open={show}>
 			<AlertDialogContent>
 				<AlertDialogHeader>
-					<AlertDialogTitle>Delete Plugin</AlertDialogTitle>
-					<AlertDialogDescription>
-						Are you sure you want to delete the plugin "{plugin.name}"? This action cannot be undone.
-					</AlertDialogDescription>
+					<AlertDialogTitle>{t("deleteDialog.title")}</AlertDialogTitle>
+					<AlertDialogDescription>{t("deleteDialog.description", { name: plugin.name })}</AlertDialogDescription>
 				</AlertDialogHeader>
 				<AlertDialogFooter>
-					<AlertDialogCancel onClick={onCancel}>Cancel</AlertDialogCancel>
+					<AlertDialogCancel onClick={onCancel}>{t("common:actions.cancel")}</AlertDialogCancel>
 					<AlertDialogAction onClick={onDeleteHandler} disabled={isDeletingPlugin}>
-						{isDeletingPlugin ? "Deleting..." : "Delete"}
+						{isDeletingPlugin ? t("deleteDialog.deleting") : t("common:actions.delete")}
 					</AlertDialogAction>
 				</AlertDialogFooter>
 			</AlertDialogContent>

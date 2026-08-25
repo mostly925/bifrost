@@ -1,8 +1,10 @@
+import FullPageLoader from "@/components/fullPageLoader";
 import TempTokenScope from "@/components/tempTokenScope";
 import { ThemeProvider } from "@/components/themeProvider";
 import { ReduxProvider } from "@/lib/store";
 import { NuqsAdapter } from "nuqs/adapters/tanstack-router";
 import { createFileRoute } from "@tanstack/react-router";
+import { Suspense } from "react";
 import { Toaster } from "sonner";
 import OAuth2ConsentPage from "./page";
 
@@ -26,7 +28,9 @@ function RouteComponent() {
 				<NuqsAdapter>
 					<Toaster closeButton />
 					<TempTokenScope name="oauth2_consent">
-						<OAuth2ConsentPage />
+						<Suspense fallback={<FullPageLoader />}>
+							<OAuth2ConsentPage />
+						</Suspense>
 					</TempTokenScope>
 				</NuqsAdapter>
 			</ReduxProvider>

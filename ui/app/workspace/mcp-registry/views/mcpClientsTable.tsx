@@ -34,6 +34,7 @@ import { MCPClient } from "@/lib/types/mcp";
 import { titleCaseFromSnakeCase } from "@/lib/utils/strings";
 import { RbacOperation, RbacResource, useRbac } from "@enterprise/lib";
 import { Link } from "@tanstack/react-router";
+import type { TFunction } from "i18next";
 import {
 	Box,
 	ChevronLeft,
@@ -50,6 +51,7 @@ import {
 	X,
 } from "lucide-react";
 import { ReactNode, useEffect, useMemo, useState } from "react";
+import { Trans, useTranslation } from "react-i18next";
 import { IconWrap, InfoBox } from "./authorizerUi";
 import MCPClientSheet from "./mcpClientSheet";
 import { canReconnectMCPClient } from "./mcpClientsTable.utils";

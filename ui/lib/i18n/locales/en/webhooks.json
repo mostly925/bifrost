@@ -1,0 +1,187 @@
+{
+	"toasts": {
+		"endpointEnabled": "Endpoint enabled successfully",
+		"endpointDisabled": "Endpoint disabled successfully",
+		"testDelivered": "Test delivered, receiver answered {{code}}",
+		"testFailed": "Test failed: {{error}}",
+		"testRejected": "Test rejected, receiver answered {{code}}",
+		"deleted": "Webhook endpoint deleted successfully",
+		"secretRotated": "Signing secret rotated successfully",
+		"updated": "Webhook endpoint updated successfully",
+		"created": "Webhook endpoint created successfully",
+		"redeliveryQueued": "Redelivery queued under the original webhook id"
+	},
+	"emptyState": {
+		"title": "Get notified when async jobs finish",
+		"description": "Register webhook endpoints and Bifrost will send a signed notification whenever an async inference job completes or fails, so you don't have to poll for results.",
+		"readMore": "Read more",
+		"add": "Add Webhook Endpoint"
+	},
+	"view": {
+		"title": "Webhooks",
+		"subtitle": "Register endpoints to receive signed notifications when async inference jobs complete or fail. Pass the endpoint's name in the <1>x-bf-async-webhook</1> header when submitting a job.",
+		"addEndpoint": "Add Endpoint",
+		"loadError": "Failed to load webhook endpoints.",
+		"retry": "Retry"
+	},
+	"filterBar": {
+		"searchAria": "Search webhook endpoints",
+		"searchPlaceholder": "Search by name or URL",
+		"allEvents": "All events",
+		"allStatuses": "All statuses",
+		"statusEnabled": "Enabled",
+		"statusDisabled": "Disabled",
+		"clearFilters": "Clear filters"
+	},
+	"table": {
+		"actionsAria": "Webhook actions",
+		"edit": "Edit",
+		"rotateSecret": "Rotate secret",
+		"delete": "Delete",
+		"columnName": "Name",
+		"columnUrl": "URL",
+		"columnEvents": "Events",
+		"columnEnabled": "Enabled",
+		"noMatches": "No matching webhook endpoints found.",
+		"deleteDialog": {
+			"title": "Delete webhook endpoint",
+			"description": "Are you sure you want to delete <1>{{name}}</1>? Pending deliveries to it will be dropped and jobs referencing it will be rejected. This action cannot be undone.",
+			"cancel": "Cancel",
+			"confirm": "Delete"
+		},
+		"rotateDialog": {
+			"title": "Rotate signing secret",
+			"description": "The current secret for <1>{{name}}</1> stops working immediately and deliveries are signed with the new one from now on. Update your receiver right after rotating.",
+			"cancel": "Cancel",
+			"confirm": "Rotate"
+		},
+		"pagination": {
+			"range": "{{from}}-{{to}} of {{total}} entries",
+			"previousAria": "Previous page",
+			"nextAria": "Next page",
+			"page": "Page",
+			"of": "of {{count}}"
+		}
+	},
+	"secretDialog": {
+		"title": "Signing secret for {{name}}",
+		"description": "Use this secret to verify the <1>webhook-signature</1> header on deliveries. It is shown only once - copy it now and store it securely. If you lose it, rotate the endpoint to get a new one.",
+		"copyAria": "Copy signing secret",
+		"copied": "Signing secret copied",
+		"readMore": "Read more",
+		"confirm": "I've stored the secret"
+	},
+	"sheet": {
+		"createTitle": "Add Webhook Endpoint",
+		"editDescription": "Update the endpoint's URL, subscriptions, and delivery behavior.",
+		"createDescription": "Register an HTTPS endpoint to receive signed notifications when async jobs finish.",
+		"nameLabel": "Name",
+		"namePlaceholder": "e.g., billing-service",
+		"urlLabel": "URL",
+		"urlPlaceholder": "https://example.com/hooks/bifrost",
+		"eventsLabel": "Events",
+		"includeResponseLabel": "Include response payload",
+		"includeResponseDescription": "Inline the job's result in the notification. Oversized or already-expired results are delivered as a thin payload instead.",
+		"allowPrivateNetworkLabel": "Allow private network",
+		"allowPrivateNetworkDescription": "Permit deliveries to private IP ranges. Only enable this for receivers inside your own network.",
+		"customHeadersLabel": "Custom Headers",
+		"headerKeyPlaceholder": "e.g., Authorization",
+		"headerValuePlaceholder": "Value or env.VARIABLE",
+		"headersNote": "Sent with every delivery. Signing and content headers are reserved and cannot be overridden.",
+		"headerValueRequired": "Header \"{{name}}\" must have a value",
+		"tuningHeading": "Delivery Tuning",
+		"usingDefault": "Using delivery worker default",
+		"tuningNote": "If retries extend past the job's result TTL, later deliveries carry a thin payload marked <1>result_expired</1>.",
+		"tuning": {
+			"max_retries": {
+				"label": "Max retries",
+				"description": "Retries after the first delivery attempt."
+			},
+			"retry_backoff_initial_seconds": {
+				"label": "Initial retry backoff (seconds)",
+				"description": "Delay before the first retry; doubles per retry."
+			},
+			"retry_backoff_max_seconds": {
+				"label": "Max retry backoff (seconds)",
+				"description": "Cap on the per-retry delay."
+			},
+			"attempt_timeout_seconds": {
+				"label": "Attempt timeout (seconds)",
+				"description": "End-to-end bound for one delivery attempt."
+			},
+			"max_response_payload_kbs": {
+				"label": "Max response payload (KB)",
+				"description": "Responses above this size are omitted from the payload."
+			},
+			"max_concurrent_deliveries": {
+				"label": "Max concurrent deliveries",
+				"description": "Concurrent in-flight deliveries to this endpoint per node."
+			}
+		},
+		"cancel": "Cancel",
+		"saving": "Saving...",
+		"update": "Update Endpoint",
+		"create": "Create Endpoint",
+		"validation": {
+			"nameRequired": "Name is required",
+			"urlRequired": "URL is required",
+			"urlInvalid": "Enter a valid HTTP(S) URL",
+			"eventsMin": "Subscribe to at least one event",
+			"privateNetworkRequired": "http:// URLs require \"Allow private network\" to be enabled"
+		}
+	},
+	"details": {
+		"statusEnabled": "enabled",
+		"statusDisabled": "disabled",
+		"eventsLabel": "Events",
+		"includeResponse": "Include response",
+		"yes": "yes",
+		"no": "no",
+		"privateNetwork": "Private network",
+		"allowed": "allowed",
+		"blocked": "blocked",
+		"lastSuccess": "Last success",
+		"lastFailure": "Last failure",
+		"never": "never",
+		"consecutiveFailures": "Consecutive failures",
+		"maxRetries": "Max retries",
+		"retryBackoff": "Retry backoff",
+		"attemptTimeout": "Attempt timeout",
+		"deliveryHistory": "Delivery History",
+		"sendTestEvent": "Send Test Event",
+		"columnTime": "Time",
+		"columnRequestId": "Request ID",
+		"columnEvent": "Event",
+		"columnStatus": "Status",
+		"columnResponses": "Responses",
+		"columnActions": "Actions",
+		"statusTooltip": {
+			"delivered": "<1>delivered</1>: receiver returned a 2xx.",
+			"retrying": "<1>retrying</1>: transient failure (network error, timeout, 429, or 5xx); another attempt is scheduled.",
+			"failed": "<1>failed</1>: permanent error (a non-retryable 4xx such as 401/404); not retried automatically.",
+			"retriesExhausted": "<1>retries exhausted</1>: kept failing until the retry budget ran out."
+		},
+		"responsesTooltip": "One chip per delivery attempt, oldest to newest: the receiver's response code, or a dash when no response arrived. Hover a failed code for its error.",
+		"loadError": "Failed to load delivery history. Retrying…",
+		"noDeliveries": "No deliveries yet.",
+		"expandRedeliveries": "Expand redeliveries",
+		"collapseRedeliveries": "Collapse redeliveries",
+		"sendsCount": "{{count}} sends",
+		"sendOriginal": "Original",
+		"sendRedelivery": "Redelivery {{index}}",
+		"redeliverAria": "Redeliver",
+		"outcomes": {
+			"delivered": "delivered",
+			"retrying": "retrying",
+			"failed": "failed",
+			"retriesExhausted": "retries exhausted"
+		},
+		"pagination": {
+			"range": "{{from}}-{{to}} of {{total}} deliveries",
+			"previousAria": "Previous page",
+			"nextAria": "Next page",
+			"page": "Page",
+			"of": "of {{count}}"
+		}
+	}
+}

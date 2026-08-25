@@ -1,0 +1,46 @@
+{
+	"errors": {
+		"missingFlowTitle": "Missing flow identifier",
+		"missingFlowDescription": "This URL is missing the <1>flow</1> query parameter. Restart the connection from your MCP client.",
+		"linkUnavailableTitle": "Link unavailable",
+		"linkUnavailableDescription": "This authorization link may have expired or already been used. Restart the connection from your MCP client to get a fresh link.",
+		"invalidLinkTitle": "This link is no longer valid",
+		"invalidLinkDescription": "The authorization link has expired, been used already, or had its token stripped. Restart the connection from your MCP client to get a fresh link.",
+		"authFailed": "Authentication failed",
+		"invalidRedirectUrl": "Invalid redirect URL"
+	},
+	"consent": {
+		"title": "{{clientName}} wants to connect",
+		"subtitle": "Choose how you'd like to identify yourself to Bifrost",
+		"connecting": "Connecting…",
+		"or": "or",
+		"noOptions": {
+			"title": "No authentication options available",
+			"description": "Restart the connection from your MCP client."
+		},
+		"userMode": {
+			"signedInAccount": "Signed-in account",
+			"continueAs": "Continue as {{name}}",
+			"signInTitle": "Sign in with your account",
+			"signInDescription": "Requires a Bifrost dashboard account",
+			"signInButton": "Sign in to continue"
+		},
+		"vkMode": {
+			"title": "Virtual Key",
+			"description": "Use a Virtual Key from your Bifrost workspace",
+			"placeholder": "sk-bf-…",
+			"connect": "Connect with key",
+			"linkedHint": "If this key is linked to a user account, you'll be asked to sign in to confirm your identity."
+		},
+		"sessionMode": {
+			"continue": "Continue without an identity",
+			"description": "Anonymous session - no account required"
+		},
+		"expiry": {
+			"soon": "This link expires soon",
+			"lessThanMinute": "This link expires in less than a minute",
+			"oneMinute": "This link expires in 1 minute",
+			"minutes": "This link expires in {{count}} minutes"
+		}
+	}
+}

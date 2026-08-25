@@ -14,6 +14,8 @@ import { useGetMCPClientsQuery, useGetVirtualKeysQuery } from "@/lib/store";
 import { cn } from "@/lib/utils";
 import { ChevronDown, Fingerprint, KeyRound, LoaderCircle, PanelLeftClose, PanelLeftOpen, RotateCcw, Search, UserRound } from "lucide-react";
 import { type Ref, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
+import type { TFunction } from "i18next";
 // Side-effect import: registers the enterprise user search hook (if this is
 // an enterprise build) before this module's first render. OSS has no user
 // directory, so nothing registers and getUserSearchQuery() stays undefined —
@@ -55,26 +57,33 @@ interface FilterOption {
 
 // Labels mirror the Type column's TypeBadge ("OAuth" / "Headers") so the
 // filter vocabulary matches what the user sees in the table.
-const KIND_OPTIONS: FilterOption[] = [
-	{ value: "token", label: "OAuth" },
-	{ value: "header", label: "Headers" },
-];
+// 选项标签在调用期经 t 求值，避免在模块顶层固化译文
+function buildKindOptions(t: TFunction<"mcpSessions">): FilterOption[] {
+	return [
+		{ value: "token", label: t("filters.kind.oauth") },
+		{ value: "header", label: t("filters.kind.headers") },
+	];
+}
 
-const STATUS_OPTIONS: FilterOption[] = [
-	{ value: "active", label: "Active" },
-	{ value: "orphaned", label: "Orphaned" },
-	{ value: "needs_reauth", label: "Needs re-auth" },
-	{ value: "needs_update", label: "Needs update" },
-	{ value: "pending", label: "Pending" },
-];
+function buildStatusOptions(t: TFunction<"mcpSessions">): FilterOption[] {
+	return [
+		{ value: "active", label: t("filters.status.active") },
+		{ value: "orphaned", label: t("filters.status.orphaned") },
+		{ value: "needs_reauth", label: t("filters.status.needsReauth") },
+		{ value: "needs_update", label: t("filters.status.needsUpdate") },
+		{ value: "pending", label: t("filters.status.pending") },
+	];
+}
 
 // Identity-mode icons match the glyphs used in BindingCell so the sidebar
 // reads as the same vocabulary as the rendered table column.
-const AUTH_MODE_OPTIONS: FilterOption[] = [
-	{ value: "user", label: "User", icon: <UserRound className="size-3.5" /> },
-	{ value: "vk", label: "Virtual key", icon: <KeyRound className="size-3.5" /> },
-	{ value: "session", label: "Session", icon: <Fingerprint className="size-3.5" /> },
-];
+function buildAuthModeOptions(t: TFunction<"mcpSessions">): FilterOption[] {
+	return [
+		{ value: "user", label: t("filters.authMode.user"), icon: <UserRound className="size-3.5" /> },
+		{ value: "vk", label: t("filters.authMode.virtualKey"), icon: <KeyRound className="size-3.5" /> },
+		{ value: "session", label: t("filters.authMode.session"), icon: <Fingerprint className="size-3.5" /> },
+	];
+}
 
 interface SidebarProps {
 	filters: MCPSessionFilters;
@@ -86,7 +95,11 @@ interface SidebarProps {
 // ---------------------------------------------------------------------------
 
 export function MCPSessionsFilterSidebar({ filters, onFiltersChange }: SidebarProps) {
+	const { t } = useTranslation("mcpSessions");
 	const [collapsed, setCollapsed] = useState(false);
+	const kindOptions = buildKindOptions(t);
+	const statusOptions = buildStatusOptions(t);
+	const authModeOptions = buildAuthModeOptions(t);
 
 	useEffect(() => {
 		if (typeof window === "undefined") return;
@@ -152,12 +165,12 @@ export function MCPSessionsFilterSidebar({ filters, onFiltersChange }: SidebarPr
 				type="button"
 				onClick={toggleCollapsed}
 				className="bg-card group flex h-full w-10 shrink-0 cursor-pointer flex-col items-center gap-3 rounded-r-md py-4 text-sm font-medium"
-				title="Show filters"
-				aria-label="Show filters"
+				title={t("filters.showAria")}
+				aria-label={t("filters.showAria")}
 				data-testid="mcp-sessions-filter-sidebar-toggle-show"
 			>
 				<PanelLeftOpen className="text-muted-foreground group-hover:text-foreground size-4 transition-colors" />
-				<span className="rotate-180 select-none [writing-mode:vertical-rl]">Filters</span>
+				<span className="rotate-180 select-none [writing-mode:vertical-rl]">{t("filters.title")}</span>
 				{activeFilterCount > 0 && (
 					<span className="bg-primary/10 text-primary flex size-6 items-center justify-center rounded-full text-xs font-medium">
 						{activeFilterCount}
@@ -170,7 +183,7 @@ export function MCPSessionsFilterSidebar({ filters, onFiltersChange }: SidebarPr
 	return (
 		<div className="bg-card flex h-full w-64 shrink-0 flex-col rounded-r-md">
 			<div className="flex h-11 items-center justify-between border-b pr-2 pl-5">
-				<span className="text-sm font-semibold">Filters</span>
+				<span className="text-sm font-semibold">{t("filters.title")}</span>
 				<div className="flex items-center gap-1">
 					{activeFilterCount > 0 && (
 						<Button
@@ -181,7 +194,7 @@ export function MCPSessionsFilterSidebar({ filters, onFiltersChange }: SidebarPr
 							data-testid="mcp-sessions-filter-sidebar-reset-button"
 						>
 							<RotateCcw className="size-3" />
-							Reset
+							{t("filters.reset")}
 						</Button>
 					)}
 					<Button
@@ -189,8 +202,8 @@ export function MCPSessionsFilterSidebar({ filters, onFiltersChange }: SidebarPr
 						size="icon"
 						className="size-7"
 						onClick={toggleCollapsed}
-						title="Hide filters"
-						aria-label="Hide filters"
+						title={t("filters.hideAria")}
+						aria-label={t("filters.hideAria")}
 						data-testid="mcp-sessions-filter-sidebar-toggle-hide"
 					>
 						<PanelLeftClose className="size-4" />
@@ -201,23 +214,23 @@ export function MCPSessionsFilterSidebar({ filters, onFiltersChange }: SidebarPr
 			<ScrollArea className="flex flex-1 overflow-y-auto p-2 pb-0" viewportClassName="no-table">
 				<div className="flex grow flex-col gap-1">
 					<CheckboxFilterSection
-						title="Type"
-						options={KIND_OPTIONS}
+						title={t("filters.sections.type")}
+						options={kindOptions}
 						selected={filters.kind}
 						defaultOpen
 						onChange={(kind) => onFiltersChange({ ...filters, kind })}
 						testIdPrefix="mcp-sessions-filter-kind"
 					/>
 					<CheckboxFilterSection
-						title="Status"
-						options={STATUS_OPTIONS}
+						title={t("filters.sections.status")}
+						options={statusOptions}
 						selected={filters.status}
 						onChange={(status) => onFiltersChange({ ...filters, status })}
 						testIdPrefix="mcp-sessions-filter-status"
 					/>
 					<CheckboxFilterSection
-						title="Identity"
-						options={AUTH_MODE_OPTIONS}
+						title={t("filters.sections.identity")}
+						options={authModeOptions}
 						selected={filters.auth_mode}
 						onChange={(auth_mode) => onFiltersChange({ ...filters, auth_mode })}
 						testIdPrefix="mcp-sessions-filter-auth-mode"
@@ -360,7 +373,7 @@ function SearchableCheckboxList({
 	items,
 	isSelected,
 	onToggle,
-	placeholder = "Search...",
+	placeholder,
 	inputRef,
 	testIdPrefix,
 	onSearch,
@@ -375,6 +388,8 @@ function SearchableCheckboxList({
 	onSearch?: (query: string) => void;
 	fetching?: boolean;
 }) {
+	const { t } = useTranslation("mcpSessions");
+	const resolvedPlaceholder = placeholder ?? t("filters.searchPlaceholder");
 	const [query, setQuery] = useState("");
 	const normalized = query.trim().toLowerCase();
 	const filtered = normalized ? items.filter((item) => item.label.toLowerCase().includes(normalized)) : items;
@@ -397,7 +412,7 @@ function SearchableCheckboxList({
 					ref={inputRef}
 					value={query}
 					onChange={(e) => setQuery(e.target.value)}
-					placeholder={placeholder}
+					placeholder={resolvedPlaceholder}
 					className="h-8 border-0 pl-8 text-xs"
 					data-testid={testIdPrefix ? `${testIdPrefix}-search` : undefined}
 				/>
@@ -411,7 +426,7 @@ function SearchableCheckboxList({
 					testId={testIdPrefix ? `${testIdPrefix}-checkbox-${item.key}` : undefined}
 				/>
 			))}
-			{filtered.length === 0 && <div className="text-muted-foreground flex h-9 items-center px-3 text-xs">No results</div>}
+			{filtered.length === 0 && <div className="text-muted-foreground flex h-9 items-center px-3 text-xs">{t("filters.noResults")}</div>}
 		</>
 	);
 }
@@ -426,6 +441,7 @@ function SearchableCheckboxList({
 // only fetches once the section is opened or already has a selection, since
 // most visits won't touch this filter.
 function MCPClientFilterSection({ filters, onFiltersChange }: SidebarProps) {
+	const { t } = useTranslation("mcpSessions");
 	const hasActive = filters.mcp_client_id.length > 0;
 	const [opened, setOpened] = useState(hasActive);
 	const [searchQuery, setSearchQuery] = useState("");
@@ -452,10 +468,10 @@ function MCPClientFilterSection({ filters, onFiltersChange }: SidebarProps) {
 	};
 
 	return (
-		<FilterSection title="MCP Server" defaultOpen={hasActive} onOpenChange={setOpened} testId="mcp-sessions-filter-mcp-client-toggle">
+		<FilterSection title={t("filters.sections.mcpServer")} defaultOpen={hasActive} onOpenChange={setOpened} testId="mcp-sessions-filter-mcp-client-toggle">
 			<SearchableCheckboxList
 				inputRef={searchInputRef}
-				placeholder="Search MCP servers"
+				placeholder={t("filters.searchMcpServers")}
 				items={mcpClients.map((client) => ({ key: client.config.client_id, label: client.config.name || client.config.client_id }))}
 				isSelected={(key) => filters.mcp_client_id.includes(key)}
 				onToggle={toggle}
@@ -475,6 +491,7 @@ function MCPClientFilterSection({ filters, onFiltersChange }: SidebarProps) {
 // opened or already has a selection, since most visits won't touch this
 // filter.
 function VirtualKeyFilterSection({ filters, onFiltersChange }: SidebarProps) {
+	const { t } = useTranslation("mcpSessions");
 	const hasActive = filters.virtual_key_id.length > 0;
 	const [opened, setOpened] = useState(hasActive);
 	const [searchQuery, setSearchQuery] = useState("");
@@ -493,10 +510,10 @@ function VirtualKeyFilterSection({ filters, onFiltersChange }: SidebarProps) {
 	};
 
 	return (
-		<FilterSection title="Virtual Key" defaultOpen={hasActive} onOpenChange={setOpened} testId="mcp-sessions-filter-vk-toggle">
+		<FilterSection title={t("filters.sections.virtualKey")} defaultOpen={hasActive} onOpenChange={setOpened} testId="mcp-sessions-filter-vk-toggle">
 			<SearchableCheckboxList
 				inputRef={searchInputRef}
-				placeholder="Search virtual keys"
+				placeholder={t("filters.searchVirtualKeys")}
 				items={virtualKeys.map((vk) => ({ key: vk.id, label: vk.name || vk.id }))}
 				isSelected={(key) => filters.virtual_key_id.includes(key)}
 				onToggle={toggle}
@@ -519,6 +536,7 @@ function VirtualKeyFilterSection({ filters, onFiltersChange }: SidebarProps) {
 // single-select UserPicker (routing rules' "User" scope, the VK table's
 // user filter) already uses.
 function UsersFilterSection({ filters, onFiltersChange }: SidebarProps) {
+	const { t } = useTranslation("mcpSessions");
 	const useUserSearchQuery = getUserSearchQuery();
 	const hasActive = filters.user_id.length > 0;
 	const [opened, setOpened] = useState(hasActive);
@@ -541,10 +559,10 @@ function UsersFilterSection({ filters, onFiltersChange }: SidebarProps) {
 	};
 
 	return (
-		<FilterSection title="Users" defaultOpen={hasActive} onOpenChange={setOpened} testId="mcp-sessions-filter-users-toggle">
+		<FilterSection title={t("filters.sections.users")} defaultOpen={hasActive} onOpenChange={setOpened} testId="mcp-sessions-filter-users-toggle">
 			<SearchableCheckboxList
 				inputRef={searchInputRef}
-				placeholder="Search by name or email"
+				placeholder={t("filters.searchUsers")}
 				items={users.map((user) => ({ key: user.id, label: user.label }))}
 				isSelected={(key) => filters.user_id.includes(key)}
 				onToggle={toggle}

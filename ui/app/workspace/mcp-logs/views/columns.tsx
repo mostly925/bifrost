@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdownMenu";
 import { mapAppToClientApp, mapUserAgentToApp, Status, StatusBarColors, Statuses } from "@/lib/constants/logs";
 import type { MCPToolLogEntry } from "@/lib/types/logs";
+import { getDateFnsLocale } from "@/lib/utils/dateLocale";
 import { ColumnDef, Row } from "@tanstack/react-table";
 import { format, isValid } from "date-fns";
 import { ArrowUpDown, MoreHorizontal, Trash2 } from "lucide-react";
@@ -44,7 +45,7 @@ export const createMCPColumns = (
 		cell: ({ row }) => {
 			const timestamp = row.original.timestamp;
 			const date = new Date(timestamp);
-			return <div className="truncate text-xs">{isValid(date) ? format(date, "yyyy-MM-dd hh:mm:ss aa (XXX)") : "Invalid date"}</div>;
+			return <div className="truncate text-xs">{isValid(date) ? format(date, "yyyy-MM-dd hh:mm:ss aa (XXX)", { locale: getDateFnsLocale() }) : "Invalid date"}</div>;
 		},
 	},
 	{

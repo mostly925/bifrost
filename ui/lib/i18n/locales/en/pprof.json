@@ -1,0 +1,91 @@
+{
+	"header": {
+		"title": "Pprof Profiler",
+		"subtitle": "Development only - Runtime profiling and memory analysis",
+		"autoRefresh": "Auto-refresh: 10s"
+	},
+	"stats": {
+		"cpuUsage": "CPU Usage",
+		"heapAlloc": "Heap Alloc",
+		"heapInUse": "Heap In-Use",
+		"systemMemory": "System Memory",
+		"goroutines": "Goroutines",
+		"gcPause": "GC Pause",
+		"gcCount": "{{count}} GCs"
+	},
+	"charts": {
+		"cpuTitle": "CPU Usage & Goroutines",
+		"memoryTitle": "Memory Usage",
+		"last5Min": "(last 5 min)",
+		"cpuPercent": "CPU %",
+		"goroutines": "Goroutines",
+		"alloc": "Alloc",
+		"heapInUse": "Heap In-Use",
+		"allocSeries": "Alloc (MB)",
+		"heapInUseSeries": "Heap In-Use (MB)"
+	},
+	"tables": {
+		"expandAria": "Expand",
+		"stackTrace": "Stack Trace",
+		"function": "Function",
+		"fileLine": "File:Line",
+		"bytes": "Bytes",
+		"count": "Count",
+		"severity": "Severity",
+		"live": "Live",
+		"retention": "Retention",
+		"trend": "Trend",
+		"liveCount": "Live Count",
+		"siteCount": "({{count}} sites)",
+		"noAllocations": "No allocations data available"
+	},
+	"leaks": {
+		"title": "Potential Leaks",
+		"suspiciousCount": "({{count}} suspicious)",
+		"highCount": "{{count}} high",
+		"mediumCount": "{{count}} medium",
+		"lowCount": "{{count}} low",
+		"description": "Stacks whose live bytes remain a large fraction of what they ever allocated (retention), optionally with live bytes trending upward over the last minute. Growth + high retention together is the strongest leak signal.",
+		"stable": "stable",
+		"cumulativeLabel": "Cumulative:",
+		"retainedLabel": "Retained:",
+		"lastWindow": "Last {{seconds}}s:",
+		"empty": "No obvious leak signatures; all live allocations have normal retention ratios."
+	},
+	"inuse": {
+		"title": "Live Heap Allocations",
+		"description": "Call stacks currently holding memory on the heap right now. Expand a row to see the full stack."
+	},
+	"cumulative": {
+		"title": "Cumulative Memory Allocations",
+		"description": "Total bytes allocated since process start (includes memory already freed). Expand a row to see the full stack."
+	},
+	"goroutines": {
+		"title": "Goroutine Health",
+		"growing": "Growing +{{percent}}%",
+		"stuckBadge": "Stuck Goroutines",
+		"longWaitingBadge": "Long Waiting",
+		"healthyBadge": "Healthy",
+		"clearHidden": "Clear {{count}} hidden",
+		"total": "Total",
+		"background": "Background",
+		"perRequest": "Per-Request",
+		"stuck": "Stuck",
+		"waitingMinutes": "{{minutes}}m waiting",
+		"waitReason": "Wait reason:",
+		"hideFile": "Hide goroutines from this file",
+		"allHidden": "All goroutines are hidden. Click \"Clear hidden\" to show them.",
+		"noData": "No goroutine data available"
+	},
+	"runtime": {
+		"cpus": "CPUs:",
+		"gomaxprocs": "GOMAXPROCS:",
+		"gcRuns": "GC Runs:",
+		"heapObjects": "Heap Objects:",
+		"totalAlloc": "Total Alloc:"
+	},
+	"states": {
+		"loading": "Loading profiling data...",
+		"error": "Failed to load profiling data. Make sure the backend is running in dev mode."
+	}
+}

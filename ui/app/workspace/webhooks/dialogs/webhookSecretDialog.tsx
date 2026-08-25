@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
 import { ArrowUpRight, Check, Copy } from "lucide-react";
+import { Trans, useTranslation } from "react-i18next";
 
 const WEBHOOKS_VERIFICATION_DOCS_URL = "https://docs.getbifrost.ai/features/webhooks?utm_source=bfd#verifying-deliveries";
 
@@ -18,16 +19,19 @@ interface WebhookSecretDialogProps {
 // The signing secret is returned exactly once by create and rotate-secret;
 // the API never exposes it again, so this dialog is the only chance to copy it.
 export function WebhookSecretDialog({ reveal, onClose }: WebhookSecretDialogProps) {
+	const { t } = useTranslation("webhooks");
 	const { copy, copied } = useCopyToClipboard();
 
 	return (
 		<Dialog open={!!reveal} onOpenChange={(open) => !open && onClose()}>
 			<DialogContent data-testid="webhook-secret-dialog">
 				<DialogHeader>
-					<DialogTitle>Signing secret for {reveal?.endpointName}</DialogTitle>
+					<DialogTitle>{t("secretDialog.title", { name: reveal?.endpointName })}</DialogTitle>
 					<DialogDescription>
-						Use this secret to verify the <code>webhook-signature</code> header on deliveries. It is shown only once - copy it now and store
-						it securely. If you lose it, rotate the endpoint to get a new one.
+						<Trans ns="webhooks" i18nKey="secretDialog.description">
+							Use this secret to verify the <code>webhook-signature</code> header on deliveries. It is shown only once - copy it now and
+							store it securely. If you lose it, rotate the endpoint to get a new one.
+						</Trans>
 					</DialogDescription>
 				</DialogHeader>
 				<div className="flex items-center gap-2 rounded-sm border p-3">

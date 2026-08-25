@@ -6,6 +6,7 @@ import { getApiBaseUrl } from "@/lib/utils/port";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useTheme } from "next-themes";
 import { NuqsAdapter } from "nuqs/adapters/tanstack-router";
+import { useTranslation } from "react-i18next";
 import LoginPage from "./page";
 
 function RouteComponent() {
@@ -29,6 +30,7 @@ function RouteComponent() {
 function PendingCard() {
 	const { resolvedTheme } = useTheme();
 	const { logoSrc, logoAlt } = useBranding(resolvedTheme === "dark");
+	const { t } = useTranslation();
 	return (
 		<div className="flex min-h-screen items-center justify-center p-4">
 			<div className="w-full max-w-md">
@@ -37,7 +39,7 @@ function PendingCard() {
 						<img src={logoSrc} alt={logoAlt} width={160} height={26} className="max-h-[40px] w-auto max-w-[220px] object-contain" />
 					</div>
 					<div className="flex items-center justify-center py-6">
-						<div className="text-muted-foreground text-sm">Checking authentication...</div>
+						<div className="text-muted-foreground text-sm">{t("login.checkingAuth")}</div>
 					</div>
 				</div>
 			</div>

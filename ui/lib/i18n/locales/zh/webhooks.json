@@ -1,0 +1,187 @@
+{
+	"toasts": {
+		"endpointEnabled": "端点已成功启用",
+		"endpointDisabled": "端点已成功停用",
+		"testDelivered": "测试已送达，接收方返回 {{code}}",
+		"testFailed": "测试失败：{{error}}",
+		"testRejected": "测试被拒绝，接收方返回 {{code}}",
+		"deleted": "Webhook 端点删除成功",
+		"secretRotated": "签名密钥轮换成功",
+		"updated": "Webhook 端点更新成功",
+		"created": "Webhook 端点创建成功",
+		"redeliveryQueued": "重投已加入队列，沿用原 webhook id"
+	},
+	"emptyState": {
+		"title": "异步任务完成时即时获得通知",
+		"description": "注册 Webhook 端点后，每当异步推理任务完成或失败，Bifrost 都会发送带签名的通知，无需轮询结果。",
+		"readMore": "了解更多",
+		"add": "添加 Webhook 端点"
+	},
+	"view": {
+		"title": "Webhooks",
+		"subtitle": "注册端点以接收带签名的通知，在异步推理任务完成或失败时推送。提交任务时通过 <1>x-bf-async-webhook</1> 请求头传入端点名称。",
+		"addEndpoint": "添加端点",
+		"loadError": "加载 Webhook 端点失败。",
+		"retry": "重试"
+	},
+	"filterBar": {
+		"searchAria": "搜索 Webhook 端点",
+		"searchPlaceholder": "按名称或 URL 搜索",
+		"allEvents": "全部事件",
+		"allStatuses": "全部状态",
+		"statusEnabled": "已启用",
+		"statusDisabled": "已停用",
+		"clearFilters": "清除筛选"
+	},
+	"table": {
+		"actionsAria": "Webhook 操作",
+		"edit": "编辑",
+		"rotateSecret": "轮换密钥",
+		"delete": "删除",
+		"columnName": "名称",
+		"columnUrl": "URL",
+		"columnEvents": "事件",
+		"columnEnabled": "启用",
+		"noMatches": "未找到匹配的 Webhook 端点。",
+		"deleteDialog": {
+			"title": "删除 Webhook 端点",
+			"description": "确定要删除 <1>{{name}}</1> 吗？待投递的消息将被丢弃，引用该端点的任务将被拒绝。此操作无法撤销。",
+			"cancel": "取消",
+			"confirm": "删除"
+		},
+		"rotateDialog": {
+			"title": "轮换签名密钥",
+			"description": "<1>{{name}}</1> 的当前密钥将立即失效，后续投递将使用新密钥签名。请在轮换后立即更新接收方。",
+			"cancel": "取消",
+			"confirm": "轮换"
+		},
+		"pagination": {
+			"range": "第 {{from}}-{{to}} 条，共 {{total}} 条",
+			"previousAria": "上一页",
+			"nextAria": "下一页",
+			"page": "第",
+			"of": "页，共 {{count}} 页"
+		}
+	},
+	"secretDialog": {
+		"title": "{{name}} 的签名密钥",
+		"description": "使用该密钥校验投递中的 <1>webhook-signature</1> 请求头。密钥仅显示一次，请立即复制并妥善保存。若遗失，可轮换代点获取新密钥。",
+		"copyAria": "复制签名密钥",
+		"copied": "签名密钥已复制",
+		"readMore": "了解更多",
+		"confirm": "我已保存密钥"
+	},
+	"sheet": {
+		"createTitle": "添加 Webhook 端点",
+		"editDescription": "更新该端点的 URL、订阅事件与投递行为。",
+		"createDescription": "注册 HTTPS 端点，在异步任务完成时接收带签名的通知。",
+		"nameLabel": "名称",
+		"namePlaceholder": "例如：billing-service",
+		"urlLabel": "URL",
+		"urlPlaceholder": "https://example.com/hooks/bifrost",
+		"eventsLabel": "事件",
+		"includeResponseLabel": "包含响应内容",
+		"includeResponseDescription": "在通知中内联任务结果。结果过大或已过期时，将改为投递精简内容。",
+		"allowPrivateNetworkLabel": "允许私有网络",
+		"allowPrivateNetworkDescription": "允许投递到私有 IP 段。仅当接收方位于你自己的内网时才启用。",
+		"customHeadersLabel": "自定义请求头",
+		"headerKeyPlaceholder": "例如：Authorization",
+		"headerValuePlaceholder": "值或 env.VARIABLE",
+		"headersNote": "随每次投递发送。签名与内容相关请求头为保留项，无法覆盖。",
+		"headerValueRequired": "请求头 \"{{name}}\" 必须有值",
+		"tuningHeading": "投递调优",
+		"usingDefault": "使用投递工作进程默认值",
+		"tuningNote": "若重试时间超出任务结果的 TTL，后续投递将携带标记为 <1>result_expired</1> 的精简内容。",
+		"tuning": {
+			"max_retries": {
+				"label": "最大重试次数",
+				"description": "首次投递失败后的重试次数。"
+			},
+			"retry_backoff_initial_seconds": {
+				"label": "初始重试退避（秒）",
+				"description": "首次重试前的延迟，每次重试翻倍。"
+			},
+			"retry_backoff_max_seconds": {
+				"label": "最大重试退避（秒）",
+				"description": "单次重试延迟的上限。"
+			},
+			"attempt_timeout_seconds": {
+				"label": "单次尝试超时（秒）",
+				"description": "单次投递尝试的端到端时限。"
+			},
+			"max_response_payload_kbs": {
+				"label": "最大响应体积（KB）",
+				"description": "超过该大小的响应将从内容中省略。"
+			},
+			"max_concurrent_deliveries": {
+				"label": "最大并发投递数",
+				"description": "每个节点向该端点并发进行的投递数。"
+			}
+		},
+		"cancel": "取消",
+		"saving": "保存中...",
+		"update": "更新端点",
+		"create": "创建端点",
+		"validation": {
+			"nameRequired": "必须填写名称",
+			"urlRequired": "必须填写 URL",
+			"urlInvalid": "请输入有效的 HTTP(S) URL",
+			"eventsMin": "至少订阅一个事件",
+			"privateNetworkRequired": "http:// URL 需启用「允许私有网络」"
+		}
+	},
+	"details": {
+		"statusEnabled": "已启用",
+		"statusDisabled": "已停用",
+		"eventsLabel": "事件",
+		"includeResponse": "包含响应",
+		"yes": "是",
+		"no": "否",
+		"privateNetwork": "私有网络",
+		"allowed": "允许",
+		"blocked": "禁止",
+		"lastSuccess": "最近成功",
+		"lastFailure": "最近失败",
+		"never": "从未",
+		"consecutiveFailures": "连续失败次数",
+		"maxRetries": "最大重试次数",
+		"retryBackoff": "重试退避",
+		"attemptTimeout": "单次尝试超时",
+		"deliveryHistory": "投递历史",
+		"sendTestEvent": "发送测试事件",
+		"columnTime": "时间",
+		"columnRequestId": "请求 ID",
+		"columnEvent": "事件",
+		"columnStatus": "状态",
+		"columnResponses": "响应",
+		"columnActions": "操作",
+		"statusTooltip": {
+			"delivered": "<1>已送达</1>：接收方返回 2xx。",
+			"retrying": "<1>重试中</1>：临时性失败（网络错误、超时、429 或 5xx），已安排再次尝试。",
+			"failed": "<1>失败</1>：永久性错误（如 401/404 等不可重试的 4xx），不会自动重试。",
+			"retriesExhausted": "<1>重试次数用尽</1>：持续失败直至重试次数用尽。"
+		},
+		"responsesTooltip": "每次投递尝试对应一个标记，按时间从旧到新排列：接收方返回的状态码，未收到响应时显示短横线。悬停失败的状态码可查看错误详情。",
+		"loadError": "加载投递历史失败，正在重试…",
+		"noDeliveries": "暂无投递记录。",
+		"expandRedeliveries": "展开重投记录",
+		"collapseRedeliveries": "收起重投记录",
+		"sendsCount": "{{count}} 次发送",
+		"sendOriginal": "首次发送",
+		"sendRedelivery": "第 {{index}} 次重投",
+		"redeliverAria": "重新投递",
+		"outcomes": {
+			"delivered": "已送达",
+			"retrying": "重试中",
+			"failed": "失败",
+			"retriesExhausted": "重试次数用尽"
+		},
+		"pagination": {
+			"range": "第 {{from}}-{{to}} 条，共 {{total}} 条",
+			"previousAria": "上一页",
+			"nextAria": "下一页",
+			"page": "第",
+			"of": "页，共 {{count}} 页"
+		}
+	}
+}

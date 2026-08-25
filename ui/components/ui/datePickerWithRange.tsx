@@ -1,10 +1,12 @@
 import { cn } from "@/lib/utils";
+import { getDateFnsLocale } from "@/lib/utils/dateLocale";
 import { getSupportedTimezones } from "@/lib/timezones";
 import { TZDate, tz, tzName } from "@date-fns/tz";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon, Globe } from "lucide-react";
 import React, { useEffect, useMemo } from "react";
 import { DateRange } from "react-day-picker";
+import { useTranslation } from "react-i18next";
 import { Button } from "./button";
 import { Calendar } from "./calendar";
 import { ComboboxSelect } from "./combobox";
@@ -135,8 +137,8 @@ export function DateTimePickerWithRange(props: DateTimePickerWithRangeProps) {
 
 	/** Format a date for the trigger button, respecting the active timezone. */
 	const formatDate = (d: Date, fmt: string): string => {
-		if (activeTimezone) return format(d, fmt, { in: tz(activeTimezone) });
-		return format(d, fmt);
+		if (activeTimezone) return format(d, fmt, { in: tz(activeTimezone), locale: getDateFnsLocale() });
+		return format(d, fmt, { locale: getDateFnsLocale() });
 	};
 
 	/** Short timezone abbreviation for the trigger button label. */
@@ -386,6 +388,7 @@ interface DateTimePickerProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export function DateTimePicker(props: DateTimePickerProps) {
 	const { className, buttonClassName, buttonVariant, triggerLabel, onTrigger, dateTime } = props;
+	const { t } = useTranslation();
 
 	const initialDate = dateTime ? new Date(dateTime) : new Date();
 	const [date, setDate] = React.useState<Date | undefined>(initialDate);
@@ -450,10 +453,10 @@ export function DateTimePicker(props: DateTimePickerProps) {
 						<CalendarIcon className="h-4 w-4" strokeWidth={1.5} />
 						{date ? (
 							<>
-								{format(date, "LLL dd, y")} {printTimeValue(timeValue)}
+								{format(date, "LLL dd, y", { locale: getDateFnsLocale() })} {printTimeValue(timeValue)}
 							</>
 						) : (
-							<span>Pick a date and time</span>
+							<span>{t("datePicker.placeholder")}</span>
 						)}
 					</Button>
 				</PopoverTrigger>

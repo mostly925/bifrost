@@ -37,10 +37,12 @@ import {
 import { MCPFlowDetail } from "@/lib/types/mcpSessions";
 import { MCPHeadersFlowDetail } from "@/lib/types/mcpPerUserHeaders";
 import { Link } from "@tanstack/react-router";
+import type { TFunction } from "i18next";
 import { CheckCircle2, ExternalLink, Fingerprint, KeyRound, Loader2, LogIn, ShieldCheck, TriangleAlert, UserRound } from "lucide-react";
 import { useQueryState } from "nuqs";
 import React from "react";
 import { useMemo, useState } from "react";
+import { Trans, useTranslation } from "react-i18next";
 
 export default function MCPSessionsAuthPage() {
 	const [flowId] = useQueryState("flow");
@@ -56,6 +58,7 @@ export default function MCPSessionsAuthPage() {
 }
 
 function OAuthAuthView() {
+	const { t } = useTranslation("mcpSessions");
 	const { toast } = useToast();
 	const [flowId] = useQueryState("flow");
 	const skip = !flowId;
@@ -79,10 +82,9 @@ function OAuthAuthView() {
 	if (!flowId) {
 		return (
 			<CenteredCard>
-				<h1 className="text-xl font-semibold">Missing flow identifier</h1>
+				<h1 className="text-xl font-semibold">{t("auth.missingFlow.title")}</h1>
 				<p className="text-muted-foreground mt-2 text-sm">
-					This URL is missing the <code className="bg-muted rounded px-1 py-0.5">flow</code> query parameter. Open the link from your
-					inference response or the sessions tab.
+					<Trans i18nKey="auth.missingFlow.body" components={{ 1: <code className="bg-muted rounded px-1 py-0.5" /> }} />
 				</p>
 				<div className="mt-6">
 					<SessionsTabLink />
@@ -103,11 +105,8 @@ function OAuthAuthView() {
 		if (status === 403) {
 			return (
 				<CenteredCard>
-					<h1 className="text-xl font-semibold">This authentication flow isn't yours</h1>
-					<p className="text-muted-foreground mt-2 text-sm">
-						The pending flow belongs to a different identity. Ask the teammate whose VK or user identity triggered the original request to
-						complete it, or trigger a new request yourself.
-					</p>
+					<h1 className="text-xl font-semibold">{t("auth.notYours.oauthTitle")}</h1>
+					<p className="text-muted-foreground mt-2 text-sm">{t("auth.notYours.body")}</p>
 					<div className="mt-6">
 						<SessionsTabLink />
 					</div>
@@ -117,11 +116,8 @@ function OAuthAuthView() {
 		if (status === 404) {
 			return (
 				<CenteredCard>
-					<h1 className="text-xl font-semibold">This authentication flow has expired or been completed</h1>
-					<p className="text-muted-foreground mt-2 text-sm">
-						Pending flows expire after a short window. If you still need to authenticate, trigger the original action again so a fresh flow
-						is created.
-					</p>
+					<h1 className="text-xl font-semibold">{t("auth.expired.oauthTitle")}</h1>
+					<p className="text-muted-foreground mt-2 text-sm">{t("auth.expired.oauthBody")}</p>
 					<div className="mt-6">
 						<SessionsTabLink />
 					</div>
@@ -130,7 +126,7 @@ function OAuthAuthView() {
 		}
 		return (
 			<CenteredCard>
-				<h1 className="text-xl font-semibold">Could not load this authentication flow</h1>
+				<h1 className="text-xl font-semibold">{t("auth.loadError.oauthTitle")}</h1>
 				<p className="text-muted-foreground mt-2 text-sm">{getErrorMessage(error)}</p>
 			</CenteredCard>
 		);
@@ -149,14 +145,14 @@ function OAuthAuthView() {
 			window.location.href = res.authorize_url;
 		} catch (err) {
 			toast({
-				title: "Failed to start authentication",
+				title: t("auth.startFailedToast"),
 				description: getErrorMessage(err),
 				variant: "destructive",
 			});
 		}
 	};
 
-	const mcpClientName = flow.mcp_client?.name || flow.mcp_client?.client_id || "MCP server";
+	const mcpClientName = flow.mcp_client?.name || flow.mcp_client?.client_id || t("auth.mcpServerFallback");
 	const isReauth = flow.has_active_token === true;
 
 	return (
@@ -165,38 +161,28 @@ function OAuthAuthView() {
 				<ShieldCheck className="text-primary size-6" />
 			</div>
 			<h1 className="text-xl font-semibold tracking-tight">
-				{isReauth ? "Re-authenticate with" : "Authenticate with"} {mcpClientName}
+				{isReauth ? t("auth.reauthenticateTitle", { name: mcpClientName }) : t("auth.authenticateTitle", { name: mcpClientName })}
 			</h1>
 			<p className="text-muted-foreground mt-2 text-sm">
-				{isReauth ? (
-					<>
-						An active credential already exists for the binding below. Completing this flow will <strong>replace</strong> it with a fresh
-						credential. You can also close this tab to keep using the existing one.
-					</>
-				) : (
-					<>
-						You'll be redirected to the provider to sign in and grant access. Bifrost stores the resulting credential against the binding
-						below so this request and future ones can proceed automatically.
-					</>
-				)}
+				{isReauth ? <Trans i18nKey="auth.reauthBody" components={{ strong: <strong /> }} /> : t("auth.freshBody")}
 			</p>
 
 			<dl className="bg-muted/40 mt-6 space-y-3 rounded-sm border p-4 text-sm">
-				<DetailRow label="MCP client" value={mcpClientName} mono={!flow.mcp_client?.name} />
-				<DetailRow label="Bound to" value={<BindingValue flow={flow} />} />
-				<DetailRow label="Flow expires" value={formatExpiry(flow.expires_at)} />
+				<DetailRow label={t("auth.details.mcpClient")} value={mcpClientName} mono={!flow.mcp_client?.name} />
+				<DetailRow label={t("auth.details.boundTo")} value={<BindingValue flow={flow} />} />
+				<DetailRow label={t("auth.details.flowExpires")} value={formatExpiry(flow.expires_at, t)} />
 			</dl>
 
 			<div className="mt-6 flex gap-3">
 				<Button onClick={handleAuthenticate} disabled={starting} data-testid="mcp-auth-authenticate-button">
 					{starting ? <Loader2 className="size-4 animate-spin" /> : <ExternalLink className="size-4" />}
-					<span>{isReauth ? "Re-authenticate" : "Authenticate"}</span>
+					<span>{isReauth ? t("auth.reauthenticate") : t("auth.authenticate")}</span>
 				</Button>
 				{showLoginOption && !showTempTokenSSOWarning ? (
 					<Button asChild variant="outline" data-testid="mcp-auth-login-instead-inline-button">
 						<a href={loginHref}>
 							<LogIn className="size-4" />
-							Log in instead
+							{t("auth.logInInstead")}
 						</a>
 					</Button>
 				) : null}
@@ -212,6 +198,7 @@ function OAuthAuthView() {
 // endpoint. On success the backend verifies upstream, upserts the credential
 // row, deletes the flow row + temp token, and we show a success card.
 function HeadersAuthView({ flowId }: { flowId: string }) {
+	const { t } = useTranslation("mcpSessions");
 	const { toast } = useToast();
 	const [submitted, setSubmitted] = useQueryState("submitted");
 	// Skip the GET once the submit has completed — the backend deletes the
@@ -226,10 +213,8 @@ function HeadersAuthView({ flowId }: { flowId: string }) {
 				<div className="mb-5 flex size-12 items-center justify-center rounded-full bg-emerald-500/10">
 					<CheckCircle2 className="size-6 text-emerald-600" />
 				</div>
-				<h1 className="text-xl font-semibold tracking-tight">Headers saved</h1>
-				<p className="text-muted-foreground mt-2 text-sm">
-					Bifrost verified the connection and stored your credentials. You can close this tab and retry the original action.
-				</p>
+				<h1 className="text-xl font-semibold tracking-tight">{t("headersAuth.savedTitle")}</h1>
+				<p className="text-muted-foreground mt-2 text-sm">{t("headersAuth.savedBody")}</p>
 				<div className="mt-6 flex gap-3">
 					<SessionsTabLink />
 				</div>
@@ -253,11 +238,8 @@ function HeadersAuthView({ flowId }: { flowId: string }) {
 		if (status === 403) {
 			return (
 				<CenteredCard>
-					<h1 className="text-xl font-semibold">This submission flow isn't yours</h1>
-					<p className="text-muted-foreground mt-2 text-sm">
-						The pending flow belongs to a different identity. Ask the teammate whose VK or user identity triggered the original request to
-						complete it, or trigger a new request yourself.
-					</p>
+					<h1 className="text-xl font-semibold">{t("auth.notYours.headersTitle")}</h1>
+					<p className="text-muted-foreground mt-2 text-sm">{t("auth.notYours.body")}</p>
 					<div className="mt-6">
 						<SessionsTabLink />
 					</div>
@@ -267,10 +249,8 @@ function HeadersAuthView({ flowId }: { flowId: string }) {
 		if (status === 404 || status === 410) {
 			return (
 				<CenteredCard>
-					<h1 className="text-xl font-semibold">This submission link has expired or been used</h1>
-					<p className="text-muted-foreground mt-2 text-sm">
-						Submission flows expire after a short window. Trigger the original request again to get a fresh link.
-					</p>
+					<h1 className="text-xl font-semibold">{t("auth.expired.headersTitle")}</h1>
+					<p className="text-muted-foreground mt-2 text-sm">{t("auth.expired.headersBody")}</p>
 					<div className="mt-6">
 						<SessionsTabLink />
 					</div>
@@ -279,7 +259,7 @@ function HeadersAuthView({ flowId }: { flowId: string }) {
 		}
 		return (
 			<CenteredCard>
-				<h1 className="text-xl font-semibold">Could not load this submission link</h1>
+				<h1 className="text-xl font-semibold">{t("auth.loadError.headersTitle")}</h1>
 				<p className="text-muted-foreground mt-2 text-sm">{getErrorMessage(error)}</p>
 			</CenteredCard>
 		);
@@ -291,16 +271,16 @@ function HeadersAuthView({ flowId }: { flowId: string }) {
 			void setSubmitted("true");
 		} catch (err) {
 			toast({
-				title: "Submission failed",
+				title: t("headersAuth.submitFailedToast"),
 				description: getErrorMessage(err),
 				variant: "destructive",
 			});
 		}
 	};
 
-	const mcpClientName = detail.mcp_client?.name || detail.mcp_client?.client_id || "MCP server";
+	const mcpClientName = detail.mcp_client?.name || detail.mcp_client?.client_id || t("auth.mcpServerFallback");
 	const isEdit = detail.has_active_credential;
-	const title = isEdit ? `Update credentials for ${mcpClientName}` : `Submit credentials for ${mcpClientName}`;
+	const title = isEdit ? t("headersAuth.updateTitle", { name: mcpClientName }) : t("headersAuth.submitTitle", { name: mcpClientName });
 
 	return (
 		<CenteredCard>
@@ -309,23 +289,13 @@ function HeadersAuthView({ flowId }: { flowId: string }) {
 			</div>
 			<h1 className="text-xl font-semibold tracking-tight">{title}</h1>
 			<p className="text-muted-foreground mt-2 text-sm">
-				{isEdit ? (
-					<>
-						This server already has stored credentials for you. Submitting new values <strong>replaces</strong> the existing entry; the
-						server will be re-verified before saving.
-					</>
-				) : (
-					<>
-						This server requires you to supply your own API keys / tokens. The values you submit are stored encrypted and only used to
-						authenticate your own requests.
-					</>
-				)}
+				{isEdit ? <Trans i18nKey="headersAuth.editBody" components={{ strong: <strong /> }} /> : t("headersAuth.freshBody")}
 			</p>
 
 			<dl className="bg-muted/40 mt-6 space-y-3 rounded-sm border p-4 text-sm">
-				<DetailRow label="MCP client" value={mcpClientName} mono={!detail.mcp_client?.name} />
-				<DetailRow label="Bound to" value={<HeadersBindingValue flow={detail} />} />
-				<DetailRow label="Flow expires" value={formatExpiry(detail.expires_at)} />
+				<DetailRow label={t("auth.details.mcpClient")} value={mcpClientName} mono={!detail.mcp_client?.name} />
+				<DetailRow label={t("auth.details.boundTo")} value={<HeadersBindingValue flow={detail} />} />
+				<DetailRow label={t("auth.details.flowExpires")} value={formatExpiry(detail.expires_at, t)} />
 			</dl>
 
 			<div className="mt-6">
@@ -335,7 +305,7 @@ function HeadersAuthView({ flowId }: { flowId: string }) {
 					previouslySubmittedKeys={detail.submitted_keys}
 					onSubmit={handleSubmit}
 					busy={submitting}
-					submitLabel={isEdit ? "Save" : "Submit"}
+					submitLabel={isEdit ? t("headersAuth.saveLabel") : t("headersAuth.submitLabel")}
 					testIdPrefix="mcp-headers-submit"
 				/>
 			</div>
@@ -344,13 +314,14 @@ function HeadersAuthView({ flowId }: { flowId: string }) {
 }
 
 function HeadersBindingValue({ flow }: { flow: MCPHeadersFlowDetail }) {
+	const { t } = useTranslation("mcpSessions");
 	if (flow.flow_mode === "user") {
 		const userID = flow.user_id;
 		if (!userID) {
 			return (
 				<span className="inline-flex items-center gap-2">
 					<UserRound className="text-muted-foreground size-3.5" />
-					<Badge variant="secondary">First signed-in user</Badge>
+					<Badge variant="secondary">{t("auth.binding.firstSignedInUser")}</Badge>
 				</span>
 			);
 		}
@@ -378,29 +349,28 @@ function HeadersBindingValue({ flow }: { flow: MCPHeadersFlowDetail }) {
 			</span>
 		);
 	}
-	return <span className="text-muted-foreground italic">Unknown</span>;
+	return <span className="text-muted-foreground italic">{t("auth.binding.unknown")}</span>;
 }
 
 function CompletedFlowView({ flow }: { flow: MCPFlowDetail }) {
-	const mcpClientName = flow.mcp_client?.name || flow.mcp_client?.client_id || "this MCP server";
+	const { t } = useTranslation("mcpSessions");
+	const mcpClientName = flow.mcp_client?.name || flow.mcp_client?.client_id || t("auth.completed.mcpServerFallback");
 	// has_active_token wins over the flow's row status: a pending flow with an
 	// existing active token means OAuth was re-initiated unnecessarily.
 	const effectivelyAuthorized = flow.status === "authorized" || flow.has_active_token;
 	const title = effectivelyAuthorized
-		? "Already authenticated"
+		? t("auth.completed.alreadyAuthenticated")
 		: flow.status === "expired"
-			? "This authentication flow has expired"
-			: "This authentication flow can no longer be completed";
-	const body = effectivelyAuthorized
-		? `The OAuth credential for ${mcpClientName} is already stored. You can close this tab.`
-		: "Trigger the original action again so a fresh flow is created.";
+			? t("auth.completed.expiredTitle")
+			: t("auth.completed.noLongerCompletable");
+	const body = effectivelyAuthorized ? t("auth.completed.credentialAlreadyStored", { name: mcpClientName }) : t("auth.completed.triggerAgain");
 	return (
 		<CenteredCard>
 			<h1 className="text-xl font-semibold tracking-tight">{title}</h1>
 			<p className="text-muted-foreground mt-2 text-sm">{body}</p>
 			<dl className="bg-muted/40 mt-6 space-y-3 rounded-sm border p-4 text-sm">
-				<DetailRow label="MCP client" value={mcpClientName} mono={!flow.mcp_client?.name} />
-				<DetailRow label="Bound to" value={<BindingValue flow={flow} />} />
+				<DetailRow label={t("auth.details.mcpClient")} value={mcpClientName} mono={!flow.mcp_client?.name} />
+				<DetailRow label={t("auth.details.boundTo")} value={<BindingValue flow={flow} />} />
 			</dl>
 			<div className="mt-6">
 				<SessionsTabLink />
@@ -419,13 +389,14 @@ function DetailRow({ label, value, mono = false }: { label: string; value: React
 }
 
 function BindingValue({ flow }: { flow: MCPFlowDetail }) {
+	const { t } = useTranslation("mcpSessions");
 	if (flow.flow_mode === "user") {
 		const userID = flow.user_id;
 		if (!userID) {
 			return (
 				<span className="inline-flex items-center gap-2">
 					<UserRound className="text-muted-foreground size-3.5" />
-					<Badge variant="secondary">First signed-in user</Badge>
+					<Badge variant="secondary">{t("auth.binding.firstSignedInUser")}</Badge>
 				</span>
 			);
 		}
@@ -453,19 +424,19 @@ function BindingValue({ flow }: { flow: MCPFlowDetail }) {
 			</span>
 		);
 	}
-	return <span className="text-muted-foreground italic">Unknown</span>;
+	return <span className="text-muted-foreground italic">{t("auth.binding.unknown")}</span>;
 }
 
-function formatExpiry(iso: string): string {
+function formatExpiry(iso: string, t: TFunction<"mcpSessions">): string {
 	try {
-		const t = new Date(iso).getTime();
-		if (Number.isNaN(t)) return iso;
-		const diffMs = t - Date.now();
-		if (diffMs < 0) return "Expired";
+		const ts = new Date(iso).getTime();
+		if (Number.isNaN(ts)) return iso;
+		const diffMs = ts - Date.now();
+		if (diffMs < 0) return t("auth.expiry.expired");
 		const mins = Math.floor(diffMs / 60_000);
-		if (mins < 1) return "in less than a minute";
-		if (mins === 1) return "in 1 minute";
-		return `in ${mins} minutes`;
+		if (mins < 1) return t("auth.expiry.inLessThanAMinute");
+		if (mins === 1) return t("auth.expiry.inOneMinute");
+		return t("auth.expiry.inMinutes", { count: mins });
 	} catch {
 		return iso;
 	}
@@ -480,6 +451,7 @@ function CenteredCard({ children }: { children: React.ReactNode }) {
 }
 
 function SessionsTabLink({ variant = "outline" }: { variant?: "outline" | "ghost" }) {
+	const { t } = useTranslation("mcpSessions");
 	// Hide the link only when the visitor has no dashboard session — for them,
 	// /workspace/mcp-sessions would 401 and bounce to /login. Admins (cookie
 	// present) still see it. ClientLayout already cached this query for the
@@ -490,7 +462,7 @@ function SessionsTabLink({ variant = "outline" }: { variant?: "outline" | "ghost
 	}
 	return (
 		<Button asChild variant={variant} data-testid="mcp-auth-sessions-tab-link">
-			<Link to="/workspace/mcp-sessions">Open sessions tab</Link>
+			<Link to="/workspace/mcp-sessions">{t("auth.openSessionsTab")}</Link>
 		</Button>
 	);
 }
@@ -502,13 +474,11 @@ function SessionsTabLink({ variant = "outline" }: { variant?: "outline" | "ghost
 // fragment was dropped along the way. Trigger the original action again to
 // get a fresh URL.
 function InvalidLinkView() {
+	const { t } = useTranslation("mcpSessions");
 	return (
 		<CenteredCard>
-			<h1 className="text-xl font-semibold tracking-tight">This authentication link is no longer valid</h1>
-			<p className="text-muted-foreground mt-2 text-sm">
-				The link may have expired, been used already, invalid, or had its short-lived token stripped. Trigger the original action again so a
-				fresh authentication link is created.
-			</p>
+			<h1 className="text-xl font-semibold tracking-tight">{t("auth.invalidLink.title")}</h1>
+			<p className="text-muted-foreground mt-2 text-sm">{t("auth.invalidLink.body")}</p>
 		</CenteredCard>
 	);
 }

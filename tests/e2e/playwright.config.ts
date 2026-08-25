@@ -92,6 +92,10 @@ export default defineConfig({
 
     // Grant clipboard permissions so copy-to-clipboard tests work on localhost
     permissions: ['clipboard-read', 'clipboard-write'],
+
+    // UI follows browser language via i18n; pin locale so text-based locators
+    // always see the English copy regardless of host environment.
+    locale: 'en-US',
   },
 
   // Global timeout for each test

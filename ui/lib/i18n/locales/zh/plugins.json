@@ -1,0 +1,79 @@
+{
+	"sidebar": {
+		"title": "插件"
+	},
+	"installNewPlugin": "安装新插件",
+	"editPluginSequence": "编辑插件顺序",
+	"emptyState": {
+		"title": "自定义插件用你自己的业务逻辑扩展 Bifrost",
+		"description": "构建并部署插件，实现自定义集成、工作流自动化和 AI 治理。",
+		"readMore": "了解更多",
+		"readMoreAria": "了解更多自定义插件信息（在新标签页打开）",
+		"createAria": "创建你的第一个插件"
+	},
+	"form": {
+		"infoEdit": "更新插件配置。插件名称和路径为只读。<1>了解更多</1>",
+		"infoNew": "提供 Bifrost 部署可访问的绝对文件路径或 HTTP URL（.so）即可安装自定义插件。<1>了解更多</1>",
+		"nameLabel": "插件名称 *",
+		"namePlaceholder": "例如 my-custom-plugin",
+		"pathLabel": "插件路径/URL *",
+		"pathPlaceholder": "例如 /path/to/plugin.so 或 https://example.com/plugin.so",
+		"addConfiguration": "添加配置",
+		"configLabel": "配置（JSON）",
+		"validation": {
+			"nameRequired": "插件名称为必填项",
+			"nameFormat": "插件名称只能包含字母、数字、连字符和下划线",
+			"pathRequired": "插件路径/URL 为必填项",
+			"pathFormat": "请输入有效的绝对文件路径（以 / 开头）或 HTTP/HTTPS URL",
+			"configJson": "配置必须是合法的 JSON",
+			"viewNameRequired": "名称为必填项"
+		}
+	},
+	"sheet": {
+		"installTitle": "安装新插件",
+		"updateTitle": "更新插件",
+		"installDescription": "提供插件名称、路径/URL 和可选配置来添加自定义插件。",
+		"updateDescription": "更新插件配置。注意：插件名称和路径无法修改。",
+		"installSubmit": "安装插件",
+		"updateSubmit": "更新插件"
+	},
+	"sequence": {
+		"description": "将插件拖拽到内置插件块的上方或下方，以控制执行顺序。",
+		"builtinPlugins": "内置插件",
+		"alert": "如果你的 config.json 文件中配置了插件顺序，重启 Bifrost 后它将优先于界面中配置的顺序。",
+		"save": "保存顺序",
+		"toastUpdated": "插件顺序已更新"
+	},
+	"view": {
+		"title": "插件配置",
+		"noPluginSelected": "未选择插件",
+		"nameLabel": "名称",
+		"namePlaceholder": "插件名称",
+		"nameDescription": "插件的名称",
+		"typesLabel": "类型",
+		"enabledLabel": "启用",
+		"enabledDescription": "启用或禁用此插件",
+		"pathLabel": "路径",
+		"pathPlaceholder": "插件路径",
+		"pathDescription": "插件的文件系统路径",
+		"configDescription": "JSON 格式的插件配置",
+		"logsLabel": "日志",
+		"deleteButton": "删除插件",
+		"saveChanges": "保存更改"
+	},
+	"deleteDialog": {
+		"title": "删除插件",
+		"description": "确定要删除插件 “{{name}}” 吗？此操作无法撤销。",
+		"deleting": "删除中...",
+		"failed": "删除插件失败"
+	},
+	"toast": {
+		"invalidJson": "配置不是合法的 JSON",
+		"invalidJsonConfig": "配置中的 JSON 不合法",
+		"updated": "插件更新成功",
+		"created": "插件创建成功",
+		"updateFailed": "更新插件失败",
+		"deleted": "插件删除成功",
+		"fixErrors": "请先修正表单错误再提交"
+	}
+}

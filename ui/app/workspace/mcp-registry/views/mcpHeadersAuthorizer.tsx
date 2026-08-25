@@ -14,6 +14,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { getErrorMessage } from "@/lib/store";
 import { CheckCircle2, KeyRound, Loader2, RefreshCw, ShieldCheck, XCircle } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { IconWrap, InfoBox, StepDots, UiVariant } from "./authorizerUi";
 
 interface MCPHeadersAuthorizerProps {
@@ -41,21 +42,22 @@ const STATUS_ICON: Record<Status, { variant: UiVariant; icon: React.ReactNode }>
 	failed: { variant: "danger", icon: <XCircle className="size-4" /> },
 };
 
-const titles: Record<Status, string> = {
-	confirm: "Test header configuration",
-	input: "Enter sample values",
-	testing: "Verifying connection",
-	success: "Connection verified",
-	failed: "Verification failed",
-};
+// Translation keys per step; resolved with t at render time.
+const TITLE_KEYS = {
+	confirm: "clients.headersAuth.confirmTitle",
+	input: "clients.headersAuth.inputTitle",
+	testing: "clients.headersAuth.testingTitle",
+	success: "clients.headersAuth.successTitle",
+	failed: "clients.headersAuth.failedTitle",
+} satisfies Record<Status, string>;
 
-const subtitles: Record<Status, string> = {
-	confirm: "Verify your header setup to discover available tools.",
-	input: "Enter sample values to verify the connection.",
-	testing: "Checking your headers and discovering available tools.",
-	success: "Header verification completed successfully.",
-	failed: "The verification did not complete.",
-};
+const SUBTITLE_KEYS = {
+	confirm: "clients.headersAuth.confirmSubtitle",
+	input: "clients.headersAuth.inputSubtitle",
+	testing: "clients.headersAuth.testingSubtitle",
+	success: "clients.headersAuth.successSubtitle",
+	failed: "clients.headersAuth.failedSubtitle",
+} satisfies Record<Status, string>;
 
 export const MCPHeadersAuthorizer: React.FC<MCPHeadersAuthorizerProps> = ({
 	open,
@@ -66,6 +68,7 @@ export const MCPHeadersAuthorizer: React.FC<MCPHeadersAuthorizerProps> = ({
 	perUserHeaderKeys,
 	submitHandler,
 }) => {
+	const { t } = useTranslation("mcpRegistry");
 	const [status, setStatus] = useState<Status>("confirm");
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
 	// Set to true when the user cancels so in-flight async callbacks do not
@@ -142,8 +145,8 @@ export const MCPHeadersAuthorizer: React.FC<MCPHeadersAuthorizerProps> = ({
 					<div className="flex items-start gap-3">
 						<IconWrap variant={STATUS_ICON[status].variant} icon={STATUS_ICON[status].icon} />
 						<div className="min-w-0 space-y-0.5">
-							<DialogTitle className="text-sm leading-snug font-medium">{titles[status]}</DialogTitle>
-							<DialogDescription className="text-xs leading-relaxed">{subtitles[status]}</DialogDescription>
+							<DialogTitle className="text-sm leading-snug font-medium">{t(TITLE_KEYS[status])}</DialogTitle>
+							<DialogDescription className="text-xs leading-relaxed">{t(SUBTITLE_KEYS[status])}</DialogDescription>
 						</div>
 					</div>
 				</DialogHeader>
@@ -154,22 +157,15 @@ export const MCPHeadersAuthorizer: React.FC<MCPHeadersAuthorizerProps> = ({
 					{status === "confirm" && (
 						<>
 							<InfoBox icon={<KeyRound className="size-4" />}>
-								<p>
-									To set up this MCP server, we need to verify that your header configuration is correct and discover the
-									available tools.
-								</p>
-								<p className="text-muted-foreground/80 text-xs">
-									You will be asked to provide sample values for the required headers. Bifrost keeps these values on file to
-									periodically refresh the available tool list; they are never used for real end-user requests. Once verified,
-									each user will submit their own header values when they use this MCP server.
-								</p>
+								<p>{t("clients.headersAuth.confirmBody")}</p>
+								<p className="text-muted-foreground/80 text-xs">{t("clients.headersAuth.confirmDetail")}</p>
 							</InfoBox>
 							<div className="flex justify-end gap-2">
 								<Button size="sm" variant="outline" onClick={handleCancel} data-testid="per-user-headers-cancel">
-									Cancel
+									{t("clients.headersAuth.cancel")}
 								</Button>
 								<Button size="sm" onClick={handleConfirm} data-testid="per-user-headers-confirm">
-									Continue
+									{t("clients.headersAuth.continue")}
 								</Button>
 							</div>
 						</>
@@ -179,15 +175,12 @@ export const MCPHeadersAuthorizer: React.FC<MCPHeadersAuthorizerProps> = ({
 					{status === "input" && (
 						<>
 							<InfoBox icon={<KeyRound className="size-4" />}>
-								<p>
-									These values verify the connection now and are kept on file so Bifrost can periodically refresh the available
-									tool list. Each user still submits their own values when they use this server.
-								</p>
+								<p>{t("clients.headersAuth.inputBody")}</p>
 							</InfoBox>
 							<HeadersForm
 								requiredKeys={perUserHeaderKeys}
 								onSubmit={handleRunTest}
-								submitLabel="Run Test"
+								submitLabel={t("clients.headersAuth.runTest")}
 								onCancel={handleCancel}
 								testIdPrefix="per-user-headers-admin-test"
 							/>
@@ -198,8 +191,8 @@ export const MCPHeadersAuthorizer: React.FC<MCPHeadersAuthorizerProps> = ({
 					{status === "testing" && (
 						<>
 							<InfoBox icon={<Loader2 className="size-4 animate-spin" />}>
-								<p>Checking your headers against the server and discovering available tools.</p>
-								<p className="text-muted-foreground/80 text-xs">This only takes a moment.</p>
+								<p>{t("clients.headersAuth.testingBody")}</p>
+								<p className="text-muted-foreground/80 text-xs">{t("clients.headersAuth.testingDetail")}</p>
 							</InfoBox>
 							<div className="flex items-center justify-end">
 								<StepDots active={2} total={3} />
@@ -210,8 +203,8 @@ export const MCPHeadersAuthorizer: React.FC<MCPHeadersAuthorizerProps> = ({
 					{/* Success */}
 					{status === "success" && (
 						<InfoBox variant="success" icon={<CheckCircle2 className="size-4" />}>
-							<p className="font-medium">Header configuration verified.</p>
-							<p className="text-xs opacity-80">You can close this dialog.</p>
+							<p className="font-medium">{t("clients.headersAuth.successBody")}</p>
+							<p className="text-xs opacity-80">{t("clients.headersAuth.successDetail")}</p>
 						</InfoBox>
 					)}
 
@@ -219,16 +212,16 @@ export const MCPHeadersAuthorizer: React.FC<MCPHeadersAuthorizerProps> = ({
 					{status === "failed" && (
 						<>
 							<InfoBox variant="danger" icon={<XCircle className="size-4" />}>
-								<p className="font-medium">Verification did not complete.</p>
-								<p className="text-xs opacity-80">{errorMessage ?? "Check your header values and try again."}</p>
+								<p className="font-medium">{t("clients.headersAuth.failedBody")}</p>
+								<p className="text-xs opacity-80">{errorMessage ?? t("clients.headersAuth.failedDefaultError")}</p>
 							</InfoBox>
 							<div className="flex justify-end gap-2">
 								<Button size="sm" variant="outline" onClick={handleCancel} data-testid="mcp-headers-authorizer-close-btn">
-									Close
+									{t("clients.headersAuth.close")}
 								</Button>
 								<Button size="sm" onClick={handleRetry} data-testid="mcp-headers-authorizer-retry-btn">
 									<RefreshCw className="size-3.5" />
-									Retry
+									{t("clients.headersAuth.retry")}
 								</Button>
 							</div>
 						</>

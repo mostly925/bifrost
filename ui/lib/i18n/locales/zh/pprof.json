@@ -1,0 +1,91 @@
+{
+	"header": {
+		"title": "Pprof 性能分析器",
+		"subtitle": "仅限开发环境 - 运行时性能与内存分析",
+		"autoRefresh": "自动刷新：10 秒"
+	},
+	"stats": {
+		"cpuUsage": "CPU 使用率",
+		"heapAlloc": "堆分配",
+		"heapInUse": "堆使用中",
+		"systemMemory": "系统内存",
+		"goroutines": "Goroutines",
+		"gcPause": "GC 暂停",
+		"gcCount": "{{count}} 次 GC"
+	},
+	"charts": {
+		"cpuTitle": "CPU 使用率与 Goroutines",
+		"memoryTitle": "内存使用",
+		"last5Min": "（最近 5 分钟）",
+		"cpuPercent": "CPU %",
+		"goroutines": "Goroutines",
+		"alloc": "分配",
+		"heapInUse": "堆使用中",
+		"allocSeries": "分配 (MB)",
+		"heapInUseSeries": "堆使用中 (MB)"
+	},
+	"tables": {
+		"expandAria": "展开",
+		"stackTrace": "调用栈",
+		"function": "函数",
+		"fileLine": "文件:行号",
+		"bytes": "字节",
+		"count": "数量",
+		"severity": "严重级别",
+		"live": "存活",
+		"retention": "留存率",
+		"trend": "趋势",
+		"liveCount": "存活数量",
+		"siteCount": "（{{count}} 处）",
+		"noAllocations": "暂无分配数据"
+	},
+	"leaks": {
+		"title": "潜在泄漏",
+		"suspiciousCount": "（{{count}} 处可疑）",
+		"highCount": "{{count}} 个高危",
+		"mediumCount": "{{count}} 个中危",
+		"lowCount": "{{count}} 个低危",
+		"description": "存活字节在其历史累计分配中占比（留存率）较大的调用栈，部分还伴随最近一分钟内存活字节持续上升。增长叠加高留存是最强的泄漏信号。",
+		"stable": "稳定",
+		"cumulativeLabel": "累计：",
+		"retainedLabel": "留存：",
+		"lastWindow": "最近 {{seconds}} 秒：",
+		"empty": "没有明显的泄漏特征；所有存活分配的留存率均正常。"
+	},
+	"inuse": {
+		"title": "实时堆分配",
+		"description": "当前正持有堆内存的调用栈。展开某一行可查看完整调用栈。"
+	},
+	"cumulative": {
+		"title": "累计内存分配",
+		"description": "进程启动以来分配的总字节数（包含已释放的内存）。展开某一行可查看完整调用栈。"
+	},
+	"goroutines": {
+		"title": "Goroutine 健康状态",
+		"growing": "增长 +{{percent}}%",
+		"stuckBadge": "Goroutine 卡死",
+		"longWaitingBadge": "长时间等待",
+		"healthyBadge": "健康",
+		"clearHidden": "清除 {{count}} 个隐藏项",
+		"total": "总计",
+		"background": "后台",
+		"perRequest": "按请求",
+		"stuck": "卡死",
+		"waitingMinutes": "等待 {{minutes}} 分钟",
+		"waitReason": "等待原因：",
+		"hideFile": "隐藏此文件的 goroutines",
+		"allHidden": "所有 goroutines 均已被隐藏。点击“清除隐藏”以重新显示。",
+		"noData": "暂无 goroutine 数据"
+	},
+	"runtime": {
+		"cpus": "CPU 数：",
+		"gomaxprocs": "GOMAXPROCS：",
+		"gcRuns": "GC 次数：",
+		"heapObjects": "堆对象数：",
+		"totalAlloc": "累计分配："
+	},
+	"states": {
+		"loading": "正在加载性能数据...",
+		"error": "加载性能数据失败。请确认后端正以开发模式运行。"
+	}
+}

@@ -1,0 +1,198 @@
+{
+	"page": {
+		"loadError": "Failed to load MCP sessions: {{message}}"
+	},
+	"table": {
+		"title": "MCP Auth Sessions",
+		"description": "Per-user credentials stored for MCP servers (OAuth tokens and submitted headers), plus any pending authentication flows.",
+		"searchAria": "Search sessions",
+		"searchPlaceholder": "Search MCP, user, VK, session...",
+		"columns": {
+			"mcpServer": "MCP server",
+			"type": "Type",
+			"typeTooltip": "OAuth: per-user OAuth credential, either a stored token from a completed sign-in, or a pending sign-in flow. Headers: per-user header values (API keys / signed tokens), either stored or pending submission.",
+			"boundTo": "Bound to",
+			"boundToTooltip": "The identity this credential is keyed to: an end user (via SSO), a virtual key (shared by anyone using that VK), or a client-issued session ID (asserted via the x-bf-mcp-session-id header).",
+			"status": "Status",
+			"statusTooltip": "Active: credential valid and usable. Pending: OAuth flow in progress, user must complete sign-in. Needs re-auth: upstream credential expired or revoked at the provider; user must reconnect. Needs update: the admin changed the required header keys; user must resubmit. Orphaned: the user lost access to this MCP (e.g. an access profile change); credential is preserved and will become Active automatically if access is restored.",
+			"accessTokenExpiry": "Access token expiry",
+			"accessTokenExpiryTooltip": "When the current access token expires. Bifrost auto-refreshes using the refresh token on the next request, so an active row past its expiry will silently mint a new token at use time. Header rows do not have an upstream expiry; their values stay valid until revoked or the schema changes.",
+			"created": "Created"
+		},
+		"noMatch": "No sessions match these filters.",
+		"empty": "No sessions yet. Sessions appear here when an inference request or MCP gateway call triggers per-user authentication (OAuth or header submission).",
+		"typeBadge": {
+			"headers": "Headers",
+			"oauth": "OAuth"
+		},
+		"statusBadge": {
+			"active": "Active",
+			"orphaned": "Orphaned",
+			"needsReauth": "Needs re-auth",
+			"needsUpdate": "Needs update",
+			"pending": "Pending"
+		},
+		"binding": {
+			"sessionBound": "Session-bound"
+		},
+		"expiry": {
+			"refreshesOnNextUse": "Refreshes on next use",
+			"refreshesWhenAccessRestored": "Refreshes when access is restored",
+			"expired": "expired",
+			"inDays": "in {{count}} days",
+			"inHours": "in {{count}} hours",
+			"inMinutes": "in {{count}} min"
+		},
+		"relative": {
+			"justNow": "just now",
+			"minutesAgo": "{{count}} min ago",
+			"hoursAgo": "{{count}}h ago",
+			"daysAgo": "{{count}}d ago"
+		},
+		"refreshedSuffix": "refreshed {{time}}",
+		"pagination": {
+			"range": "{{from}}-{{to}} of {{total}} entries",
+			"previousAria": "Previous page",
+			"nextAria": "Next page",
+			"page": "Page",
+			"of": "of {{count}}"
+		},
+		"actionsAria": "MCP session actions",
+		"actions": {
+			"triggerReauth": "Trigger a request to re-authenticate",
+			"completeAuth": "Complete authentication",
+			"updateValues": "Update values",
+			"editValues": "Edit values",
+			"reauthenticate": "Re-authenticate",
+			"revoke": "Revoke"
+		},
+		"toasts": {
+			"reauthFailed": "Re-authentication failed",
+			"headerValuesRevoked": "Header values revoked",
+			"sessionRevoked": "Session revoked",
+			"revokeHeadersFailed": "Failed to revoke header values",
+			"revokeSessionFailed": "Failed to revoke session"
+		},
+		"revokeDialog": {
+			"headerTitle": "Revoke these stored header values?",
+			"headerDescription": "Bifrost will remove the stored credential values for this binding. There is no upstream token to revoke; the user will need to resubmit their header values to use this MCP again.",
+			"sessionTitle": "Revoke this MCP session?",
+			"sessionDescription": "Bifrost will remove the stored credential for this binding. The upstream OAuth token is not revoked at the provider; it stays detached and expires naturally. Anyone using this binding will need to re-authenticate to obtain a fresh token.",
+			"cancel": "Cancel",
+			"confirm": "Revoke"
+		}
+	},
+	"filters": {
+		"title": "Filters",
+		"showAria": "Show filters",
+		"hideAria": "Hide filters",
+		"reset": "Reset",
+		"sections": {
+			"type": "Type",
+			"status": "Status",
+			"identity": "Identity",
+			"mcpServer": "MCP Server",
+			"virtualKey": "Virtual Key",
+			"users": "Users"
+		},
+		"kind": {
+			"oauth": "OAuth",
+			"headers": "Headers"
+		},
+		"status": {
+			"active": "Active",
+			"orphaned": "Orphaned",
+			"needsReauth": "Needs re-auth",
+			"needsUpdate": "Needs update",
+			"pending": "Pending"
+		},
+		"authMode": {
+			"user": "User",
+			"virtualKey": "Virtual key",
+			"session": "Session"
+		},
+		"searchPlaceholder": "Search...",
+		"noResults": "No results",
+		"searchMcpServers": "Search MCP servers",
+		"searchVirtualKeys": "Search virtual keys",
+		"searchUsers": "Search by name or email"
+	},
+	"auth": {
+		"missingFlow": {
+			"title": "Missing flow identifier",
+			"body": "This URL is missing the <1>flow</1> query parameter. Open the link from your inference response or the sessions tab."
+		},
+		"notYours": {
+			"oauthTitle": "This authentication flow isn't yours",
+			"headersTitle": "This submission flow isn't yours",
+			"body": "The pending flow belongs to a different identity. Ask the teammate whose VK or user identity triggered the original request to complete it, or trigger a new request yourself."
+		},
+		"expired": {
+			"oauthTitle": "This authentication flow has expired or been completed",
+			"oauthBody": "Pending flows expire after a short window. If you still need to authenticate, trigger the original action again so a fresh flow is created.",
+			"headersTitle": "This submission link has expired or been used",
+			"headersBody": "Submission flows expire after a short window. Trigger the original request again to get a fresh link."
+		},
+		"loadError": {
+			"oauthTitle": "Could not load this authentication flow",
+			"headersTitle": "Could not load this submission link"
+		},
+		"invalidLink": {
+			"title": "This authentication link is no longer valid",
+			"body": "The link may have expired, been used already, invalid, or had its short-lived token stripped. Trigger the original action again so a fresh authentication link is created."
+		},
+		"authenticateTitle": "Authenticate with {{name}}",
+		"reauthenticateTitle": "Re-authenticate with {{name}}",
+		"reauthBody": "An active credential already exists for the binding below. Completing this flow will <strong>replace</strong> it with a fresh credential. You can also close this tab to keep using the existing one.",
+		"freshBody": "You'll be redirected to the provider to sign in and grant access. Bifrost stores the resulting credential against the binding below so this request and future ones can proceed automatically.",
+		"mcpServerFallback": "MCP server",
+		"details": {
+			"mcpClient": "MCP client",
+			"boundTo": "Bound to",
+			"flowExpires": "Flow expires"
+		},
+		"binding": {
+			"firstSignedInUser": "First signed-in user",
+			"unknown": "Unknown"
+		},
+		"authenticate": "Authenticate",
+		"reauthenticate": "Re-authenticate",
+		"logInInstead": "Log in instead",
+		"startFailedToast": "Failed to start authentication",
+		"completed": {
+			"mcpServerFallback": "this MCP server",
+			"alreadyAuthenticated": "Already authenticated",
+			"expiredTitle": "This authentication flow has expired",
+			"noLongerCompletable": "This authentication flow can no longer be completed",
+			"credentialAlreadyStored": "The OAuth credential for {{name}} is already stored. You can close this tab.",
+			"triggerAgain": "Trigger the original action again so a fresh flow is created."
+		},
+		"expiry": {
+			"expired": "Expired",
+			"inLessThanAMinute": "in less than a minute",
+			"inOneMinute": "in 1 minute",
+			"inMinutes": "in {{count}} minutes"
+		},
+		"openSessionsTab": "Open sessions tab"
+	},
+	"headersAuth": {
+		"savedTitle": "Headers saved",
+		"savedBody": "Bifrost verified the connection and stored your credentials. You can close this tab and retry the original action.",
+		"updateTitle": "Update credentials for {{name}}",
+		"submitTitle": "Submit credentials for {{name}}",
+		"editBody": "This server already has stored credentials for you. Submitting new values <strong>replaces</strong> the existing entry; the server will be re-verified before saving.",
+		"freshBody": "This server requires you to supply your own API keys / tokens. The values you submit are stored encrypted and only used to authenticate your own requests.",
+		"saveLabel": "Save",
+		"submitLabel": "Submit",
+		"submitFailedToast": "Submission failed"
+	},
+	"authSuccess": {
+		"title": "Authentication successful",
+		"body": "Your credential has been stored. You can close this tab and return to your MCP client - future requests will use this credential automatically."
+	},
+	"authFailed": {
+		"title": "Authentication failed",
+		"defaultError": "We couldn't complete the authentication flow.",
+		"body": "You can close this tab and retry the original request from your MCP client to generate a fresh authentication link."
+	}
+}

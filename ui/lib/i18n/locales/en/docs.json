@@ -1,0 +1,87 @@
+{
+	"header": {
+		"badge": "Documentation",
+		"title": "Power Up Your Bifrost Stack",
+		"subtitle": "Everything you need to know about building production AI applications with Bifrost",
+		"viewFull": "View Full Documentation",
+		"quickStartGuide": "Quick Start Guide"
+	},
+	"readMore": "Read More",
+	"sections": {
+		"quickStart": {
+			"title": "Quick Start",
+			"description": "Get Bifrost running in under 30 seconds",
+			"badge": "Popular",
+			"items": {
+				"httpTransport": "HTTP Transport Setup",
+				"goPackage": "Go Package Usage",
+				"docker": "Docker Guide"
+			}
+		},
+		"architecture": {
+			"title": "Architecture",
+			"description": "Deep dive into Bifrost's design and performance",
+			"items": {
+				"systemOverview": "System Overview",
+				"requestFlow": "Request Flow",
+				"concurrencyModel": "Concurrency Model",
+				"designDecisions": "Design Decisions"
+			}
+		},
+		"usageGuides": {
+			"title": "Usage Guides",
+			"description": "Complete API reference and configuration guides",
+			"badge": "Comprehensive",
+			"items": {
+				"providersSetup": "Providers Setup",
+				"keyManagement": "Key Management",
+				"errorHandling": "Error Handling",
+				"memoryNetworking": "Memory & Networking"
+			}
+		},
+		"contributing": {
+			"title": "Contributing",
+			"description": "Help improve Bifrost for everyone",
+			"items": {
+				"guide": "Contributing Guide",
+				"addingProviders": "Adding Providers",
+				"pluginDevelopment": "Plugin Development",
+				"codeConventions": "Code Conventions"
+			}
+		},
+		"integrationExamples": {
+			"title": "Integration Examples",
+			"description": "Practical examples and testing code",
+			"items": {
+				"openai": "OpenAI Integration",
+				"anthropic": "Anthropic Integration",
+				"genai": "GenAI Integration",
+				"migrationGuides": "Migration Guides"
+			}
+		},
+		"benchmarks": {
+			"title": "Benchmarks",
+			"description": "Performance metrics and guides",
+			"items": {
+				"rpsResults": "5K RPS Test Results",
+				"performanceMetrics": "Performance Metrics",
+				"configurationTuning": "Configuration Tuning",
+				"hardwareComparisons": "Hardware Comparisons"
+			}
+		}
+	},
+	"featured": {
+		"mcp": {
+			"title": "MCP Documentation",
+			"description": "Comprehensive guide to Model Context Protocol integration",
+			"content": "Learn how to build sophisticated AI agents with MCP support, tool calling, and external integrations.",
+			"buttonText": "View MCP Guide"
+		},
+		"governance": {
+			"title": "Governance Plugin",
+			"description": "Complete access control, budgets, and rate limiting guide",
+			"content": "Master Virtual Keys, hierarchical budgets, rate limiting, and usage tracking for secure AI infrastructure.",
+			"buttonText": "View Governance Guide"
+		}
+	}
+}

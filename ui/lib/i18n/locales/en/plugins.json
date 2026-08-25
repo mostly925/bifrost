@@ -1,0 +1,79 @@
+{
+	"sidebar": {
+		"title": "Plugins"
+	},
+	"installNewPlugin": "Install New Plugin",
+	"editPluginSequence": "Edit Plugin Sequence",
+	"emptyState": {
+		"title": "Custom plugins extend Bifrost with your own business logic",
+		"description": "Build and deploy plugins for custom integrations, workflow automation, and AI governance.",
+		"readMore": "Read more",
+		"readMoreAria": "Read more about custom plugins (opens in new tab)",
+		"createAria": "Create your first plugin"
+	},
+	"form": {
+		"infoEdit": "Update your plugin configuration. Plugin name and path are read-only. <1>Learn more</1>",
+		"infoNew": "Install a custom plugin by providing an absolute file path or HTTP URL accessible to Bifrost deployment (.so). <1>Learn more</1>",
+		"nameLabel": "Plugin Name *",
+		"namePlaceholder": "e.g., my-custom-plugin",
+		"pathLabel": "Plugin Path/URL *",
+		"pathPlaceholder": "e.g., /path/to/plugin.so or https://example.com/plugin.so",
+		"addConfiguration": "Add Configuration",
+		"configLabel": "Configuration (JSON)",
+		"validation": {
+			"nameRequired": "Plugin name is required",
+			"nameFormat": "Plugin name must contain only letters, numbers, hyphens, and underscores",
+			"pathRequired": "Plugin path/URL is required",
+			"pathFormat": "Please enter a valid absolute file path (starting with /) or HTTP/HTTPS URL",
+			"configJson": "Configuration must be valid JSON",
+			"viewNameRequired": "Name is required"
+		}
+	},
+	"sheet": {
+		"installTitle": "Install New Plugin",
+		"updateTitle": "Update Plugin",
+		"installDescription": "Add a custom plugin by providing its name, path/URL, and optional configuration.",
+		"updateDescription": "Update the plugin configuration. Note: Plugin name and path cannot be changed.",
+		"installSubmit": "Install Plugin",
+		"updateSubmit": "Update Plugin"
+	},
+	"sequence": {
+		"description": "Drag plugins above or below the built-in plugins block to control execution order.",
+		"builtinPlugins": "Built-in Plugins",
+		"alert": "If your config.json file has plugin sequence configured, it will take precedence over the sequence configured in the UI after restarting Bifrost.",
+		"save": "Save Sequence",
+		"toastUpdated": "Plugin sequence updated"
+	},
+	"view": {
+		"title": "Plugin Configuration",
+		"noPluginSelected": "No plugin selected",
+		"nameLabel": "Name",
+		"namePlaceholder": "Plugin name",
+		"nameDescription": "The name of the plugin",
+		"typesLabel": "Types",
+		"enabledLabel": "Enabled",
+		"enabledDescription": "Enable or disable this plugin",
+		"pathLabel": "Path",
+		"pathPlaceholder": "Plugin path",
+		"pathDescription": "The file system path to the plugin",
+		"configDescription": "Plugin configuration in JSON format",
+		"logsLabel": "Logs",
+		"deleteButton": "Delete Plugin",
+		"saveChanges": "Save Changes"
+	},
+	"deleteDialog": {
+		"title": "Delete Plugin",
+		"description": "Are you sure you want to delete the plugin “{{name}}”? This action cannot be undone.",
+		"deleting": "Deleting...",
+		"failed": "Failed to delete plugin"
+	},
+	"toast": {
+		"invalidJson": "Invalid JSON configuration",
+		"invalidJsonConfig": "Invalid JSON in configuration",
+		"updated": "Plugin updated successfully",
+		"created": "Plugin created successfully",
+		"updateFailed": "Failed to update plugin",
+		"deleted": "Plugin deleted successfully",
+		"fixErrors": "Please fix the form errors before submitting"
+	}
+}

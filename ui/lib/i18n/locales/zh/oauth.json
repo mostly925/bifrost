@@ -1,0 +1,46 @@
+{
+	"errors": {
+		"missingFlowTitle": "缺少流程标识",
+		"missingFlowDescription": "此 URL 缺少 <1>flow</1> 查询参数。请从你的 MCP 客户端重新发起连接。",
+		"linkUnavailableTitle": "链接不可用",
+		"linkUnavailableDescription": "此授权链接可能已过期或已被使用。请从你的 MCP 客户端重新发起连接以获取新链接。",
+		"invalidLinkTitle": "此链接已失效",
+		"invalidLinkDescription": "授权链接已过期、已被使用或其令牌已被剥离。请从你的 MCP 客户端重新发起连接以获取新链接。",
+		"authFailed": "认证失败",
+		"invalidRedirectUrl": "无效的回调地址"
+	},
+	"consent": {
+		"title": "{{clientName}} 请求连接",
+		"subtitle": "选择你希望以什么身份接入 Bifrost",
+		"connecting": "连接中…",
+		"or": "或",
+		"noOptions": {
+			"title": "没有可用的认证选项",
+			"description": "请从你的 MCP 客户端重新发起连接。"
+		},
+		"userMode": {
+			"signedInAccount": "已登录账号",
+			"continueAs": "以 {{name}} 继续",
+			"signInTitle": "使用你的账号登录",
+			"signInDescription": "需要 Bifrost 控制台账号",
+			"signInButton": "登录以继续"
+		},
+		"vkMode": {
+			"title": "虚拟密钥",
+			"description": "使用你 Bifrost 工作空间中的虚拟密钥",
+			"placeholder": "sk-bf-…",
+			"connect": "使用密钥连接",
+			"linkedHint": "如果该密钥已关联用户账号，你需要登录以确认身份。"
+		},
+		"sessionMode": {
+			"continue": "以匿名身份继续",
+			"description": "匿名会话 - 无需账号"
+		},
+		"expiry": {
+			"soon": "此链接即将过期",
+			"lessThanMinute": "此链接将在不到 1 分钟后过期",
+			"oneMinute": "此链接将在 1 分钟后过期",
+			"minutes": "此链接将在 {{count}} 分钟后过期"
+		}
+	}
+}

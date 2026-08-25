@@ -5,6 +5,9 @@ import { createRoot } from "react-dom/client";
 // Tailwind + global styles (also declares @font-face for local Geist fonts).
 import "@/app/globals.css";
 
+// i18n 初始化（副作用导入）：语言解析、懒加载后端在此注册
+import "@/lib/i18n";
+
 import { ErrorComponent } from "./__error";
 import { NotFoundComponent } from "./__notFound";
 import { routeTree } from "./routeTree.gen";

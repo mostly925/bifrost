@@ -1,0 +1,63 @@
+{
+	"panel": {
+		"title": "Dev Profiler",
+		"showTitle": "Show Dev Profiler",
+		"collapseTitle": "Collapse",
+		"expandTitle": "Expand",
+		"minimizeTitle": "Minimize",
+		"dismissTitle": "Dismiss",
+		"loadError": "Failed to load profiling data"
+	},
+	"stats": {
+		"cpuUsage": "CPU Usage",
+		"heapAlloc": "Heap Alloc",
+		"heapInUse": "Heap In-Use",
+		"system": "System",
+		"goroutines": "Goroutines",
+		"gcPause": "GC Pause"
+	},
+	"charts": {
+		"cpuTitle": "CPU Usage (last 5 min)",
+		"memoryTitle": "Memory (last 5 min)",
+		"cpuPercent": "CPU %",
+		"goroutines": "Goroutines",
+		"alloc": "Alloc",
+		"heapInUse": "Heap In-Use"
+	},
+	"topAllocations": {
+		"title": "Top Allocations",
+		"allocCount": "{{num}} allocs"
+	},
+	"goroutineHealth": {
+		"title": "Goroutine Health",
+		"growingTitle": "Goroutine count growing",
+		"stuckBadge": "Stuck",
+		"longWaitBadge": "Long Wait",
+		"healthyBadge": "Healthy",
+		"total": "Total",
+		"background": "Background",
+		"perRequest": "Per-Request",
+		"stuck": "Stuck",
+		"potentialLeaks": "Potential Leaks",
+		"clearHiddenTitle": "Clear all hidden goroutines",
+		"hiddenCount": "{{count}} hidden",
+		"waitingMinutes": "{{minutes}}m waiting",
+		"hideFileTitle": "Hide goroutines from this file",
+		"stateLabel": "State:",
+		"waitLabel": "Wait:",
+		"moreFrames": "... {{count}} more frames",
+		"allHidden": "All potential leaks hidden",
+		"longAndStuck": "{{longWaiting}} long-waiting and {{stuck}} stuck goroutines (background workers filtered)",
+		"longWaitingOnly": "{{longWaiting}} long-waiting goroutines (background workers filtered)",
+		"stuckOnly": "{{stuck}} stuck goroutines (background workers filtered)",
+		"noLeaks": "No goroutine leaks detected"
+	},
+	"footer": {
+		"runtime": "CPUs: {{cpus}} | GOMAXPROCS: {{gomaxprocs}} | GC: {{gcs}} | Objects: {{objects}}"
+	},
+	"collapsed": {
+		"cpu": "CPU: {{value}}",
+		"heap": "Heap: {{value}}",
+		"goroutines": "Goroutines: {{value}}"
+	}
+}

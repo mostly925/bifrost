@@ -1,0 +1,102 @@
+{
+	"header": {
+		"title": "Budgets & Limits",
+		"description": "Configure budgets and rate limits at any scope: virtual keys, users, providers, or specific models.",
+		"addLimit": "Add Limit"
+	},
+	"errors": {
+		"loadConfigs": "Failed to load model configs: {{error}}",
+		"loadLimit": "Failed to load model limit: {{error}}"
+	},
+	"toasts": {
+		"deleted": "Limit deleted successfully"
+	},
+	"filters": {
+		"searchAria": "Search model limits by model name",
+		"searchPlaceholder": "Search by model name...",
+		"allScopes": "All Scopes",
+		"allProviders": "All Providers",
+		"clear": "Clear filters"
+	},
+	"table": {
+		"headers": {
+			"model": "Model",
+			"provider": "Provider",
+			"scope": "Scope",
+			"scopeTarget": "Scope Target",
+			"budget": "Budget",
+			"rateLimit": "Rate Limit"
+		},
+		"actionsAria": "Actions for model limit {{model}}",
+		"loading": "Loading limits...",
+		"noMatches": "No matching limits found.",
+		"allModels": "All Models",
+		"limitReached": "Limit Reached",
+		"resets": "Resets {{duration}}",
+		"resetsCalendar": "Resets {{duration}} (calendar)",
+		"tokens": "{{value}} tokens",
+		"tokensUsed": "{{current}} / {{max}} tokens",
+		"requests": "{{value}} req",
+		"requestsUsed": "{{current}} / {{max}} requests"
+	},
+	"pagination": {
+		"entries": "{{from}}-{{to}} of {{total}} entries",
+		"page": "Page",
+		"of": "of {{total}}",
+		"prevAria": "Previous page",
+		"nextAria": "Next page"
+	},
+	"deleteDialog": {
+		"title": "Delete Limit",
+		"description": "Are you sure you want to delete the limit for \"{{name}}\"? This action cannot be undone.",
+		"cancel": "Cancel",
+		"deleting": "Deleting...",
+		"delete": "Delete"
+	},
+	"actions": {
+		"edit": "Edit",
+		"delete": "Delete"
+	},
+	"empty": {
+		"title": "Budgets and rate limits",
+		"description": "Set spending caps and rate limits at any scope: virtual keys, users, providers, or specific models.",
+		"readMoreAria": "Read more about budgets and limits (opens in new tab)",
+		"readMore": "Read more",
+		"addAria": "Add your first limit",
+		"addLimit": "Add Limit"
+	},
+	"sheet": {
+		"titleEdit": "Edit Limit",
+		"titleCreate": "Create Limit",
+		"descriptionEdit": "Update budget and rate limit configuration.",
+		"descriptionCreate": "Set up budget and rate limits for a scope.",
+		"provider": "Provider",
+		"modelName": "Model Name",
+		"modelSearchPlaceholder": "Search for a model...",
+		"scope": "Scope",
+		"globalPlaceholder": "Global",
+		"budget": "Budget",
+		"rateLimits": "Rate Limits",
+		"maximumTokens": "Maximum Tokens",
+		"maximumRequests": "Maximum Requests",
+		"currentUsage": "Current Usage",
+		"currentBudget": "Budget ({{duration}})",
+		"tokens": "Tokens",
+		"requests": "Requests",
+		"cancel": "Cancel",
+		"saving": "Saving...",
+		"saveChanges": "Save Changes",
+		"submitCreate": "Create Limit",
+		"ownerLabel": "limit",
+		"errors": {
+			"modelNameRequired": "Model name is required",
+			"virtualKeyRequired": "Virtual key is required for the Virtual Key scope",
+			"noPermission": "You don't have permission to perform this action",
+			"atLeastOneLimit": "At least one budget or rate limit is required"
+		},
+		"toasts": {
+			"updated": "Limit updated successfully",
+			"created": "Limit created successfully"
+		}
+	}
+}

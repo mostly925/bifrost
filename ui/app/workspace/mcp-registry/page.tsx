@@ -4,6 +4,7 @@ import { useDebouncedValue } from "@/hooks/useDebounce";
 import { getErrorMessage, useGetMCPClientsQuery } from "@/lib/store";
 import { parseAsArrayOf, parseAsBoolean, parseAsInteger, parseAsString, useQueryStates } from "nuqs";
 import { useCallback, useEffect, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { MCPClientsFilterSidebar, type MCPClientFilters } from "./views/mcpClientsFilterSidebar";
 import MCPClientsTable from "./views/mcpClientsTable";
 
@@ -18,6 +19,7 @@ function resolveBooleanFacet(selected: string[]): boolean | undefined {
 }
 
 export default function MCPServersPage() {
+	const { t } = useTranslation("mcpRegistry");
 	const [urlState, setUrlState] = useQueryStates(
 		{
 			search: parseAsString.withDefault(""),
@@ -121,7 +123,7 @@ export default function MCPServersPage() {
 			const message = getErrorMessage(error);
 			if (message.toLowerCase().includes("mcp is not configured in this bifrost instance")) return;
 			toast({
-				title: "Error",
+				title: t("clients.errorToastTitle"),
 				description: message,
 				variant: "destructive",
 			});

@@ -1,0 +1,198 @@
+{
+	"page": {
+		"loadError": "加载 MCP 会话失败：{{message}}"
+	},
+	"table": {
+		"title": "MCP 授权会话",
+		"description": "为 MCP 服务器存储的按用户凭据（OAuth 令牌和提交的请求头），以及待完成的授权流程。",
+		"searchAria": "搜索会话",
+		"searchPlaceholder": "搜索 MCP、用户、虚拟密钥、会话...",
+		"columns": {
+			"mcpServer": "MCP 服务器",
+			"type": "类型",
+			"typeTooltip": "OAuth：按用户的 OAuth 凭据，可以是已完成登录存储的令牌，也可以是待完成的登录流程。Headers：按用户的请求头值（API 密钥/签名令牌），已存储或待提交。",
+			"boundTo": "绑定对象",
+			"boundToTooltip": "该凭据绑定的身份：终端用户（通过 SSO）、虚拟密钥（共享给所有使用该 VK 的人）或客户端下发的会话 ID（通过 x-bf-mcp-session-id 请求头声明）。",
+			"status": "状态",
+			"statusTooltip": "正常：凭据有效可用。待处理：OAuth 流程进行中，用户需完成登录。需重新授权：上游凭据已过期或在提供方被撤销，用户需重新连接。需更新：管理员变更了必需的请求头字段，用户需重新提交。已孤立：用户失去了对该 MCP 的访问权限（如访问配置变更）；凭据已保留，恢复访问后将自动变为正常。",
+			"accessTokenExpiry": "访问令牌过期时间",
+			"accessTokenExpiryTooltip": "当前访问令牌的过期时间。Bifrost 会在下次请求时使用 refresh token 自动续期，因此已过期的正常行会在实际使用时静默换取新令牌。请求头行没有上游过期时间，其值在撤销或结构变更前一直有效。",
+			"created": "创建时间"
+		},
+		"noMatch": "没有符合筛选条件的会话。",
+		"empty": "暂无会话。当推理请求或 MCP 网关调用触发按用户授权（OAuth 或请求头提交）时，会话将显示在这里。",
+		"typeBadge": {
+			"headers": "请求头",
+			"oauth": "OAuth"
+		},
+		"statusBadge": {
+			"active": "正常",
+			"orphaned": "已孤立",
+			"needsReauth": "需重新授权",
+			"needsUpdate": "需更新",
+			"pending": "待处理"
+		},
+		"binding": {
+			"sessionBound": "会话绑定"
+		},
+		"expiry": {
+			"refreshesOnNextUse": "下次使用时续期",
+			"refreshesWhenAccessRestored": "恢复访问后续期",
+			"expired": "已过期",
+			"inDays": "{{count}} 天后",
+			"inHours": "{{count}} 小时后",
+			"inMinutes": "{{count}} 分钟后"
+		},
+		"relative": {
+			"justNow": "刚刚",
+			"minutesAgo": "{{count}} 分钟前",
+			"hoursAgo": "{{count}} 小时前",
+			"daysAgo": "{{count}} 天前"
+		},
+		"refreshedSuffix": "续期于 {{time}}",
+		"pagination": {
+			"range": "第 {{from}}-{{to}} 条，共 {{total}} 条",
+			"previousAria": "上一页",
+			"nextAria": "下一页",
+			"page": "第",
+			"of": "页，共 {{count}} 页"
+		},
+		"actionsAria": "MCP 会话操作",
+		"actions": {
+			"triggerReauth": "发起请求以重新授权",
+			"completeAuth": "完成授权",
+			"updateValues": "更新值",
+			"editValues": "编辑值",
+			"reauthenticate": "重新授权",
+			"revoke": "撤销"
+		},
+		"toasts": {
+			"reauthFailed": "重新授权失败",
+			"headerValuesRevoked": "已撤销请求头值",
+			"sessionRevoked": "已撤销会话",
+			"revokeHeadersFailed": "撤销请求头值失败",
+			"revokeSessionFailed": "撤销会话失败"
+		},
+		"revokeDialog": {
+			"headerTitle": "撤销这些已存储的请求头值？",
+			"headerDescription": "Bifrost 将移除该绑定存储的凭据值。没有可撤销的上游令牌；用户需要重新提交请求头值才能再次使用该 MCP。",
+			"sessionTitle": "撤销该 MCP 会话？",
+			"sessionDescription": "Bifrost 将移除该绑定存储的凭据。上游 OAuth 令牌不会在提供方处被撤销，它将保持分离状态并自然过期。使用该绑定的任何人都需要重新授权以获取新令牌。",
+			"cancel": "取消",
+			"confirm": "撤销"
+		}
+	},
+	"filters": {
+		"title": "筛选",
+		"showAria": "显示筛选",
+		"hideAria": "隐藏筛选",
+		"reset": "重置",
+		"sections": {
+			"type": "类型",
+			"status": "状态",
+			"identity": "身份",
+			"mcpServer": "MCP 服务器",
+			"virtualKey": "虚拟密钥",
+			"users": "用户"
+		},
+		"kind": {
+			"oauth": "OAuth",
+			"headers": "请求头"
+		},
+		"status": {
+			"active": "正常",
+			"orphaned": "已孤立",
+			"needsReauth": "需重新授权",
+			"needsUpdate": "需更新",
+			"pending": "待处理"
+		},
+		"authMode": {
+			"user": "用户",
+			"virtualKey": "虚拟密钥",
+			"session": "会话"
+		},
+		"searchPlaceholder": "搜索...",
+		"noResults": "无结果",
+		"searchMcpServers": "搜索 MCP 服务器",
+		"searchVirtualKeys": "搜索虚拟密钥",
+		"searchUsers": "按姓名或邮箱搜索"
+	},
+	"auth": {
+		"missingFlow": {
+			"title": "缺少流程标识",
+			"body": "该 URL 缺少 <1>flow</1> 查询参数。请从推理响应或会话页打开此链接。"
+		},
+		"notYours": {
+			"oauthTitle": "该授权流程不属于你",
+			"headersTitle": "该提交流程不属于你",
+			"body": "待处理的流程属于另一个身份。请让触发原始请求的队友（其 VK 或用户身份）完成授权，或自行重新发起请求。"
+		},
+		"expired": {
+			"oauthTitle": "该授权流程已过期或已完成",
+			"oauthBody": "待处理流程会在较短时间内过期。如果仍需授权，请重新触发原始操作以创建新流程。",
+			"headersTitle": "该提交链接已过期或已被使用",
+			"headersBody": "提交流程会在较短时间内过期。请重新触发原始请求以获取新链接。"
+		},
+		"loadError": {
+			"oauthTitle": "无法加载该授权流程",
+			"headersTitle": "无法加载该提交链接"
+		},
+		"invalidLink": {
+			"title": "该授权链接已失效",
+			"body": "链接可能已过期、已被使用、无效，或其短期令牌已丢失。请重新触发原始操作以生成新的授权链接。"
+		},
+		"authenticateTitle": "授权登录 {{name}}",
+		"reauthenticateTitle": "重新授权 {{name}}",
+		"reauthBody": "以下绑定已存在有效凭据。完成此流程将以新凭据<strong>替换</strong>它。你也可以关闭此标签页继续使用现有凭据。",
+		"freshBody": "你将被重定向到提供方完成登录并授予访问权限。Bifrost 会将获得的凭据绑定到下方身份存储，使本次及后续请求可以自动执行。",
+		"mcpServerFallback": "MCP 服务器",
+		"details": {
+			"mcpClient": "MCP 客户端",
+			"boundTo": "绑定对象",
+			"flowExpires": "流程过期时间"
+		},
+		"binding": {
+			"firstSignedInUser": "首个登录用户",
+			"unknown": "未知"
+		},
+		"authenticate": "授权",
+		"reauthenticate": "重新授权",
+		"logInInstead": "改为登录",
+		"startFailedToast": "启动授权失败",
+		"completed": {
+			"mcpServerFallback": "该 MCP 服务器",
+			"alreadyAuthenticated": "已完成授权",
+			"expiredTitle": "该授权流程已过期",
+			"noLongerCompletable": "该授权流程已无法完成",
+			"credentialAlreadyStored": "{{name}} 的 OAuth 凭据已存储。你可以关闭此标签页。",
+			"triggerAgain": "请重新触发原始操作以创建新流程。"
+		},
+		"expiry": {
+			"expired": "已过期",
+			"inLessThanAMinute": "不到 1 分钟",
+			"inOneMinute": "1 分钟后",
+			"inMinutes": "{{count}} 分钟后"
+		},
+		"openSessionsTab": "打开会话页"
+	},
+	"headersAuth": {
+		"savedTitle": "请求头已保存",
+		"savedBody": "Bifrost 已验证连接并存储你的凭据。你可以关闭此标签页并重试原始操作。",
+		"updateTitle": "更新 {{name}} 的凭据",
+		"submitTitle": "提交 {{name}} 的凭据",
+		"editBody": "该服务器已存储你的凭据。提交新值将<strong>替换</strong>现有条目；保存前服务器会重新验证。",
+		"freshBody": "该服务器要求你提供自己的 API 密钥/令牌。你提交的值将加密存储，仅用于认证你自己的请求。",
+		"saveLabel": "保存",
+		"submitLabel": "提交",
+		"submitFailedToast": "提交失败"
+	},
+	"authSuccess": {
+		"title": "授权成功",
+		"body": "你的凭据已存储。你可以关闭此标签页并返回 MCP 客户端，后续请求将自动使用该凭据。"
+	},
+	"authFailed": {
+		"title": "授权失败",
+		"defaultError": "无法完成授权流程。",
+		"body": "你可以关闭此标签页，并在 MCP 客户端中重试原始请求以生成新的授权链接。"
+	}
+}
