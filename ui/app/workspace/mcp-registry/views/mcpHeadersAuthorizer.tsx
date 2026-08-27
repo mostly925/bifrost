@@ -42,14 +42,13 @@ const STATUS_ICON: Record<Status, { variant: UiVariant; icon: React.ReactNode }>
 	failed: { variant: "danger", icon: <XCircle className="size-4" /> },
 };
 
-// Translation keys per step; resolved with t at render time.
 const TITLE_KEYS = {
 	confirm: "clients.headersAuth.confirmTitle",
 	input: "clients.headersAuth.inputTitle",
 	testing: "clients.headersAuth.testingTitle",
 	success: "clients.headersAuth.successTitle",
 	failed: "clients.headersAuth.failedTitle",
-} satisfies Record<Status, string>;
+} as const;
 
 const SUBTITLE_KEYS = {
 	confirm: "clients.headersAuth.confirmSubtitle",
@@ -57,7 +56,7 @@ const SUBTITLE_KEYS = {
 	testing: "clients.headersAuth.testingSubtitle",
 	success: "clients.headersAuth.successSubtitle",
 	failed: "clients.headersAuth.failedSubtitle",
-} satisfies Record<Status, string>;
+} as const;
 
 export const MCPHeadersAuthorizer: React.FC<MCPHeadersAuthorizerProps> = ({
 	open,

@@ -25,32 +25,28 @@ export type KeywordListKey = keyof EditableKeywordConfig;
 
 export const COMPLEXITY_TIER_VALUES = ["SIMPLE", "MEDIUM", "COMPLEX", "REASONING"] as const;
 
-export const KEYWORD_LIST_DEFINITIONS: Array<{
-	key: KeywordListKey;
-	label: string;
-	description: string;
-}> = [
+export const KEYWORD_LIST_DEFINITIONS = [
 	{
 		key: "simple_keywords",
-		label: "Simple keywords",
-		description: "Phrases that bias the request toward the SIMPLE tier (greetings, trivia, small talk).",
+		labelKey: "keywords.lists.simple.label",
+		descriptionKey: "keywords.lists.simple.description",
 	},
 	{
 		key: "code_keywords",
-		label: "Code keywords",
-		description: "Signals that the request involves code, debugging, or programming artifacts.",
+		labelKey: "keywords.lists.code.label",
+		descriptionKey: "keywords.lists.code.description",
 	},
 	{
 		key: "technical_keywords",
-		label: "Technical keywords",
-		description: "Architecture, infra, and operational terms that raise the complexity score.",
+		labelKey: "keywords.lists.technical.label",
+		descriptionKey: "keywords.lists.technical.description",
 	},
 	{
 		key: "reasoning_keywords",
-		label: "Reasoning keywords",
-		description: "Strong reasoning triggers. Matching these phrases can override tier selection toward the REASONING tier.",
+		labelKey: "keywords.lists.reasoning.label",
+		descriptionKey: "keywords.lists.reasoning.description",
 	},
-];
+] as const;
 
 export const DEFAULT_TIER_BOUNDARIES: TierBoundaries = {
 	simple_medium: 0.15,

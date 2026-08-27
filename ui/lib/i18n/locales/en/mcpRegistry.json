@@ -1,0 +1,132 @@
+{
+	"noPermissionEntity": "MCP registry",
+	"library": {
+		"noPermissionEntity": "MCP library"
+	},
+	"oauthCallback": {
+		"defaultError": "OAuth authorization failed",
+		"successTitle": "Authorization complete",
+		"failedTitle": "Authorization failed",
+		"closeTab": "You can close this tab now.",
+		"canClose": "This tab will close automatically. You can close it if it remains open.",
+		"backToRegistry": "Back to MCP registry"
+	},
+	"emptyState": {
+		"title": "No MCP servers configured",
+		"description": "Add an MCP server to make its tools available to your models.",
+		"readMore": "Read more",
+		"readMoreAria": "Read more about MCP servers",
+		"add": "Add MCP server",
+		"addAria": "Add an MCP server",
+		"browseLibrary": "Browse library",
+		"browseLibraryAria": "Browse MCP library"
+	},
+	"clients": {
+		"errorToastTitle": "MCP client error",
+		"filters": {
+			"title": "Filters",
+			"showAria": "Show filters",
+			"hideAria": "Hide filters",
+			"searchPlaceholder": "Search MCP servers...",
+			"searchVirtualKeys": "Search virtual keys...",
+			"allVirtualKeys": "All virtual keys",
+			"enabled": "Enabled",
+			"disabled": "Disabled",
+			"reset": "Reset filters",
+			"noResults": "No results found",
+			"sections": {
+				"status": "Status",
+				"state": "Connection state",
+				"connectionType": "Connection type",
+				"authType": "Authentication type",
+				"codeMode": "Code mode",
+				"vkAccess": "Virtual key access"
+			},
+			"state": {
+				"healthy": "Healthy",
+				"unstable": "Unstable"
+			},
+			"authType": {
+				"none": "None",
+				"headers": "Headers",
+				"perUserHeaders": "Per-user headers",
+				"oauth": "OAuth",
+				"perUserOauth": "Per-user OAuth",
+				"tokenExchange": "Token exchange"
+			}
+		},
+		"headersAuth": {
+			"confirmTitle": "Submit headers",
+			"confirmSubtitle": "Review the connection details before continuing.",
+			"confirmBody": "Submit these headers for this MCP server?",
+			"confirmDetail": "The values are stored only for your current session.",
+			"cancel": "Cancel",
+			"continue": "Continue",
+			"inputTitle": "Enter headers",
+			"inputSubtitle": "Provide the values required by this MCP server.",
+			"inputBody": "Enter the required header values to connect.",
+			"runTest": "Test connection",
+			"testingTitle": "Testing connection",
+			"testingSubtitle": "Verifying the supplied headers.",
+			"testingBody": "Testing connection…",
+			"testingDetail": "This may take a few seconds.",
+			"successTitle": "Connection successful",
+			"successSubtitle": "The MCP server is ready to use.",
+			"successBody": "Connection successful",
+			"successDetail": "Your headers were accepted.",
+			"failedTitle": "Connection failed",
+			"failedSubtitle": "The MCP server could not be reached with these headers.",
+			"failedBody": "Connection failed",
+			"failedDefaultError": "The MCP server rejected the supplied headers.",
+			"close": "Close",
+			"retry": "Retry"
+		},
+		"oauth": {
+			"providerFallback": "OAuth provider",
+			"authorizationExpiredStatus": "Authorization expired",
+			"authorizationFailedStatus": "Authorization failed",
+			"authorizationFailedTitle": "Could not authorize connection",
+			"authorizationFailedSubtitle": "Try again or check the server configuration.",
+			"authorizeConnectionTitle": "Authorize connection",
+			"authorizeConnectionSubtitle": "Sign in with {{provider}} to continue.",
+			"blockedBody": "The authorization window was blocked.",
+			"blockedDetail": "Allow pop-ups for this site and try again.",
+			"cancel": "Cancel",
+			"close": "Close",
+			"commaSeparated": "Separate values with commas.",
+			"confirmBodyReauth": "Authorize <strong>{{host}}</strong> again to continue.",
+			"confirmBodyFresh": "Authorize <strong>{{host}}</strong> to continue.",
+			"confirmDetailFresh": "You will be redirected to {{provider}} to authorize this connection.",
+			"confirmDetailReauth": "Your existing authorization will be replaced after you sign in again.",
+			"connectionAuthorizedTitle": "Connection authorized",
+			"connectionAuthorizedSubtitle": "You can return to the MCP registry.",
+			"continue": "Continue",
+			"failedBody": "Authorization failed",
+			"failedDefaultError": "The OAuth authorization could not be completed.",
+			"flowFailed": "OAuth authorization flow failed",
+			"openAuthorization": "Open authorization",
+			"pollingBody": "Waiting for authorization…",
+			"pollingDetail": "Complete the sign-in in the authorization window.",
+			"popupBlockedTitle": "Authorization window blocked",
+			"popupBlockedSubtitle": "Allow pop-ups, then open the authorization window again.",
+			"refreshAdminCredentialTitle": "Refresh administrator credential",
+			"refreshAdminCredentialSubtitle": "Sign in again to refresh the shared credential.",
+			"retry": "Retry",
+			"successBody": "Authorization successful",
+			"successDetail": "The MCP server is ready to use.",
+			"waitingTitle": "Waiting for authorization",
+			"waitingSubtitle": "Finish signing in with {{provider}} in the authorization window."
+		},
+		"tls": {
+			"caCertLabel": "CA certificate",
+			"caCertDescription": "Optional PEM-encoded certificate authority used to verify the MCP server.",
+			"caCertPlaceholder": "Paste the PEM certificate",
+			"skipVerifyLabel": "Skip TLS certificate verification",
+			"skipVerifyDescription": "Use only for trusted development servers."
+		},
+		"tokenExchange": {
+			"dedicatedApplication": "Dedicated application",
+			"identityProviderApplication": "Identity provider application"
+		}
+	}
+}

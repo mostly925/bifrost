@@ -11,13 +11,13 @@ import type {
 import { COMPACT_NUMBER_FORMAT } from "@/lib/utils/numbers";
 import NumberFlow from "@number-flow/react";
 import { memo, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import {
 	CHART_COLORS,
 	CHART_HEADER_LEGEND_CLASS,
 	LATENCY_COLORS,
 	OTHER_SERIES_COLOR,
 	OTHER_SERIES_KEY,
-	OTHER_SERIES_LABEL,
 	THROUGHPUT_COLOR,
 	formatTokensPerSecond,
 	getModelColor,
@@ -124,6 +124,7 @@ function OverviewTabImpl({
 	onCostModelChange,
 	onUsageModelChange,
 }: OverviewTabProps) {
+	const { t } = useTranslation("dashboard");
 	const volumeTotal = useMemo(() => {
 		if (!histogramData?.buckets) return null;
 		return histogramData.buckets.reduce((sum, b) => sum + (b.count ?? 0), 0);
@@ -304,7 +305,7 @@ function OverviewTabImpl({
 																		backgroundColor: model === OTHER_SERIES_KEY ? OTHER_SERIES_COLOR : getModelColor(idx + 1),
 																	}}
 																/>
-																{model === OTHER_SERIES_KEY ? OTHER_SERIES_LABEL : model}
+																{model === OTHER_SERIES_KEY ? t("chart.otherSeries") : model}
 															</span>
 														))}
 													</div>
@@ -380,7 +381,7 @@ function OverviewTabImpl({
 																		backgroundColor: model === OTHER_SERIES_KEY ? OTHER_SERIES_COLOR : getModelColor(idx + 1),
 																	}}
 																/>
-																{model === OTHER_SERIES_KEY ? OTHER_SERIES_LABEL : model}
+																{model === OTHER_SERIES_KEY ? t("chart.otherSeries") : model}
 															</span>
 														))}
 													</div>

@@ -1,0 +1,30 @@
+{
+	"chart": {
+		"avg": "平均值",
+		"cached": "缓存",
+		"cancelled": "已取消",
+		"completionTokens": "补全 Token",
+		"cost": "成本",
+		"count": "数量",
+		"error": "错误",
+		"input": "输入",
+		"noData": "暂无数据",
+		"otherSeries": "其他",
+		"output": "输出",
+		"p90": "P90",
+		"p95": "P95",
+		"p99": "P99",
+		"requests": "请求",
+		"success": "成功",
+		"throughput": "吞吐量",
+		"total": "总计",
+		"unnamedModel": "未命名模型"
+	},
+	"meter": {
+		"cached": "{{value}} 已缓存",
+		"externalCacheCaption": "外部缓存 Token",
+		"externalCacheInfoAria": "关于外部缓存 Token",
+		"externalCacheInfoTip": "从外部缓存读取的 Token。",
+		"input": "{{value}} 输入"
+	}
+}

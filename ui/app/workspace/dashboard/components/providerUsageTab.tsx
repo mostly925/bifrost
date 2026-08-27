@@ -2,6 +2,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { COMPACT_NUMBER_FORMAT } from "@/lib/utils/numbers";
 import NumberFlow from "@number-flow/react";
 import { memo, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import type {
 	ProviderCostHistogramResponse,
 	ProviderLatencyHistogramResponse,
@@ -14,7 +15,6 @@ import {
 	LATENCY_COLORS,
 	OTHER_SERIES_COLOR,
 	OTHER_SERIES_KEY,
-	OTHER_SERIES_LABEL,
 	THROUGHPUT_COLOR,
 	formatTokensPerSecond,
 	getModelColor,
@@ -109,6 +109,7 @@ function ProviderUsageTabImpl({
 	onProviderLatencyProviderChange,
 	onProviderThroughputProviderChange,
 }: ProviderUsageTabProps) {
+	const { t } = useTranslation("dashboard");
 	const providerCostTotal = useMemo(() => {
 		if (!providerCostData?.buckets) return null;
 		if (providerCostProvider === "all") {
@@ -216,7 +217,7 @@ function ProviderUsageTabImpl({
 																className="h-2 w-2 shrink-0 rounded-full"
 																style={{ backgroundColor: provider === OTHER_SERIES_KEY ? OTHER_SERIES_COLOR : getModelColor(idx + 1) }}
 															/>
-															{provider === OTHER_SERIES_KEY ? OTHER_SERIES_LABEL : provider}
+															{provider === OTHER_SERIES_KEY ? t("chart.otherSeries") : provider}
 														</span>
 													))}
 												</div>
@@ -304,7 +305,7 @@ function ProviderUsageTabImpl({
 																className="h-2 w-2 shrink-0 rounded-full"
 																style={{ backgroundColor: provider === OTHER_SERIES_KEY ? OTHER_SERIES_COLOR : getModelColor(idx + 1) }}
 															/>
-															{provider === OTHER_SERIES_KEY ? OTHER_SERIES_LABEL : provider}
+															{provider === OTHER_SERIES_KEY ? t("chart.otherSeries") : provider}
 														</span>
 													))}
 												</div>

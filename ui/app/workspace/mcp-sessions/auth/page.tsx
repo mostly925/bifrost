@@ -84,7 +84,7 @@ function OAuthAuthView() {
 			<CenteredCard>
 				<h1 className="text-xl font-semibold">{t("auth.missingFlow.title")}</h1>
 				<p className="text-muted-foreground mt-2 text-sm">
-					<Trans i18nKey="auth.missingFlow.body" components={{ 1: <code className="bg-muted rounded px-1 py-0.5" /> }} />
+					<Trans ns="mcpSessions" i18nKey="auth.missingFlow.body" components={{ 1: <code className="bg-muted rounded px-1 py-0.5" /> }} />
 				</p>
 				<div className="mt-6">
 					<SessionsTabLink />
@@ -164,7 +164,7 @@ function OAuthAuthView() {
 				{isReauth ? t("auth.reauthenticateTitle", { name: mcpClientName }) : t("auth.authenticateTitle", { name: mcpClientName })}
 			</h1>
 			<p className="text-muted-foreground mt-2 text-sm">
-				{isReauth ? <Trans i18nKey="auth.reauthBody" components={{ strong: <strong /> }} /> : t("auth.freshBody")}
+				{isReauth ? <Trans ns="mcpSessions" i18nKey="auth.reauthBody" components={{ strong: <strong /> }} /> : t("auth.freshBody")}
 			</p>
 
 			<dl className="bg-muted/40 mt-6 space-y-3 rounded-sm border p-4 text-sm">
@@ -289,7 +289,11 @@ function HeadersAuthView({ flowId }: { flowId: string }) {
 			</div>
 			<h1 className="text-xl font-semibold tracking-tight">{title}</h1>
 			<p className="text-muted-foreground mt-2 text-sm">
-				{isEdit ? <Trans i18nKey="headersAuth.editBody" components={{ strong: <strong /> }} /> : t("headersAuth.freshBody")}
+				{isEdit ? (
+					<Trans ns="mcpSessions" i18nKey="headersAuth.editBody" components={{ strong: <strong /> }} />
+				) : (
+					t("headersAuth.freshBody")
+				)}
 			</p>
 
 			<dl className="bg-muted/40 mt-6 space-y-3 rounded-sm border p-4 text-sm">
@@ -363,7 +367,9 @@ function CompletedFlowView({ flow }: { flow: MCPFlowDetail }) {
 		: flow.status === "expired"
 			? t("auth.completed.expiredTitle")
 			: t("auth.completed.noLongerCompletable");
-	const body = effectivelyAuthorized ? t("auth.completed.credentialAlreadyStored", { name: mcpClientName }) : t("auth.completed.triggerAgain");
+	const body = effectivelyAuthorized
+		? t("auth.completed.credentialAlreadyStored", { name: mcpClientName })
+		: t("auth.completed.triggerAgain");
 	return (
 		<CenteredCard>
 			<h1 className="text-xl font-semibold tracking-tight">{title}</h1>

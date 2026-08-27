@@ -18,11 +18,18 @@ import { join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const uiRoot = resolve(fileURLToPath(new URL("..", import.meta.url)));
-const targetArg = process.argv.slice(2).find((arg) => !arg.startsWith("--"));
-const jsonOutput = process.argv.includes("--json");
+const args = process.argv.slice(2);
+const checkIndex = args.indexOf("--check");
+const baselinePath = checkIndex === -1 ? undefined : args[checkIndex + 1];
+if (checkIndex !== -1 && !baselinePath) {
+	throw new Error("--check requires a baseline JSON path");
+}
+const targetArg = args.find((arg, index) => !arg.startsWith("--") && index !== checkIndex + 1);
+const jsonOutput = args.includes("--json");
 const scanRoot = targetArg ? resolve(uiRoot, targetArg) : uiRoot;
 
 const SCAN_DIRS = ["app", "components", "lib", "hooks"];
+const scanRoots = targetArg ? [scanRoot] : SCAN_DIRS.map((dir) => join(uiRoot, dir));
 
 // 标签之间的文本节点：含至少一个英文单词，排除纯表达式/纯符号/注释
 const jsxTextRe = />([^<>{}\n]*[A-Za-z][^<>{}\n]*)</g;
@@ -55,8 +62,7 @@ const perFile = [];
 let totalFiles = 0;
 let totalHits = 0;
 
-for (const baseDir of SCAN_DIRS) {
-	const root = join(scanRoot, baseDir);
+for (const root of scanRoots) {
 	let st;
 	try {
 		st = statSync(root);
@@ -93,13 +99,27 @@ for (const baseDir of SCAN_DIRS) {
 	}
 }
 
+const report = { totalHits, totalFiles, perDir: Object.fromEntries(perDir), perFile };
+
 if (jsonOutput) {
-	console.log(JSON.stringify({ totalHits, totalFiles, perDir: Object.fromEntries(perDir), perFile }, null, 2));
+	console.log(JSON.stringify(report, null, 2));
 } else {
 	const rows = [...perDir.entries()].sort((a, b) => b[1] - a[1]);
 	console.log(`硬编码文案扫描结果（启发式）：共 ${totalHits} 处，分布在 ${totalFiles} 个文件`);
 	console.log("");
 	for (const [dir, count] of rows) {
 		console.log(`${String(count).padStart(6)}  ${dir}`);
+	}
+}
+
+if (baselinePath) {
+	const baseline = JSON.parse(readFileSync(resolve(uiRoot, baselinePath), "utf8"));
+	const regressions = Object.entries(report.perDir).filter(([dir, count]) => count > (baseline.perDir[dir] ?? 0));
+	if (regressions.length > 0) {
+		console.error("发现新增的疑似硬编码文案：");
+		for (const [dir, count] of regressions) {
+			console.error(`  ${dir}: ${baseline.perDir[dir] ?? 0} → ${count}`);
+		}
+		process.exitCode = 1;
 	}
 }

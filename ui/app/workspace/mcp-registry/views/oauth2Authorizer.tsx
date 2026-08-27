@@ -293,9 +293,19 @@ export const OAuth2Authorizer: React.FC<OAuth2AuthorizerProps> = ({
 							<InfoBox icon={<KeyRound className="size-4" />}>
 								<p>
 									{isPerUserReauth ? (
-										<Trans i18nKey="clients.oauth.confirmBodyReauth" values={{ host: authorizationHost }} components={{ strong: <strong /> }} />
+										<Trans
+											ns="mcpRegistry"
+											i18nKey="clients.oauth.confirmBodyReauth"
+											values={{ host: authorizationHost }}
+											components={{ strong: <strong /> }}
+										/>
 									) : (
-										<Trans i18nKey="clients.oauth.confirmBodyFresh" values={{ host: authorizationHost }} components={{ strong: <strong /> }} />
+										<Trans
+											ns="mcpRegistry"
+											i18nKey="clients.oauth.confirmBodyFresh"
+											values={{ host: authorizationHost }}
+											components={{ strong: <strong /> }}
+										/>
 									)}
 								</p>
 								<p className="text-muted-foreground/80 text-xs">

@@ -39,7 +39,25 @@
 		"hint": "保存时自动转为小写并去重。每个列表至少需要一条关键词。",
 		"countOne": "条",
 		"countMany": "条",
-		"placeholder": "输入关键词后按回车"
+		"placeholder": "输入关键词后按回车",
+		"lists": {
+			"simple": {
+				"label": "简单关键词",
+				"description": "会使请求更倾向归入 SIMPLE 层级的短语，例如问候、常识问答和闲聊。"
+			},
+			"code": {
+				"label": "代码关键词",
+				"description": "表明请求涉及代码、调试或编程产物的信号。"
+			},
+			"technical": {
+				"label": "技术关键词",
+				"description": "会提高复杂度评分的架构、基础设施和运维术语。"
+			},
+			"reasoning": {
+				"label": "推理关键词",
+				"description": "强推理触发词。匹配这些短语可以覆盖层级选择并转向 REASONING 层级。"
+			}
+		}
 	},
 	"toasts": {
 		"resetToDefaults": "已恢复默认配置",

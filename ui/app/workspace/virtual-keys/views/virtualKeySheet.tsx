@@ -87,15 +87,11 @@ interface VirtualKeySheetProps {
 }
 
 // Provider configuration schema
-function createProviderConfigSchema(t: TFunction) {
+function createProviderConfigSchema(t: TFunction<"virtualKeys">) {
 	return z.object({
 		id: z.number().optional(),
 		provider: z.string().min(1, t("sheet.validation.providerRequired")),
-		weight: z
-			.number()
-			.min(0, t("sheet.validation.weightMin"))
-			.max(1, t("sheet.validation.weightMax"))
-			.optional(),
+		weight: z.number().min(0, t("sheet.validation.weightMin")).max(1, t("sheet.validation.weightMax")).optional(),
 		allowed_models: z.array(z.string()).optional(),
 		blacklisted_models: z.array(z.string()).optional(),
 		key_ids: z.array(z.string()).optional(), // Keys associated with this provider config
@@ -150,7 +146,7 @@ function createProviderConfigSchema(t: TFunction) {
 	});
 }
 
-function createMcpConfigSchema(t: TFunction) {
+function createMcpConfigSchema(t: TFunction<"virtualKeys">) {
 	return z.object({
 		id: z.number().optional(),
 		mcp_client_name: z.string().min(1, t("sheet.validation.mcpClientNameRequired")),
@@ -159,7 +155,7 @@ function createMcpConfigSchema(t: TFunction) {
 }
 
 // Main form schema
-function createFormSchema(t: TFunction) {
+function createFormSchema(t: TFunction<"virtualKeys">) {
 	return z
 		.object({
 			name: z.string().min(1, t("sheet.validation.nameRequired")),
@@ -405,11 +401,11 @@ export default function VirtualKeySheet({ virtualKey, defaultTeamId, onSave, onC
 					})),
 					rate_limit: config.rate_limit
 						? {
-							token_max_limit: config.rate_limit.token_max_limit ?? undefined,
-							token_reset_duration: config.rate_limit.token_reset_duration,
-							request_max_limit: config.rate_limit.request_max_limit ?? undefined,
-							request_reset_duration: config.rate_limit.request_reset_duration,
-						}
+								token_max_limit: config.rate_limit.token_max_limit ?? undefined,
+								token_reset_duration: config.rate_limit.token_reset_duration,
+								request_max_limit: config.rate_limit.request_max_limit ?? undefined,
+								request_reset_duration: config.rate_limit.request_reset_duration,
+							}
 						: undefined,
 					model_budgets: config.model_budgets?.map((mb) => ({
 						model_name: mb.model_name,
@@ -443,18 +439,18 @@ export default function VirtualKeySheet({ virtualKey, defaultTeamId, onSave, onC
 			isActive: virtualKey?.is_active ?? true,
 			expiresAt: virtualKey?.expires_at
 				? (() => {
-					const d = new Date(virtualKey.expires_at);
-					return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
-				})()
+						const d = new Date(virtualKey.expires_at);
+						return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+					})()
 				: null,
 			budgets:
 				virtualKey?.budgets && virtualKey.budgets.length > 0
 					? virtualKey.budgets.map((b) => ({
-						id: b.id,
-						max_limit: b.max_limit,
-						reset_duration: b.reset_duration ?? "1M",
-						reset_config: b.reset_config,
-					}))
+							id: b.id,
+							max_limit: b.max_limit,
+							reset_duration: b.reset_duration ?? "1M",
+							reset_config: b.reset_config,
+						}))
 					: [],
 			budgetCalendarAligned: virtualKey?.calendar_aligned ?? false,
 			tokenMaxLimit: virtualKey?.rate_limit?.token_max_limit ?? undefined,
@@ -639,7 +635,9 @@ export default function VirtualKeySheet({ virtualKey, defaultTeamId, onSave, onC
 	// Build a request rate-limit payload from the form's rate-limit fields. Returns the field
 	// values when a limit is set, {} to clear an existing rate limit (removal), or undefined.
 	const normalizeRateLimit = (
-		rl: { token_max_limit?: number; token_reset_duration?: string; request_max_limit?: number; request_reset_duration?: string } | undefined,
+		rl:
+			| { token_max_limit?: number; token_reset_duration?: string; request_max_limit?: number; request_reset_duration?: string }
+			| undefined,
 		hadExisting: boolean,
 	) => {
 		const hasToken = rl?.token_max_limit !== undefined;
@@ -811,7 +809,11 @@ export default function VirtualKeySheet({ virtualKey, defaultTeamId, onSave, onC
 		for (const config of data.providerConfigs || []) {
 			const existingConfig = existingProviderConfigs.get(String(config.id ?? config.provider));
 			const providerLabel = ProviderLabels[config.provider as ProviderName] ?? config.provider;
-			const warning = findBudgetUsageWarning(config.budgets, existingConfig?.budgets, t("sheet.scopeProvider", { provider: providerLabel }));
+			const warning = findBudgetUsageWarning(
+				config.budgets,
+				existingConfig?.budgets,
+				t("sheet.scopeProvider", { provider: providerLabel }),
+			);
 			if (warning) {
 				return warning;
 			}
@@ -1110,13 +1112,9 @@ export default function VirtualKeySheet({ virtualKey, defaultTeamId, onSave, onC
 								<Alert variant="info">
 									<Users className="h-4 w-4" />
 									<AlertDescription>
-										<Trans
-											ns="virtualKeys"
-											i18nKey="sheet.teamLockedNotice"
-											values={{ team: attachedTeam?.name ?? attachedTeamId }}
-										>
-											Creating this virtual key under team <span className="font-medium">{attachedTeam?.name ?? attachedTeamId}</span>
-											. Team assignment is pre-set; all other fields are editable.
+										<Trans ns="virtualKeys" i18nKey="sheet.teamLockedNotice" values={{ team: attachedTeam?.name ?? attachedTeamId }}>
+											Creating this virtual key under team <span className="font-medium">{attachedTeam?.name ?? attachedTeamId}</span>. Team
+											assignment is pre-set; all other fields are editable.
 										</Trans>
 									</AlertDescription>
 								</Alert>
@@ -1164,7 +1162,12 @@ export default function VirtualKeySheet({ virtualKey, defaultTeamId, onSave, onC
 										name="isActive"
 										render={({ field }) => (
 											<FormItem>
-												<Toggle label={t("sheet.isActiveLabel")} val={field.value} setVal={field.onChange} data-testid="vk-is-active-toggle" />
+												<Toggle
+													label={t("sheet.isActiveLabel")}
+													val={field.value}
+													setVal={field.onChange}
+													data-testid="vk-is-active-toggle"
+												/>
 											</FormItem>
 										)}
 									/>
@@ -1225,8 +1228,7 @@ export default function VirtualKeySheet({ virtualKey, defaultTeamId, onSave, onC
 															>
 																<span>
 																	<Trans ns="virtualKeys" i18nKey="sheet.noProvidersLeft">
-																		No providers left to configure.{" "}
-																		<span className="text-primary font-medium underline">Click to add</span>
+																		No providers left to configure. <span className="text-primary font-medium underline">Click to add</span>
 																	</Trans>
 																</span>
 															</SelectItem>
@@ -1350,9 +1352,9 @@ export default function VirtualKeySheet({ virtualKey, defaultTeamId, onSave, onC
 													<TooltipContent>
 														<p>
 															<Trans ns="virtualKeys" i18nKey="sheet.mcpConfigurationsTooltip">
-																Configure which MCP clients this virtual key can use and their allowed tools. Leaving this
-																section empty blocks all MCP tools. After adding an MCP client, you must select specific tools or
-																choose <span className="font-medium">Allow All Tools</span> to grant tool access.
+																Configure which MCP clients this virtual key can use and their allowed tools. Leaving this section empty
+																blocks all MCP tools. After adding an MCP client, you must select specific tools or choose{" "}
+																<span className="font-medium">Allow All Tools</span> to grant tool access.
 															</Trans>
 														</p>
 													</TooltipContent>
@@ -1377,10 +1379,11 @@ export default function VirtualKeySheet({ virtualKey, defaultTeamId, onSave, onC
 																i18nKey="sheet.defaultMcpClientsNotice"
 																values={{ names: defaultMCPClients.map((c) => c.config.name).join(", ") }}
 															>
-																The following MCP servers are available to this key by default with all tools enabled on that
-																client: <span className="text-foreground font-medium">{defaultMCPClients.map((c) => c.config.name).join(", ")}</span>
-																. Adding an explicit config for any of them below will override the all-tools default for this
-																key.
+																The following MCP servers are available to this key by default with all tools enabled on that client:{" "}
+																<span className="text-foreground font-medium">
+																	{defaultMCPClients.map((c) => c.config.name).join(", ")}
+																</span>
+																. Adding an explicit config for any of them below will override the all-tools default for this key.
 															</Trans>
 														</span>
 													</div>
@@ -1722,10 +1725,9 @@ export default function VirtualKeySheet({ virtualKey, defaultTeamId, onSave, onC
 											<AlertDialogDescription>
 												<Trans ns="virtualKeys" i18nKey="sheet.calendarAligned.dialogDescription">
 													Enabling calendar alignment will reset budget usage to <span className="font-semibold">$0.00</span> and
-													token/request rate-limit counters to <span className="font-semibold">0</span> for this virtual key, then
-													snap each reset date to the start of its current period (e.g. start of day, week, month, or year). The usage
-													reset cannot be undone, but calendar alignment can be turned off later. This will take effect when you
-													save.
+													token/request rate-limit counters to <span className="font-semibold">0</span> for this virtual key, then snap each
+													reset date to the start of its current period (e.g. start of day, week, month, or year). The usage reset cannot be
+													undone, but calendar alignment can be turned off later. This will take effect when you save.
 												</Trans>
 											</AlertDialogDescription>
 										</AlertDialogHeader>
@@ -1818,9 +1820,9 @@ export default function VirtualKeySheet({ virtualKey, defaultTeamId, onSave, onC
 															fallbackOption={
 																field.value
 																	? {
-																		value: field.value,
-																		label: field.value === virtualKey?.team_id ? (virtualKey?.team?.name ?? field.value) : field.value,
-																	}
+																			value: field.value,
+																			label: field.value === virtualKey?.team_id ? (virtualKey?.team?.name ?? field.value) : field.value,
+																		}
 																	: null
 															}
 															disabled={isTeamLocked}
@@ -1848,10 +1850,10 @@ export default function VirtualKeySheet({ virtualKey, defaultTeamId, onSave, onC
 															fallbackOption={
 																field.value
 																	? {
-																		value: field.value,
-																		label:
-																			field.value === virtualKey?.customer_id ? (virtualKey?.customer?.name ?? field.value) : field.value,
-																	}
+																			value: field.value,
+																			label:
+																				field.value === virtualKey?.customer_id ? (virtualKey?.customer?.name ?? field.value) : field.value,
+																		}
 																	: null
 															}
 															triggerClassName="h-9"
@@ -1880,9 +1882,9 @@ export default function VirtualKeySheet({ virtualKey, defaultTeamId, onSave, onC
 															fallbackOption={
 																field.value
 																	? {
-																		value: field.value,
-																		label: field.value === assignedUserId ? assignedUserLabel : field.value,
-																	}
+																			value: field.value,
+																			label: field.value === assignedUserId ? assignedUserLabel : field.value,
+																		}
 																	: null
 															}
 															triggerClassName="h-9"
@@ -1893,9 +1895,7 @@ export default function VirtualKeySheet({ virtualKey, defaultTeamId, onSave, onC
 											/>
 										)}
 									</div>
-									{form.watch("entityType") === "user" && (
-										<p className="text-muted-foreground text-xs">{t("sheet.singleUserNote")}</p>
-									)}
+									{form.watch("entityType") === "user" && <p className="text-muted-foreground text-xs">{t("sheet.singleUserNote")}</p>}
 								</div>
 							</fieldset>
 						</div>

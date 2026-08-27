@@ -28,6 +28,7 @@ import { KnownProvider } from "@/lib/types/config";
 import { ModelConfig } from "@/lib/types/governance";
 import { RbacOperation, RbacResource, useRbac } from "@enterprise/lib";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { TFunction } from "i18next";
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -40,7 +41,7 @@ interface ModelLimitSheetProps {
 	onCancel: () => void;
 }
 
-type Translate = (key: string) => string;
+type Translate = TFunction<"modelLimits">;
 
 function createFormSchema(t: Translate) {
 	return z
@@ -314,9 +315,7 @@ export default function ModelLimitSheet({ modelConfig, onSave, onCancel }: Model
 			>
 				<SheetHeader className="flex flex-col items-start p-0 px-8 py-4" headerClassName="mb-0 sticky -top-4 bg-card z-10">
 					<SheetTitle>{isEditing ? t("sheet.titleEdit") : t("sheet.titleCreate")}</SheetTitle>
-					<SheetDescription>
-						{isEditing ? t("sheet.descriptionEdit") : t("sheet.descriptionCreate")}
-					</SheetDescription>
+					<SheetDescription>{isEditing ? t("sheet.descriptionEdit") : t("sheet.descriptionCreate")}</SheetDescription>
 				</SheetHeader>
 
 				<Form {...form}>

@@ -1,0 +1,30 @@
+{
+	"chart": {
+		"avg": "Average",
+		"cached": "Cached",
+		"cancelled": "Cancelled",
+		"completionTokens": "Completion tokens",
+		"cost": "Cost",
+		"count": "Count",
+		"error": "Error",
+		"input": "Input",
+		"noData": "No data available",
+		"otherSeries": "Other",
+		"output": "Output",
+		"p90": "P90",
+		"p95": "P95",
+		"p99": "P99",
+		"requests": "Requests",
+		"success": "Success",
+		"throughput": "Throughput",
+		"total": "Total",
+		"unnamedModel": "Unnamed model"
+	},
+	"meter": {
+		"cached": "{{value}} cached",
+		"externalCacheCaption": "External cache tokens",
+		"externalCacheInfoAria": "About external cache tokens",
+		"externalCacheInfoTip": "Tokens read from an external cache.",
+		"input": "{{value}} input"
+	}
+}

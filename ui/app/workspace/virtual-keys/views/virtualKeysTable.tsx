@@ -79,7 +79,7 @@ const formatResetDuration = (duration: string) => resetDurationLabels[duration] 
 type ExportScope = "current_page" | "all";
 
 // CSV 文案通过 t 在调用期求值，避免模块顶层读取语言包
-function virtualKeysToCSV(vks: VirtualKey[], t: TFunction): string {
+function virtualKeysToCSV(vks: VirtualKey[], t: TFunction<"virtualKeys">): string {
 	const headers = [
 		t("table.csv.headerName"),
 		t("table.csv.headerStatus"),

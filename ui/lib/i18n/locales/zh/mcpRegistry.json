@@ -1,0 +1,132 @@
+{
+	"noPermissionEntity": "MCP 注册表",
+	"library": {
+		"noPermissionEntity": "MCP 库"
+	},
+	"oauthCallback": {
+		"defaultError": "OAuth 授权失败",
+		"successTitle": "授权完成",
+		"failedTitle": "授权失败",
+		"closeTab": "现在可以关闭此标签页。",
+		"canClose": "此标签页会自动关闭；如仍未关闭，你可以手动关闭。",
+		"backToRegistry": "返回 MCP 注册表"
+	},
+	"emptyState": {
+		"title": "尚未配置 MCP 服务器",
+		"description": "添加 MCP 服务器，使其工具可供模型使用。",
+		"readMore": "了解更多",
+		"readMoreAria": "了解 MCP 服务器",
+		"add": "添加 MCP 服务器",
+		"addAria": "添加一个 MCP 服务器",
+		"browseLibrary": "浏览库",
+		"browseLibraryAria": "浏览 MCP 库"
+	},
+	"clients": {
+		"errorToastTitle": "MCP 客户端错误",
+		"filters": {
+			"title": "筛选条件",
+			"showAria": "显示筛选条件",
+			"hideAria": "隐藏筛选条件",
+			"searchPlaceholder": "搜索 MCP 服务器...",
+			"searchVirtualKeys": "搜索虚拟密钥...",
+			"allVirtualKeys": "所有虚拟密钥",
+			"enabled": "已启用",
+			"disabled": "已禁用",
+			"reset": "重置筛选条件",
+			"noResults": "未找到结果",
+			"sections": {
+				"status": "状态",
+				"state": "连接状态",
+				"connectionType": "连接类型",
+				"authType": "认证类型",
+				"codeMode": "代码模式",
+				"vkAccess": "虚拟密钥访问权限"
+			},
+			"state": {
+				"healthy": "正常",
+				"unstable": "不稳定"
+			},
+			"authType": {
+				"none": "无",
+				"headers": "请求头",
+				"perUserHeaders": "每用户请求头",
+				"oauth": "OAuth",
+				"perUserOauth": "每用户 OAuth",
+				"tokenExchange": "令牌交换"
+			}
+		},
+		"headersAuth": {
+			"confirmTitle": "提交请求头",
+			"confirmSubtitle": "继续前请确认连接详情。",
+			"confirmBody": "要为此 MCP 服务器提交这些请求头吗？",
+			"confirmDetail": "这些值只会存储在当前会话中。",
+			"cancel": "取消",
+			"continue": "继续",
+			"inputTitle": "输入请求头",
+			"inputSubtitle": "提供此 MCP 服务器要求的值。",
+			"inputBody": "输入连接所需的请求头值。",
+			"runTest": "测试连接",
+			"testingTitle": "正在测试连接",
+			"testingSubtitle": "正在验证提供的请求头。",
+			"testingBody": "正在测试连接…",
+			"testingDetail": "这可能需要几秒钟。",
+			"successTitle": "连接成功",
+			"successSubtitle": "MCP 服务器已可以使用。",
+			"successBody": "连接成功",
+			"successDetail": "请求头已通过验证。",
+			"failedTitle": "连接失败",
+			"failedSubtitle": "无法使用这些请求头连接 MCP 服务器。",
+			"failedBody": "连接失败",
+			"failedDefaultError": "MCP 服务器拒绝了提供的请求头。",
+			"close": "关闭",
+			"retry": "重试"
+		},
+		"oauth": {
+			"providerFallback": "OAuth 提供方",
+			"authorizationExpiredStatus": "授权已过期",
+			"authorizationFailedStatus": "授权失败",
+			"authorizationFailedTitle": "无法授权连接",
+			"authorizationFailedSubtitle": "请重试或检查服务器配置。",
+			"authorizeConnectionTitle": "授权连接",
+			"authorizeConnectionSubtitle": "使用 {{provider}} 登录以继续。",
+			"blockedBody": "授权窗口被拦截。",
+			"blockedDetail": "请允许此网站打开弹窗后重试。",
+			"cancel": "取消",
+			"close": "关闭",
+			"commaSeparated": "使用逗号分隔多个值。",
+			"confirmBodyReauth": "请再次授权 <strong>{{host}}</strong> 以继续。",
+			"confirmBodyFresh": "请授权 <strong>{{host}}</strong> 以继续。",
+			"confirmDetailFresh": "你将跳转到 {{provider}} 以授权此连接。",
+			"confirmDetailReauth": "重新登录后，现有授权将被替换。",
+			"connectionAuthorizedTitle": "连接已授权",
+			"connectionAuthorizedSubtitle": "现在可以返回 MCP 注册表。",
+			"continue": "继续",
+			"failedBody": "授权失败",
+			"failedDefaultError": "无法完成 OAuth 授权。",
+			"flowFailed": "OAuth 授权流程失败",
+			"openAuthorization": "打开授权页面",
+			"pollingBody": "正在等待授权…",
+			"pollingDetail": "请在授权窗口中完成登录。",
+			"popupBlockedTitle": "授权窗口被拦截",
+			"popupBlockedSubtitle": "请允许弹窗后重新打开授权窗口。",
+			"refreshAdminCredentialTitle": "刷新管理员凭据",
+			"refreshAdminCredentialSubtitle": "请重新登录以刷新共享凭据。",
+			"retry": "重试",
+			"successBody": "授权成功",
+			"successDetail": "MCP 服务器已可以使用。",
+			"waitingTitle": "正在等待授权",
+			"waitingSubtitle": "请在授权窗口中使用 {{provider}} 完成登录。"
+		},
+		"tls": {
+			"caCertLabel": "CA 证书",
+			"caCertDescription": "用于验证 MCP 服务器的可选 PEM 编码证书颁发机构。",
+			"caCertPlaceholder": "粘贴 PEM 证书",
+			"skipVerifyLabel": "跳过 TLS 证书验证",
+			"skipVerifyDescription": "仅可用于受信任的开发服务器。"
+		},
+		"tokenExchange": {
+			"dedicatedApplication": "专用应用程序",
+			"identityProviderApplication": "身份提供方应用程序"
+		}
+	}
+}

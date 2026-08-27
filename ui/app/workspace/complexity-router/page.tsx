@@ -29,6 +29,7 @@ import {
 import { cn } from "@/lib/utils";
 import { RbacOperation, RbacResource, useRbac } from "@enterprise/lib";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { TFunction } from "i18next";
 import { ExternalLink, LoaderCircle, RotateCcw, Save } from "lucide-react";
 import { type ChangeEvent, type ClipboardEvent, type DragEvent, type KeyboardEvent, useEffect, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -53,17 +54,7 @@ const TIER_PALETTE = {
 	reasoning: { color: P4, name: "REASONING" },
 } as const;
 
-interface BoundaryFieldConfig {
-	key: TierBoundaryKey;
-	labelKey: string;
-	descriptionKey: string;
-	fromTier: string;
-	toTier: string;
-	fromColor: string;
-	toColor: string;
-}
-
-const BOUNDARY_FIELDS: BoundaryFieldConfig[] = [
+const BOUNDARY_FIELDS = [
 	{
 		key: "simple_medium",
 		labelKey: "boundaries.simpleMedium.label",
@@ -91,16 +82,16 @@ const BOUNDARY_FIELDS: BoundaryFieldConfig[] = [
 		fromColor: P3,
 		toColor: P4,
 	},
-];
+] as const;
 
-type Translate = (key: string) => string;
+type Translate = TFunction<"complexityRouter">;
 
-const KEYWORD_EMPTY_ERROR_KEYS: Record<KeywordListKey, string> = {
+const KEYWORD_EMPTY_ERROR_KEYS = {
 	simple_keywords: "errors.simpleKeywordsEmpty",
 	code_keywords: "errors.codeKeywordsEmpty",
 	technical_keywords: "errors.technicalKeywordsEmpty",
 	reasoning_keywords: "errors.reasoningKeywordsEmpty",
-};
+} as const;
 
 // Built with t at render time so validation messages follow the UI language.
 function createAnalyzerConfigSchema(t: Translate) {
@@ -363,7 +354,11 @@ export default function ComplexityRouterPage() {
 					<div className="space-y-1.5">
 						<h1 className="text-2xl font-semibold tracking-tight">{t("title")}</h1>
 						<p className="text-muted-foreground max-w-2xl text-sm leading-relaxed">
-							<Trans i18nKey="description" components={{ 1: <code className="bg-muted rounded-sm px-1 py-0.5 font-mono text-xs" /> }} />
+							<Trans
+								ns="complexityRouter"
+								i18nKey="description"
+								components={{ 1: <code className="bg-muted rounded-sm px-1 py-0.5 font-mono text-xs" /> }}
+							/>
 						</p>
 					</div>
 					<Button asChild variant="outline" size="sm" className="w-fit shrink-0" data-testid="complexity-router-docs-link">
@@ -480,13 +475,11 @@ export default function ComplexityRouterPage() {
 				<div className="space-y-3">
 					<div className="flex items-baseline gap-2.5">
 						<h2 className="text-sm font-semibold">{t("keywords.title")}</h2>
-						<span className="text-muted-foreground text-xs">
-							{t("keywords.hint")}
-						</span>
+						<span className="text-muted-foreground text-xs">{t("keywords.hint")}</span>
 					</div>
 
 					<div className="grid gap-3 md:grid-cols-2">
-						{KEYWORD_LIST_DEFINITIONS.map(({ key, label, description }) => {
+						{KEYWORD_LIST_DEFINITIONS.map(({ key, labelKey, descriptionKey }) => {
 							const fieldError = keywordErrors?.[key as KeywordListKey];
 							const errorId = `keywords-${key}-error`;
 							return (
@@ -498,12 +491,12 @@ export default function ComplexityRouterPage() {
 										render={({ field }) => (
 											<div className="space-y-2 p-4 pl-5">
 												<div className="flex items-center justify-between">
-													<span className="text-xs font-medium">{label}</span>
+													<span className="text-xs font-medium">{t(labelKey)}</span>
 													<span className="text-muted-foreground font-mono text-[11px] tabular-nums">
 														{field.value.length} {t(field.value.length === 1 ? "keywords.countOne" : "keywords.countMany")}
 													</span>
 												</div>
-												<p className="text-muted-foreground text-xs leading-relaxed">{description}</p>
+												<p className="text-muted-foreground text-xs leading-relaxed">{t(descriptionKey)}</p>
 												<TagInput
 													data-testid={`complexity-router-keywords-${testIdPart(key)}-input`}
 													value={field.value}
@@ -540,7 +533,7 @@ export default function ComplexityRouterPage() {
 				)}
 
 				{/* ── Action footer ── */}
-				<div className="bg-card sticky bottom-0 flex flex-wrap items-center justify-end gap-2.5 border-t py-4 z-10">
+				<div className="bg-card sticky bottom-0 z-10 flex flex-wrap items-center justify-end gap-2.5 border-t py-4">
 					<Button
 						data-testid="complexity-router-restore-defaults-button"
 						type="button"
@@ -578,9 +571,7 @@ export default function ComplexityRouterPage() {
 				<AlertDialogContent>
 					<AlertDialogHeader>
 						<AlertDialogTitle>{t("restoreDialog.title")}</AlertDialogTitle>
-						<AlertDialogDescription>
-							{t("restoreDialog.description")}
-						</AlertDialogDescription>
+						<AlertDialogDescription>{t("restoreDialog.description")}</AlertDialogDescription>
 					</AlertDialogHeader>
 					<AlertDialogFooter>
 						<AlertDialogCancel

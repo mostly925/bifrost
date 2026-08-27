@@ -6,13 +6,15 @@
 		"dev": "vite",
 		"build-enterprise": "vite build && npm run typecheck",
 		"typecheck": "tsc --noEmit",
-		"build": "vite build && npm run typecheck && npm run copy-build",
+		"build": "npm run i18n:check && vite build && npm run typecheck && npm run copy-build",
 		"copy-build": "rm -rf ../transports/bifrost-http/ui && cp -r out ../transports/bifrost-http/ui",
 		"start": "vite preview",
 		"lint": "oxlint",
 		"format": "oxfmt",
 		"format:check": "oxfmt --check",
-		"format:enterprise": "oxfmt app/enterprise/"
+		"format:enterprise": "oxfmt app/enterprise/",
+		"i18n:scan": "node scripts/scan-hardcoded-strings.mjs",
+		"i18n:check": "node scripts/scan-hardcoded-strings.mjs --check scripts/hardcoded-strings-baseline.json"
 	},
 	"dependencies": {
 		"@bprogress/core": "1.3.4",

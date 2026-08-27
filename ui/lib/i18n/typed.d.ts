@@ -9,8 +9,22 @@ declare module "i18next" {
 		fallbackLng: "en";
 		resources: {
 			common: typeof import("./locales/en/common.json");
-			skillsRepo: typeof import("./locales/en/skillsRepo.json");
+			complexityRouter: typeof import("./locales/en/complexityRouter.json");
+			dashboard: typeof import("./locales/en/dashboard.json");
+			devProfiler: typeof import("./locales/en/devProfiler.json");
+			docs: typeof import("./locales/en/docs.json");
+			filters: typeof import("./locales/en/filters.json");
+			mcpSessions: typeof import("./locales/en/mcpSessions.json");
+			mcpRegistry: typeof import("./locales/en/mcpRegistry.json");
+			modelLimits: typeof import("./locales/en/modelLimits.json");
+			oauth: typeof import("./locales/en/oauth.json");
+			plugins: typeof import("./locales/en/plugins.json");
+			pprof: typeof import("./locales/en/pprof.json");
 			prompts: typeof import("./locales/en/prompts.json");
+			shared: typeof import("./locales/en/shared.json");
+			skillsRepo: typeof import("./locales/en/skillsRepo.json");
+			virtualKeys: typeof import("./locales/en/virtualKeys.json");
+			webhooks: typeof import("./locales/en/webhooks.json");
 		};
 	}
 }
