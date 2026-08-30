@@ -10,7 +10,9 @@ import { WEBHOOK_TUNING_DEFAULTS, WebhookDelivery, WebhookDeliveryOutcome, Webho
 import { format, formatDistanceToNow } from "date-fns";
 import { ChevronDown, ChevronLeft, ChevronRight, Info, Loader2, RefreshCcw, Send } from "lucide-react";
 import { Fragment, useEffect, useMemo, useState } from "react";
+import { Trans, useTranslation } from "react-i18next";
 import { toast } from "sonner";
+import type { TFunction } from "i18next";
 
 const PAGE_SIZE = 25;
 
@@ -21,11 +23,17 @@ const OUTCOME_COLORS: Record<WebhookDeliveryOutcome, string> = {
 	exhausted: "bg-red-100 text-red-800",
 };
 
-const OUTCOME_LABELS: Record<WebhookDeliveryOutcome, string> = {
-	delivered: "delivered",
-	retryable_failure: "retrying",
-	permanent_failure: "failed",
-	exhausted: "retries exhausted",
+const outcomeLabel = (outcome: WebhookDeliveryOutcome, t: TFunction<"webhooks">): string => {
+	switch (outcome) {
+		case "delivered":
+			return t("details.outcomes.delivered");
+		case "retryable_failure":
+			return t("details.outcomes.retrying");
+		case "permanent_failure":
+			return t("details.outcomes.failed");
+		case "exhausted":
+			return t("details.outcomes.retriesExhausted");
+	}
 };
 
 const DetailEntry = ({ label, value }: { label: string; value: React.ReactNode }) => (
@@ -35,7 +43,8 @@ const DetailEntry = ({ label, value }: { label: string; value: React.ReactNode }
 	</div>
 );
 
-const relativeTime = (timestamp?: string) => (timestamp ? formatDistanceToNow(new Date(timestamp), { addSuffix: true }) : "never");
+const relativeTime = (timestamp: string | undefined, neverText: string) =>
+	timestamp ? formatDistanceToNow(new Date(timestamp), { addSuffix: true }) : neverText;
 
 // Wraps a badge with the attempt's error text as a tooltip when present.
 const withErrorTooltip = (badge: React.ReactNode, error?: string) => {
@@ -53,10 +62,10 @@ const withErrorTooltip = (badge: React.ReactNode, error?: string) => {
 };
 
 // Run-level outcome: where the delivery as a whole stands.
-const outcomeBadge = (attempt: WebhookDelivery) =>
+const outcomeBadge = (attempt: WebhookDelivery, t: TFunction<"webhooks">) =>
 	withErrorTooltip(
 		<Badge variant="outline" className={OUTCOME_COLORS[attempt.outcome]}>
-			{OUTCOME_LABELS[attempt.outcome]}
+			{outcomeLabel(attempt.outcome, t)}
 		</Badge>,
 		attempt.error,
 	);
@@ -101,6 +110,7 @@ interface WebhookDetailsSheetProps {
 }
 
 export function WebhookDetailsSheet({ endpoint, isTesting, canManage, onTest, onClose }: WebhookDetailsSheetProps) {
+	const { t } = useTranslation("webhooks");
 	const open = !!endpoint;
 	const [offset, setOffset] = useState(0);
 	const [redeliverWebhookDelivery] = useRedeliverWebhookDeliveryMutation();
@@ -152,12 +162,12 @@ export function WebhookDetailsSheet({ endpoint, isTesting, canManage, onTest, on
 			// The oldest send is the original; label the rest as redeliveries in order.
 			const sends = [...sendsNewestFirst].reverse().map((sendAttempts, index) => ({
 				key: `${webhookId}:${index}`,
-				label: index === 0 ? "Original" : `Redelivery ${index}`,
+				label: index === 0 ? t("details.sendOriginal") : t("details.sendRedelivery", { index }),
 				attempts: sendAttempts,
 			}));
 			return { webhookId, latest: attempts[0], latestSend: sends[sends.length - 1], sends };
 		});
-	}, [data]);
+	}, [data, t]);
 
 	const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
 	const toggleExpanded = (webhookId: string) => {
@@ -176,7 +186,7 @@ export function WebhookDetailsSheet({ endpoint, isTesting, canManage, onTest, on
 		setRedeliveringIds((prev) => new Set(prev).add(deliveryId));
 		try {
 			await redeliverWebhookDelivery(deliveryId).unwrap();
-			toast.success("Redelivery queued under the original webhook id");
+			toast.success(t("toasts.redeliveryQueued"));
 		} catch (err) {
 			toast.error(getErrorMessage(err));
 		} finally {
@@ -202,11 +212,11 @@ export function WebhookDetailsSheet({ endpoint, isTesting, canManage, onTest, on
 						<p className="text-md max-w-full truncate">{endpoint?.name}</p>
 						{endpoint?.disabled ? (
 							<Badge variant="outline" className="bg-gray-100 text-gray-800">
-								disabled
+								{t("details.statusDisabled")}
 							</Badge>
 						) : (
 							<Badge variant="outline" className="bg-green-100 text-green-800">
-								enabled
+								{t("details.statusEnabled")}
 							</Badge>
 						)}
 					</SheetTitle>
@@ -216,7 +226,7 @@ export function WebhookDetailsSheet({ endpoint, isTesting, canManage, onTest, on
 				<div className="space-y-4 rounded-sm border p-4">
 					<div className="grid grid-cols-3 gap-4">
 						<DetailEntry
-							label="Events"
+							label={t("details.eventsLabel")}
 							value={
 								<div className="flex flex-wrap gap-1">
 									{endpoint?.events.map((event) => (
@@ -227,22 +237,25 @@ export function WebhookDetailsSheet({ endpoint, isTesting, canManage, onTest, on
 								</div>
 							}
 						/>
-						<DetailEntry label="Include response" value={endpoint?.include_response ? "yes" : "no"} />
-						<DetailEntry label="Private network" value={endpoint?.allow_private_network ? "allowed" : "blocked"} />
-						<DetailEntry label="Last success" value={relativeTime(endpoint?.last_success_at)} />
-						<DetailEntry label="Last failure" value={relativeTime(endpoint?.last_failure_at)} />
-						<DetailEntry label="Consecutive failures" value={endpoint?.consecutive_failures ?? 0} />
-						<DetailEntry label="Max retries" value={tuning("max_retries")} />
+						<DetailEntry label={t("details.includeResponse")} value={endpoint?.include_response ? t("details.yes") : t("details.no")} />
 						<DetailEntry
-							label="Retry backoff"
+							label={t("details.privateNetwork")}
+							value={endpoint?.allow_private_network ? t("details.allowed") : t("details.blocked")}
+						/>
+						<DetailEntry label={t("details.lastSuccess")} value={relativeTime(endpoint?.last_success_at, t("details.never"))} />
+						<DetailEntry label={t("details.lastFailure")} value={relativeTime(endpoint?.last_failure_at, t("details.never"))} />
+						<DetailEntry label={t("details.consecutiveFailures")} value={endpoint?.consecutive_failures ?? 0} />
+						<DetailEntry label={t("details.maxRetries")} value={tuning("max_retries")} />
+						<DetailEntry
+							label={t("details.retryBackoff")}
 							value={`${tuning("retry_backoff_initial_seconds", "s")} → ${tuning("retry_backoff_max_seconds", "s")}`}
 						/>
-						<DetailEntry label="Attempt timeout" value={tuning("attempt_timeout_seconds", "s")} />
+						<DetailEntry label={t("details.attemptTimeout")} value={tuning("attempt_timeout_seconds", "s")} />
 					</div>
 				</div>
 
 				<div className="mt-4 flex items-center justify-between">
-					<h3 className="font-semibold">Delivery History</h3>
+					<h3 className="font-semibold">{t("details.deliveryHistory")}</h3>
 					{canManage && (
 						<DropdownMenu>
 							<DropdownMenuTrigger asChild>
@@ -254,7 +267,7 @@ export function WebhookDetailsSheet({ endpoint, isTesting, canManage, onTest, on
 									data-testid="webhook-test-fire-btn"
 								>
 									{isTesting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-									<span className="flex-1 text-center">Send Test Event</span>
+									<span className="flex-1 text-center">{t("details.sendTestEvent")}</span>
 									<ChevronDown className="h-3 w-3" />
 								</Button>
 							</DropdownMenuTrigger>
@@ -279,33 +292,43 @@ export function WebhookDetailsSheet({ endpoint, isTesting, canManage, onTest, on
 						<TableHeader className="bg-muted sticky top-0 z-10">
 							<TableRow>
 								<TableHead className="w-8 px-2"></TableHead>
-								<TableHead>Time</TableHead>
-								<TableHead>Request ID</TableHead>
-								<TableHead>Event</TableHead>
+								<TableHead>{t("details.columnTime")}</TableHead>
+								<TableHead>{t("details.columnRequestId")}</TableHead>
+								<TableHead>{t("details.columnEvent")}</TableHead>
 								<TableHead>
 									<Tooltip>
 										<TooltipTrigger asChild>
 											<span className="inline-flex cursor-help items-center gap-1.5">
-												Status
+												{t("details.columnStatus")}
 												<Info className="text-muted-foreground size-3" />
 											</span>
 										</TooltipTrigger>
 										<TooltipContent className="max-w-xs">
 											<div className="space-y-1">
-												<p>
-													<span className="font-medium">delivered</span>: receiver returned a 2xx.
-												</p>
-												<p>
-													<span className="font-medium">retrying</span>: transient failure (network error, timeout, 429, or 5xx); another
-													attempt is scheduled.
-												</p>
-												<p>
-													<span className="font-medium">failed</span>: permanent error (a non-retryable 4xx such as 401/404); not retried
-													automatically.
-												</p>
-												<p>
-													<span className="font-medium">retries exhausted</span>: kept failing until the retry budget ran out.
-												</p>
+												<Trans
+													ns="webhooks"
+													i18nKey="details.statusTooltip.delivered"
+													parent="p"
+													components={{ 1: <span className="font-medium" /> }}
+												/>
+												<Trans
+													ns="webhooks"
+													i18nKey="details.statusTooltip.retrying"
+													parent="p"
+													components={{ 1: <span className="font-medium" /> }}
+												/>
+												<Trans
+													ns="webhooks"
+													i18nKey="details.statusTooltip.failed"
+													parent="p"
+													components={{ 1: <span className="font-medium" /> }}
+												/>
+												<Trans
+													ns="webhooks"
+													i18nKey="details.statusTooltip.retriesExhausted"
+													parent="p"
+													components={{ 1: <span className="font-medium" /> }}
+												/>
 											</div>
 										</TooltipContent>
 									</Tooltip>
@@ -314,17 +337,14 @@ export function WebhookDetailsSheet({ endpoint, isTesting, canManage, onTest, on
 									<Tooltip>
 										<TooltipTrigger asChild>
 											<span className="inline-flex cursor-help items-center gap-1.5">
-												Responses
+												{t("details.columnResponses")}
 												<Info className="text-muted-foreground size-3" />
 											</span>
 										</TooltipTrigger>
-										<TooltipContent className="max-w-xs">
-											One chip per delivery attempt, oldest to newest: the receiver's response code, or a dash when no response arrived.
-											Hover a failed code for its error.
-										</TooltipContent>
+										<TooltipContent className="max-w-xs">{t("details.responsesTooltip")}</TooltipContent>
 									</Tooltip>
 								</TableHead>
-								<TableHead className="text-right">Actions</TableHead>
+								<TableHead className="text-right">{t("details.columnActions")}</TableHead>
 							</TableRow>
 						</TableHeader>
 						<TableBody>
@@ -337,13 +357,13 @@ export function WebhookDetailsSheet({ endpoint, isTesting, canManage, onTest, on
 							) : isError ? (
 								<TableRow>
 									<TableCell colSpan={7} className="text-destructive h-24 text-center" data-testid="webhook-delivery-history-error">
-										Failed to load delivery history. Retrying…
+										{t("details.loadError")}
 									</TableCell>
 								</TableRow>
 							) : deliveries.length === 0 ? (
 								<TableRow>
 									<TableCell colSpan={7} className="text-muted-foreground h-24 text-center">
-										No deliveries yet.
+										{t("details.noDeliveries")}
 									</TableCell>
 								</TableRow>
 							) : (
@@ -367,14 +387,14 @@ export function WebhookDetailsSheet({ endpoint, isTesting, canManage, onTest, on
 															className="size-8"
 															onClick={() => toggleExpanded(webhookId)}
 															aria-expanded={expanded}
-															aria-label={expanded ? "Collapse redeliveries" : "Expand redeliveries"}
+															aria-label={expanded ? t("details.collapseRedeliveries") : t("details.expandRedeliveries")}
 															data-testid={`webhook-delivery-expand-${webhookId}`}
 														>
 															{expanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
 														</Button>
 													)}
 												</TableCell>
-												<TableCell className="whitespace-nowrap">{relativeTime(latest.created_at)}</TableCell>
+												<TableCell className="whitespace-nowrap">{relativeTime(latest.created_at, t("details.never"))}</TableCell>
 												<TableCell>
 													{latest.request_id ? (
 														<Tooltip>
@@ -400,10 +420,10 @@ export function WebhookDetailsSheet({ endpoint, isTesting, canManage, onTest, on
 												</TableCell>
 												<TableCell>
 													<div className="flex items-center gap-2">
-														{outcomeBadge(headline)}
+														{outcomeBadge(headline, t)}
 														{hasResends && (
 															<Badge variant="outline" className="text-muted-foreground text-xs">
-																{sends.length} sends
+																{t("details.sendsCount", { count: sends.length })}
 															</Badge>
 														)}
 													</div>
@@ -417,7 +437,7 @@ export function WebhookDetailsSheet({ endpoint, isTesting, canManage, onTest, on
 															onClick={() => handleRedeliver(latest.id)}
 															disabled={redeliveringIds.has(latest.id) || latest.outcome === "retryable_failure" || endpoint?.disabled}
 															data-testid={`webhook-redeliver-btn-${webhookId}`}
-															aria-label="Redeliver"
+															aria-label={t("details.redeliverAria")}
 														>
 															{redeliveringIds.has(latest.id) ? (
 																<Loader2 className="h-4 w-4 animate-spin" />
@@ -447,7 +467,7 @@ export function WebhookDetailsSheet({ endpoint, isTesting, canManage, onTest, on
 																	</span>
 																</div>
 															</TableCell>
-															<TableCell>{outcomeBadge(sendLatest)}</TableCell>
+															<TableCell>{outcomeBadge(sendLatest, t)}</TableCell>
 															<TableCell>{attemptSequence(send.attempts)}</TableCell>
 															<TableCell></TableCell>
 														</TableRow>
@@ -464,8 +484,11 @@ export function WebhookDetailsSheet({ endpoint, isTesting, canManage, onTest, on
 				{totalCount > 0 && (
 					<div className="flex shrink-0 items-center justify-between text-xs" data-testid="webhook-delivery-pagination">
 						<div className="text-muted-foreground flex items-center gap-2">
-							{(offset + 1).toLocaleString()}-{Math.min(offset + PAGE_SIZE, totalCount).toLocaleString()} of {totalCount.toLocaleString()}{" "}
-							deliveries
+							{t("details.pagination.range", {
+								from: (offset + 1).toLocaleString(),
+								to: Math.min(offset + PAGE_SIZE, totalCount).toLocaleString(),
+								total: totalCount.toLocaleString(),
+							})}
 						</div>
 						<div className="flex items-center gap-2">
 							<Button
@@ -473,21 +496,21 @@ export function WebhookDetailsSheet({ endpoint, isTesting, canManage, onTest, on
 								size="sm"
 								onClick={() => setOffset(Math.max(0, offset - PAGE_SIZE))}
 								disabled={offset === 0}
-								aria-label="Previous page"
+								aria-label={t("details.pagination.previousAria")}
 							>
 								<ChevronLeft className="size-3" />
 							</Button>
 							<div className="flex items-center gap-1">
-								<span>Page</span>
+								<span>{t("details.pagination.page")}</span>
 								<span>{Math.floor(offset / PAGE_SIZE) + 1}</span>
-								<span>of {Math.ceil(totalCount / PAGE_SIZE)}</span>
+								<span>{t("details.pagination.of", { count: Math.ceil(totalCount / PAGE_SIZE) })}</span>
 							</div>
 							<Button
 								variant="ghost"
 								size="sm"
 								onClick={() => setOffset(offset + PAGE_SIZE)}
 								disabled={offset + PAGE_SIZE >= totalCount}
-								aria-label="Next page"
+								aria-label={t("details.pagination.nextAria")}
 							>
 								<ChevronRight className="size-3" />
 							</Button>

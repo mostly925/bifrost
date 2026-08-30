@@ -4,15 +4,11 @@
 // is owned by the page via onRevoke.
 
 import { Button } from "@/components/ui/button";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from "@/components/ui/dropdownMenu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdownMenu";
 import type { OAuth2GrantRow } from "@/lib/store/apis/oauth2SessionsApi";
 import { Link } from "@tanstack/react-router";
 import { ExternalLink, Loader2, MoreHorizontal, Trash2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface GrantActionsProps {
 	row: OAuth2GrantRow;
@@ -22,6 +18,7 @@ interface GrantActionsProps {
 }
 
 export default function GrantActions({ row, revoking, isPendingRow, onRevoke }: GrantActionsProps) {
+	const { t } = useTranslation("oauthGrants");
 	const busy = revoking;
 	// Link to Auth Sessions pre-filtered to this grant's exact identity: the
 	// mode plus the identity filter, which exact-matches bf_sub against the
@@ -32,7 +29,14 @@ export default function GrantActions({ row, revoking, isPendingRow, onRevoke }: 
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
-				<Button data-testid="oauth-grants-actions-trigger" variant="ghost" size="icon" className="h-8 w-8" aria-label="Grant actions" disabled={busy}>
+				<Button
+					data-testid="oauth-grants-actions-trigger"
+					variant="ghost"
+					size="icon"
+					className="h-8 w-8"
+					aria-label={t("actions.menuAria")}
+					disabled={busy}
+				>
 					{busy && isPendingRow ? <Loader2 className="h-4 w-4 animate-spin" /> : <MoreHorizontal className="h-4 w-4" />}
 				</Button>
 			</DropdownMenuTrigger>
@@ -41,7 +45,7 @@ export default function GrantActions({ row, revoking, isPendingRow, onRevoke }: 
 					<DropdownMenuItem asChild className="cursor-pointer">
 						<Link to={authSessionsUrl} data-testid="oauth-grants-view-sessions-link">
 							<ExternalLink className="h-4 w-4" />
-							View auth sessions
+							{t("actions.viewAuthSessions")}
 						</Link>
 					</DropdownMenuItem>
 				)}
@@ -50,10 +54,13 @@ export default function GrantActions({ row, revoking, isPendingRow, onRevoke }: 
 					variant="destructive"
 					className="cursor-pointer"
 					disabled={busy}
-					onSelect={(e) => { e.preventDefault(); onRevoke(); }}
+					onSelect={(e) => {
+						e.preventDefault();
+						onRevoke();
+					}}
 				>
 					<Trash2 className="h-4 w-4" />
-					Revoke
+					{t("actions.revoke")}
 				</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>

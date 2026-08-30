@@ -98,7 +98,14 @@ export function LogsFilterSidebar({ filters, onFiltersChange }: LogsSidebarProps
 							{t("sidebar.reset")}
 						</Button>
 					)}
-					<Button variant="ghost" size="icon" className="size-7" onClick={toggleCollapsed} title={t("sidebar.hideFilters")} aria-label={t("sidebar.hideFilters")}>
+					<Button
+						variant="ghost"
+						size="icon"
+						className="size-7"
+						onClick={toggleCollapsed}
+						title={t("sidebar.hideFilters")}
+						aria-label={t("sidebar.hideFilters")}
+					>
 						<PanelLeftClose className="size-4" />
 					</Button>
 				</div>
@@ -337,7 +344,14 @@ function SearchableCheckboxList({
 					onCheckedChange={() => onToggle(item.key)}
 					testId={
 						testIdPrefix
-							? `${testIdPrefix}-checkbox-${normalizeTestIdKey ? item.key.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") : item.key}`
+							? `${testIdPrefix}-checkbox-${
+									normalizeTestIdKey
+										? item.key
+												.toLowerCase()
+												.replace(/[^a-z0-9]+/g, "-")
+												.replace(/^-+|-+$/g, "")
+										: item.key
+								}`
 							: undefined
 					}
 				/>
@@ -354,12 +368,7 @@ function SearchableCheckboxList({
 				>
 					<Plus className="text-muted-foreground size-3.5 shrink-0" />
 					<span className="truncate">
-						<Trans
-							i18nKey="list.useValue"
-							ns="filters"
-							values={{ value: trimmed }}
-							components={{ 1: <span className="font-medium" /> }}
-						/>
+						<Trans i18nKey="list.useValue" ns="filters" values={{ value: trimmed }} components={{ 1: <span className="font-medium" /> }} />
 					</span>
 				</button>
 			)}
@@ -461,7 +470,10 @@ function AppFilter({ filters, onFiltersChange, defaultOpen }: FilterComponentPro
 		isLoading,
 	} = useGetAvailableFilterDataQuery({ dimensions: ["apps"] }, { skip: !opened && !hasActive });
 	const availableApps = useMemo(() => (filterData?.apps as string[] | undefined) || [], [filterData]);
-	const items = useMemo(() => [...new Set([...availableApps, ...(filters.apps || [])])].sort().map((name) => ({ key: name, label: name })), [availableApps, filters.apps]);
+	const items = useMemo(
+		() => [...new Set([...availableApps, ...(filters.apps || [])])].sort().map((name) => ({ key: name, label: name })),
+		[availableApps, filters.apps],
+	);
 
 	if (!isUninitialized && !isLoading && availableApps.length === 0 && !hasActive && !opened) return null;
 

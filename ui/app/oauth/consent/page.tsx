@@ -4,25 +4,9 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import type { TFunction } from "i18next";
 import { toast } from "sonner";
-import {
-	getErrorMessage,
-	useGetOAuth2ConsentFlowQuery,
-	useIsAuthEnabledQuery,
-	useSubmitOAuth2ConsentFlowMutation,
-} from "@/lib/store";
-import {
-	getActiveTempToken,
-	setActiveTempToken,
-	setSuppressGlobal401,
-} from "@/lib/store/apis/tempToken";
-import {
-	Fingerprint,
-	KeyRound,
-	Loader2,
-	LogIn,
-	ShieldCheck,
-	UserRound,
-} from "lucide-react";
+import { getErrorMessage, useGetOAuth2ConsentFlowQuery, useIsAuthEnabledQuery, useSubmitOAuth2ConsentFlowMutation } from "@/lib/store";
+import { getActiveTempToken, setActiveTempToken, setSuppressGlobal401 } from "@/lib/store/apis/tempToken";
+import { Fingerprint, KeyRound, Loader2, LogIn, ShieldCheck, UserRound } from "lucide-react";
 import { useQueryState } from "nuqs";
 import React, { useEffect, useMemo, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
@@ -104,10 +88,7 @@ function ConsentView({ flowId }: { flowId: string }) {
 		}
 	}, [flowId]);
 
-	const showLoginOption =
-		usingTempToken &&
-		authState?.is_auth_enabled === true &&
-		authState.has_valid_token === false;
+	const showLoginOption = usingTempToken && authState?.is_auth_enabled === true && authState.has_valid_token === false;
 
 	const handleSubmit = async (mode: "vk" | "session" | "user") => {
 		setSelectedMode(mode);
@@ -142,9 +123,7 @@ function ConsentView({ flowId }: { flowId: string }) {
 			<Shell>
 				<div className="text-center">
 					<h1 className="text-xl font-semibold">{t("errors.linkUnavailableTitle")}</h1>
-					<p className="text-muted-foreground mt-2 text-sm">
-						{t("errors.linkUnavailableDescription")}
-					</p>
+					<p className="text-muted-foreground mt-2 text-sm">{t("errors.linkUnavailableDescription")}</p>
 				</div>
 			</Shell>
 		);
@@ -163,27 +142,16 @@ function ConsentView({ flowId }: { flowId: string }) {
 				<div className="bg-primary/10 mx-auto mb-4 flex size-14 items-center justify-center rounded-full">
 					<ShieldCheck className="text-primary size-7" />
 				</div>
-				<h1 className="text-xl font-semibold tracking-tight">
-					{t("consent.title", { clientName })}
-				</h1>
-				<p className="text-muted-foreground mt-1.5 text-sm">
-					{t("consent.subtitle")}
-				</p>
+				<h1 className="text-xl font-semibold tracking-tight">{t("consent.title", { clientName })}</h1>
+				<p className="text-muted-foreground mt-1.5 text-sm">{t("consent.subtitle")}</p>
 			</div>
 
 			<div className="space-y-3">
 				{/* No mode available — nothing the user can act on here */}
 				{!hasAnyMode && (
-					<div
-						className="rounded-sm border p-4 text-center"
-						data-testid="oauth-consent-empty-state"
-					>
-						<p className="text-sm font-medium">
-							{t("consent.noOptions.title")}
-						</p>
-						<p className="text-muted-foreground mt-1 text-xs">
-							{t("consent.noOptions.description")}
-						</p>
+					<div className="rounded-sm border p-4 text-center" data-testid="oauth-consent-empty-state">
+						<p className="text-sm font-medium">{t("consent.noOptions.title")}</p>
+						<p className="text-muted-foreground mt-1 text-xs">{t("consent.noOptions.description")}</p>
 					</div>
 				)}
 
@@ -195,9 +163,7 @@ function ConsentView({ flowId }: { flowId: string }) {
 								<UserRound className="text-muted-foreground size-4" />
 							</div>
 							<div className="min-w-0 flex-1">
-								<p className="text-sm font-medium leading-tight">
-									{flow.logged_in_user.name || flow.logged_in_user.id}
-								</p>
+								<p className="text-sm leading-tight font-medium">{flow.logged_in_user.name || flow.logged_in_user.id}</p>
 								<p className="text-muted-foreground text-xs">{t("consent.userMode.signedInAccount")}</p>
 							</div>
 						</div>
@@ -208,7 +174,10 @@ function ConsentView({ flowId }: { flowId: string }) {
 							disabled={submitting}
 						>
 							{submitting && selectedMode === "user" ? (
-								<><Loader2 className="mr-2 size-4 animate-spin" />{t("consent.connecting")}</>
+								<>
+									<Loader2 className="mr-2 size-4 animate-spin" />
+									{t("consent.connecting")}
+								</>
 							) : (
 								<>{t("consent.userMode.continueAs", { name: flow.logged_in_user.name || flow.logged_in_user.id })}</>
 							)}
@@ -225,9 +194,7 @@ function ConsentView({ flowId }: { flowId: string }) {
 							</div>
 							<div>
 								<p className="text-sm font-medium">{t("consent.userMode.signInTitle")}</p>
-								<p className="text-muted-foreground text-xs">
-									{t("consent.userMode.signInDescription")}
-								</p>
+								<p className="text-muted-foreground text-xs">{t("consent.userMode.signInDescription")}</p>
 							</div>
 						</div>
 						<Button asChild variant="outline" className="mt-4 w-full">
@@ -243,7 +210,7 @@ function ConsentView({ flowId }: { flowId: string }) {
 				{hasUser && (hasVK || hasSession) && (
 					<div className="relative">
 						<Separator />
-						<span className="bg-card text-muted-foreground absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 px-2 text-xs">
+						<span className="bg-card text-muted-foreground absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-2 text-xs">
 							{t("consent.or")}
 						</span>
 					</div>
@@ -258,9 +225,7 @@ function ConsentView({ flowId }: { flowId: string }) {
 							</div>
 							<div>
 								<p className="text-sm font-medium">{t("consent.vkMode.title")}</p>
-								<p className="text-muted-foreground text-xs">
-									{t("consent.vkMode.description")}
-								</p>
+								<p className="text-muted-foreground text-xs">{t("consent.vkMode.description")}</p>
 							</div>
 						</div>
 						<Input
@@ -285,23 +250,22 @@ function ConsentView({ flowId }: { flowId: string }) {
 							disabled={submitting || !vkValue.trim()}
 						>
 							{submitting && selectedMode === "vk" ? (
-								<><Loader2 className="mr-2 size-4 animate-spin" />{t("consent.connecting")}</>
+								<>
+									<Loader2 className="mr-2 size-4 animate-spin" />
+									{t("consent.connecting")}
+								</>
 							) : (
 								t("consent.vkMode.connect")
 							)}
 						</Button>
-						{hasUser && (
-							<p className="text-muted-foreground mt-2.5 text-xs">
-								{t("consent.vkMode.linkedHint")}
-							</p>
-						)}
+						{hasUser && <p className="text-muted-foreground mt-2.5 text-xs">{t("consent.vkMode.linkedHint")}</p>}
 					</div>
 				)}
 
 				{hasVK && hasSession && (
 					<div className="relative">
 						<Separator />
-						<span className="bg-card text-muted-foreground absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 px-2 text-xs">
+						<span className="bg-card text-muted-foreground absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-2 text-xs">
 							{t("consent.or")}
 						</span>
 					</div>
@@ -312,29 +276,23 @@ function ConsentView({ flowId }: { flowId: string }) {
 					<Button
 						data-testid="oauth-consent-continue-session-btn"
 						variant="ghost"
-						className="text-muted-foreground hover:text-foreground w-full justify-start gap-3 px-4 py-3 h-auto"
+						className="text-muted-foreground hover:text-foreground h-auto w-full justify-start gap-3 px-4 py-3"
 						onClick={() => handleSubmit("session")}
 						disabled={submitting}
 					>
 						<Fingerprint className="size-4 shrink-0" />
 						<div className="text-left">
 							<span className="block text-sm font-normal">
-								{submitting && selectedMode === "session"
-									? t("consent.connecting")
-									: t("consent.sessionMode.continue")}
+								{submitting && selectedMode === "session" ? t("consent.connecting") : t("consent.sessionMode.continue")}
 							</span>
-							<span className="text-xs opacity-70">
-								{t("consent.sessionMode.description")}
-							</span>
+							<span className="text-xs opacity-70">{t("consent.sessionMode.description")}</span>
 						</div>
 					</Button>
 				)}
 			</div>
 
 			{/* Expiry */}
-			<p className="text-muted-foreground mt-6 text-center text-xs">
-				{getExpiryText(flow.expires_at, t)}
-			</p>
+			<p className="text-muted-foreground mt-6 text-center text-xs">{getExpiryText(flow.expires_at, t)}</p>
 		</Shell>
 	);
 }
@@ -357,9 +315,7 @@ function getExpiryText(iso: string, t: TFunction<"oauth">): string {
 function Shell({ children }: { children: React.ReactNode }) {
 	return (
 		<div className="mx-auto flex min-h-screen w-full items-center justify-center p-4 sm:p-6">
-			<div className="bg-card w-full max-w-md rounded-sm border p-6 shadow-sm sm:p-8">
-				{children}
-			</div>
+			<div className="bg-card w-full max-w-md rounded-sm border p-6 shadow-sm sm:p-8">{children}</div>
 		</div>
 	);
 }
@@ -369,12 +325,8 @@ function InvalidLinkView() {
 	return (
 		<Shell>
 			<div className="text-center">
-				<h1 className="text-xl font-semibold tracking-tight">
-					{t("errors.invalidLinkTitle")}
-				</h1>
-				<p className="text-muted-foreground mt-2 text-sm">
-					{t("errors.invalidLinkDescription")}
-				</p>
+				<h1 className="text-xl font-semibold tracking-tight">{t("errors.invalidLinkTitle")}</h1>
+				<p className="text-muted-foreground mt-2 text-sm">{t("errors.invalidLinkDescription")}</p>
 			</div>
 		</Shell>
 	);

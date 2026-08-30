@@ -76,7 +76,11 @@ const lazyBackend = {
 			callback(null, {});
 			return;
 		}
-		const requestedLoad = requested ? requested().then((mod) => mod.default).catch(() => ({})) : Promise.resolve({});
+		const requestedLoad = requested
+			? requested()
+					.then((mod) => mod.default)
+					.catch(() => ({}))
+			: Promise.resolve({});
 		const fallbackLoad = fallback
 			? fallback()
 					.then((mod) => mod.default)

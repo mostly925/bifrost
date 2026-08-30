@@ -193,21 +193,24 @@ export function isRedacted(value: string): boolean {
 }
 
 const PASSWORD_REQUIREMENTS = [
-	{ label: "at least 12 characters", test: (password: string) => password.length >= 12 },
-	{ label: "one uppercase letter", test: (password: string) => /[A-Z]/.test(password) },
-	{ label: "one lowercase letter", test: (password: string) => /[a-z]/.test(password) },
-	{ label: "one number", test: (password: string) => /\d/.test(password) },
-	{ label: "one special character", test: (password: string) => /[^A-Za-z0-9]/.test(password) },
-];
+	{ labelKey: "passwordPolicy.atLeast12Characters", test: (password: string) => password.length >= 12 },
+	{ labelKey: "passwordPolicy.oneUppercaseLetter", test: (password: string) => /[A-Z]/.test(password) },
+	{ labelKey: "passwordPolicy.oneLowercaseLetter", test: (password: string) => /[a-z]/.test(password) },
+	{ labelKey: "passwordPolicy.oneNumber", test: (password: string) => /\d/.test(password) },
+	{ labelKey: "passwordPolicy.oneSpecialCharacter", test: (password: string) => /[^A-Za-z0-9]/.test(password) },
+] as const;
+
+export type PasswordPolicyFailureKey = (typeof PASSWORD_REQUIREMENTS)[number]["labelKey"];
 
 /**
- * Returns the password-policy requirements that are not satisfied.
+ * Returns the password-policy requirements that are not satisfied, as i18n keys
+ * under the `shared` namespace (resolve with t(`shared:${key}`) at render time).
  * Existing credentials are skipped only when the caller explicitly confirms
  * that the password field has not been edited.
  */
-export function getPasswordPolicyFailures(password?: string, isUnchanged = false): string[] {
+export function getPasswordPolicyFailures(password?: string, isUnchanged = false): PasswordPolicyFailureKey[] {
 	if (!password || isUnchanged) return [];
-	return PASSWORD_REQUIREMENTS.filter((requirement) => !requirement.test(password)).map((requirement) => requirement.label);
+	return PASSWORD_REQUIREMENTS.filter((requirement) => !requirement.test(password)).map((requirement) => requirement.labelKey);
 }
 
 /**

@@ -1,0 +1,114 @@
+{
+	"noPermissionEntity": "model catalog",
+	"tabs": {
+		"overview": "Overview",
+		"models": "Models"
+	},
+	"attributes": {
+		"title": "Models",
+		"description": "Attach descriptions and tags to specific models."
+	},
+	"overview": {
+		"title": "Model Catalog",
+		"description": "Overview of all configured providers, models, and usage.",
+		"totalProviders": "Total Providers",
+		"totalModels": "Total Models",
+		"totalRequests24h": "Total Requests (24h)",
+		"totalCost24h": "Total Cost (24h)"
+	},
+	"filters": {
+		"allProviders": "All Providers"
+	},
+	"search": {
+		"modelsAria": "Search models",
+		"modelsPlaceholder": "Search by model name..."
+	},
+	"table": {
+		"provider": "Provider",
+		"model": "Model",
+		"input": "Input",
+		"output": "Output",
+		"cacheWrite": "Cache Write",
+		"cacheRead": "Cache Read",
+		"description": "Description",
+		"other": "Other",
+		"models": "Models",
+		"modelsTooltip": "Models used in the last 30 days",
+		"totalTraffic24h": "Total Traffic (24h)",
+		"totalCost24h": "Total Cost (24h)",
+		"custom": "CUSTOM",
+		"moreModels": "+{{remaining}} more",
+		"noMatchingProviders": "No matching providers found.",
+		"noModelsLoaded": "No models loaded yet.",
+		"noMatchingModels": "No matching models.",
+		"attributesCount_one": "{{count}} attribute",
+		"attributesCount_other": "{{count}} attributes",
+		"overridesCount_one": "{{count}} override",
+		"overridesCount_other": "{{count}} overrides",
+		"editAttributesAria": "Edit attributes for {{model}}"
+	},
+	"pagination": {
+		"entries": "{{from}}–{{to}} of {{total}} entries",
+		"page": "Page",
+		"of": "of {{total}}",
+		"prevAria": "Previous page",
+		"nextAria": "Next page"
+	},
+	"empty": {
+		"title": "No providers configured yet",
+		"description": "Configure your first model provider to see an overview of all providers, API keys, models, and usage metrics.",
+		"configureProviders": "Configure Providers"
+	},
+	"errors": {
+		"loadModelsFailed": "Failed to load models",
+		"loadProvidersFailed": "Failed to load providers",
+		"noPermission": "You don't have permission to perform this action"
+	},
+	"sheet": {
+		"title": "Edit Model Attributes",
+		"description": "Update the description and other attributes for this model. These attributes are stored on the pricing row and preserved across the pricing sync.",
+		"provider": "Provider",
+		"model": "Model",
+		"pricing": "Pricing",
+		"pricingSource": "Source",
+		"input": "Input",
+		"output": "Output",
+		"cacheWrite": "Cache Write",
+		"cacheRead": "Cache Read",
+		"pricingOverrides": "Pricing overrides",
+		"manage": "Manage",
+		"descriptionLabel": "Description",
+		"descriptionPlaceholder": "A short description of this model, shown anywhere additional_attributes.description is consumed.",
+		"otherAttributes": "Other Attributes",
+		"noAdditionalAttributes": "No additional attributes. Add a key-value pair for anything beyond description.",
+		"keyPlaceholder": "key",
+		"valuePlaceholder": "value",
+		"saveChanges": "Save Changes"
+	},
+	"overrides": {
+		"applied": "Applied",
+		"matches": "Matches {{pattern}}",
+		"exact": "Exact {{pattern}}",
+		"caveats": {
+			"providerKey": "Applies only to requests routed through the matching provider key.",
+			"virtualKey": "Applies only to requests using the matching virtual key.",
+			"virtualKeyProvider": "Applies only to requests using the matching virtual key and provider.",
+			"virtualKeyProviderKey": "Applies only to requests using the matching virtual key and provider key.",
+			"user": "Applies only to requests from the matching user.",
+			"userProvider": "Applies only to requests from the matching user and provider.",
+			"userProviderKey": "Applies only to requests from the matching user and provider key."
+		}
+	},
+	"price": {
+		"originalAria": "Original price: ",
+		"effectiveAria": "Effective price: ",
+		"overriddenByName": "Overridden by “{{name}}”",
+		"overridden": "Overridden by a custom pricing override"
+	},
+	"toasts": {
+		"saved": "Attributes saved",
+		"attributeKeyRequired": "Attribute rows must have a key",
+		"duplicateAttributeKey": "Duplicate attribute key: {{key}}",
+		"reservedDescription": "Use the Description field instead of a 'description' attribute row"
+	}
+}

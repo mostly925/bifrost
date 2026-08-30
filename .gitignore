@@ -255,3 +255,5 @@ ui/app/routeTree.gen.ts
 bifrost-migration-cli
 
 tests/e2e/clis/reports
+# 本地安全扫描工具状态
+.mimosa/

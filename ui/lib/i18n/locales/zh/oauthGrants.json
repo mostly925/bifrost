@@ -1,0 +1,65 @@
+{
+	"title": "OAuth 授权",
+	"subtitle": "通过 OAuth 同意流程连接的 MCP 客户端所持有的下游 OAuth 授权。",
+	"searchAria": "搜索授权",
+	"searchPlaceholder": "搜索客户端、身份...",
+	"loadError": "加载 OAuth 授权失败：{{error}}",
+	"toast": {
+		"revoked": "授权已撤销",
+		"revokeFailed": "撤销授权失败"
+	},
+	"actions": {
+		"menuAria": "授权操作",
+		"viewAuthSessions": "查看认证会话",
+		"revoke": "撤销"
+	},
+	"columns": {
+		"client": "客户端",
+		"boundTo": "绑定对象",
+		"boundToTooltip": "该授权绑定的身份：终端用户（经 SSO 登录）、虚拟密钥（所有使用该 VK 的人共享）或匿名会话。这决定了该授权下可以访问哪些上游的按用户 OAuth 会话。",
+		"tokenExpiry": "访问令牌过期时间",
+		"tokenExpiryTooltip": "当前 JWT 访问令牌的过期时间。MCP 客户端会使用刷新令牌静默续期，因此已过期但仍在使用的授权会在下次请求时自动签发新令牌。",
+		"created": "创建时间",
+		"lastUsed": "最近使用",
+		"lastUsedTooltip": "该授权最近一次刷新访问令牌的时间。MCP 客户端会在令牌临近过期时刷新，因此该时间反映授权的最近活动。授权后从未刷新过的授权则以创建时间为准。"
+	},
+	"expiry": {
+		"unknown": "未知",
+		"refreshOnNextUse": "下次使用时刷新",
+		"inMinutes": "{{count}} 分钟后"
+	},
+	"time": {
+		"justNow": "刚刚",
+		"minutesAgo": "{{count}} 分钟前",
+		"hoursAgo": "{{count}} 小时前",
+		"daysAgo": "{{count}} 天前"
+	},
+	"table": {
+		"noMatches": "没有符合筛选条件的授权。",
+		"range": "第 {{from}}-{{to}} 条，共 {{total}} 条",
+		"previousAria": "上一页",
+		"nextAria": "下一页",
+		"page": "第",
+		"of": "页，共 {{count}} 页"
+	},
+	"emptyState": {
+		"text": "暂无授权。当 MCP 客户端通过 OAuth 同意流程连接时，授权会显示在这里。（Authentication Mode 需设置为 \"oauth\" 或 \"both\" 才会签发授权。）"
+	},
+	"filters": {
+		"title": "筛选",
+		"showFilters": "显示筛选",
+		"hideFilters": "收起筛选",
+		"identity": "身份",
+		"modeUser": "用户",
+		"modeVirtualKey": "虚拟密钥",
+		"modeSession": "会话",
+		"virtualKey": "虚拟密钥",
+		"users": "用户",
+		"searchVirtualKeys": "搜索虚拟密钥",
+		"searchUsers": "按名称或邮箱搜索"
+	},
+	"revokeDialog": {
+		"title": "撤销此 OAuth 授权？",
+		"description": "该授权的刷新令牌将立即停止轮换，MCP 客户端无法再续订访问权限。其当前访问令牌是短期有效的 JWT，在过期前（默认 10 分钟）仍可在 <1>/mcp</1> 端点上使用，之后客户端将被完全断开，需重新通过 OAuth 同意流程连接。"
+	}
+}

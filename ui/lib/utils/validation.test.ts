@@ -13,8 +13,8 @@ describe("isRedacted", () => {
 
 describe("getPasswordPolicyFailures", () => {
 	it.each([
-		["<redacted>", ["at least 12 characters", "one uppercase letter", "one number"]],
-		["[REDACTED]", ["at least 12 characters", "one lowercase letter", "one number"]],
+		["<redacted>", ["passwordPolicy.atLeast12Characters", "passwordPolicy.oneUppercaseLetter", "passwordPolicy.oneNumber"]],
+		["[REDACTED]", ["passwordPolicy.atLeast12Characters", "passwordPolicy.oneLowercaseLetter", "passwordPolicy.oneNumber"]],
 	])("validates a newly entered sentinel %s", (password, expectedFailures) => {
 		expect(getPasswordPolicyFailures(password, false)).toEqual(expectedFailures);
 	});

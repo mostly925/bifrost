@@ -10,14 +10,19 @@ declare module "i18next" {
 		resources: {
 			common: typeof import("./locales/en/common.json");
 			complexityRouter: typeof import("./locales/en/complexityRouter.json");
+			config: typeof import("./locales/en/config.json");
+			customPricing: typeof import("./locales/en/customPricing.json");
 			dashboard: typeof import("./locales/en/dashboard.json");
 			devProfiler: typeof import("./locales/en/devProfiler.json");
 			docs: typeof import("./locales/en/docs.json");
 			filters: typeof import("./locales/en/filters.json");
+			mcpLogs: typeof import("./locales/en/mcpLogs.json");
 			mcpSessions: typeof import("./locales/en/mcpSessions.json");
 			mcpRegistry: typeof import("./locales/en/mcpRegistry.json");
 			modelLimits: typeof import("./locales/en/modelLimits.json");
+			modelCatalog: typeof import("./locales/en/modelCatalog.json");
 			oauth: typeof import("./locales/en/oauth.json");
+			oauthGrants: typeof import("./locales/en/oauthGrants.json");
 			plugins: typeof import("./locales/en/plugins.json");
 			pprof: typeof import("./locales/en/pprof.json");
 			prompts: typeof import("./locales/en/prompts.json");

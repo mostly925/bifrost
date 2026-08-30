@@ -38,8 +38,8 @@ describe("budget overrides", () => {
 	});
 
 	it("validates positive amounts and whole finite cycle counts", () => {
-		expect(validateBudgetOverride(0, "forever", 0)).toMatch(/greater than 0/);
-		expect(validateBudgetOverride(25, "cycles", 1.5)).toMatch(/whole number/);
+		expect(validateBudgetOverride(0, "forever", 0)).toMatch(/additionalBudgetPositive/);
+		expect(validateBudgetOverride(25, "cycles", 1.5)).toMatch(/resetCyclesPositive/);
 		expect(validateBudgetOverride(25, "cycles", 1)).toBeNull();
 		expect(validateBudgetOverride(25, "forever", 0)).toBeNull();
 	});

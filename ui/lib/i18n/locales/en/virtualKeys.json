@@ -292,5 +292,6 @@
 			"entityRequired": "Please select a valid team, customer, or user when assignment type is chosen",
 			"virtualKeyRequired": "Virtual key is required"
 		}
-	}
+	},
+	"noPermissionEntity": "virtual keys"
 }

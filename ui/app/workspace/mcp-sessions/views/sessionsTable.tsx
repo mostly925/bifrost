@@ -168,10 +168,7 @@ export default function SessionsTable({
 									<HeaderWithTooltip label={t("table.columns.status")} tooltip={t("table.columns.statusTooltip")} />
 								</TableHead>
 								<TableHead>
-									<HeaderWithTooltip
-										label={t("table.columns.accessTokenExpiry")}
-										tooltip={t("table.columns.accessTokenExpiryTooltip")}
-									/>
+									<HeaderWithTooltip label={t("table.columns.accessTokenExpiry")} tooltip={t("table.columns.accessTokenExpiryTooltip")} />
 								</TableHead>
 								<TableHead>{t("table.columns.created")}</TableHead>
 								<TableHead className={`bg-muted sticky right-0 z-10 w-[56px] text-right ${PIN_SHADOW_RIGHT}`}></TableHead>
@@ -205,7 +202,9 @@ export default function SessionsTable({
 											<div className="flex flex-col">
 												<span>{formatAccessExpiry(row, t)}</span>
 												{row.last_refreshed_at && (
-													<span className="text-xs">{t("table.refreshedSuffix", { time: formatRelativePast(row.last_refreshed_at, t) })}</span>
+													<span className="text-xs">
+														{t("table.refreshedSuffix", { time: formatRelativePast(row.last_refreshed_at, t) })}
+													</span>
 												)}
 											</div>
 										</TableCell>

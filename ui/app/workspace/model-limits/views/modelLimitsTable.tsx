@@ -266,9 +266,7 @@ export default function ModelLimitsTable({
 				<div className="mb-4 flex items-center justify-between">
 					<div>
 						<h1 className="text-lg font-semibold">{t("header.title")}</h1>
-						<p className="text-muted-foreground text-sm">
-							{t("header.description")}
-						</p>
+						<p className="text-muted-foreground text-sm">{t("header.description")}</p>
 					</div>
 					<Button onClick={handleAddModelLimit} disabled={!hasCreateAccess} data-testid="model-limits-button-create">
 						<Plus className="h-4 w-4" />
@@ -354,9 +352,7 @@ export default function ModelLimitsTable({
 							{modelConfigs.length === 0 ? (
 								<TableRow>
 									<TableCell colSpan={7} className="h-24 text-center">
-										<span className="text-muted-foreground text-sm">
-											{isLoading ? t("table.loading") : t("table.noMatches")}
-										</span>
+										<span className="text-muted-foreground text-sm">{isLoading ? t("table.loading") : t("table.noMatches")}</span>
 									</TableCell>
 								</TableRow>
 							) : (
@@ -471,7 +467,9 @@ export default function ModelLimitsTable({
 																	<TooltipTrigger asChild>
 																		<div className="space-y-1.5">
 																			<div className="flex items-center justify-between gap-4 text-xs">
-																				<span className="font-medium">{t("table.tokens", { value: config.rate_limit.token_max_limit.toLocaleString() })}</span>
+																				<span className="font-medium">
+																					{t("table.tokens", { value: config.rate_limit.token_max_limit.toLocaleString() })}
+																				</span>
 																				<span className="text-muted-foreground">
 																					{formatResetDuration(config.rate_limit.token_reset_duration || "1h")}
 																				</span>
@@ -509,7 +507,9 @@ export default function ModelLimitsTable({
 																	<TooltipTrigger asChild>
 																		<div className="space-y-1.5">
 																			<div className="flex items-center justify-between gap-4 text-xs">
-																				<span className="font-medium">{t("table.requests", { value: config.rate_limit.request_max_limit.toLocaleString() })}</span>
+																				<span className="font-medium">
+																					{t("table.requests", { value: config.rate_limit.request_max_limit.toLocaleString() })}
+																				</span>
 																				<span className="text-muted-foreground">
 																					{formatResetDuration(config.rate_limit.request_reset_duration || "1h")}
 																				</span>
@@ -535,7 +535,9 @@ export default function ModelLimitsTable({
 																			})}
 																		</p>
 																		<p className="text-primary-foreground/80 text-xs">
-																			{t("table.resets", { duration: formatResetDuration(config.rate_limit.request_reset_duration || "1h") })}
+																			{t("table.resets", {
+																				duration: formatResetDuration(config.rate_limit.request_reset_duration || "1h"),
+																			})}
 																		</p>
 																	</TooltipContent>
 																</Tooltip>

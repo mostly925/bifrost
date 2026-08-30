@@ -3,6 +3,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { resetDurationLabels, supportsCalendarAlignment } from "@/lib/constants/governance";
 import { cn } from "@/lib/utils";
 import { formatCompactNumber } from "@/lib/utils/numbers";
+import { useTranslation } from "react-i18next";
 
 interface RateLimitShape {
 	token_max_limit?: number | null;
@@ -24,10 +25,10 @@ interface RateLimitDisplayProps {
 	calendarAligned?: boolean;
 }
 
-const formatResetDuration = (duration?: string | null, calendarAligned?: boolean) => {
+const formatResetDuration = (duration?: string | null, calendarAligned?: boolean, calendarSuffix = "") => {
 	if (!duration) return "";
 	const label = resetDurationLabels[duration] || duration;
-	return calendarAligned && supportsCalendarAlignment(duration) ? `${label} (calendar)` : label;
+	return calendarAligned && supportsCalendarAlignment(duration) ? `${label}${calendarSuffix}` : label;
 };
 
 function LimitText({
@@ -41,12 +42,14 @@ function LimitText({
 	resetDuration?: string | null;
 	calendarAligned?: boolean;
 }) {
+	const { t } = useTranslation("shared");
+
 	return (
 		<div className="flex items-center justify-between gap-4 text-xs">
 			<span className="font-mono">
 				{formatCompactNumber(max)} {label}
 			</span>
-			<span className="text-muted-foreground">{formatResetDuration(resetDuration, calendarAligned)}</span>
+			<span className="text-muted-foreground">{formatResetDuration(resetDuration, calendarAligned, t("usageDisplay.calendarSuffix"))}</span>
 		</div>
 	);
 }
@@ -66,6 +69,7 @@ function Bar({
 	compact?: boolean;
 	calendarAligned?: boolean;
 }) {
+	const { t } = useTranslation("shared");
 	const pct = max > 0 ? Math.min((current / max) * 100, 100) : 0;
 	const isExhausted = max > 0 && current >= max;
 	const barClass = isExhausted ? "[&>div]:bg-red-500/70" : pct > 80 ? "[&>div]:bg-amber-500/70" : "[&>div]:bg-emerald-500/70";
@@ -78,7 +82,9 @@ function Bar({
 						<span className="font-medium">
 							{formatCompactNumber(max)} {label}
 						</span>
-						<span className="text-muted-foreground">{formatResetDuration(resetDuration, calendarAligned)}</span>
+						<span className="text-muted-foreground">
+							{formatResetDuration(resetDuration, calendarAligned, t("usageDisplay.calendarSuffix"))}
+						</span>
 					</div>
 					<Progress value={pct} className={cn("bg-muted/70 dark:bg-muted/30 h-1", barClass)} />
 				</div>
@@ -88,7 +94,11 @@ function Bar({
 					{current.toLocaleString()} / {max.toLocaleString()} {label}
 				</p>
 				{resetDuration ? (
-					<p className="text-primary-foreground/80 text-xs">Resets {formatResetDuration(resetDuration, calendarAligned)}</p>
+					<p className="text-primary-foreground/80 text-xs">
+						{t("usageDisplay.resets", {
+							duration: formatResetDuration(resetDuration, calendarAligned, t("usageDisplay.calendarSuffix")),
+						})}
+					</p>
 				) : null}
 			</TooltipContent>
 		</Tooltip>
@@ -96,6 +106,8 @@ function Bar({
 }
 
 export function RateLimitDisplay({ rateLimits, compact, limitOnly, calendarAligned }: RateLimitDisplayProps) {
+	const { t } = useTranslation("shared");
+
 	if (!rateLimits) {
 		return <span className="text-muted-foreground text-sm">-</span>;
 	}
@@ -112,14 +124,14 @@ export function RateLimitDisplay({ rateLimits, compact, limitOnly, calendarAlign
 			{hasTokens ? (
 				limitOnly ? (
 					<LimitText
-						label="tokens"
+						label={t("usageDisplay.tokensLabel")}
 						max={rateLimits.token_max_limit!}
 						resetDuration={rateLimits.token_reset_duration}
 						calendarAligned={calendarAligned}
 					/>
 				) : (
 					<Bar
-						label="tokens"
+						label={t("usageDisplay.tokensLabel")}
 						current={rateLimits.token_current_usage ?? 0}
 						max={rateLimits.token_max_limit!}
 						resetDuration={rateLimits.token_reset_duration}
@@ -131,14 +143,14 @@ export function RateLimitDisplay({ rateLimits, compact, limitOnly, calendarAlign
 			{hasRequests ? (
 				limitOnly ? (
 					<LimitText
-						label="req"
+						label={t("usageDisplay.reqLabel")}
 						max={rateLimits.request_max_limit!}
 						resetDuration={rateLimits.request_reset_duration}
 						calendarAligned={calendarAligned}
 					/>
 				) : (
 					<Bar
-						label="req"
+						label={t("usageDisplay.reqLabel")}
 						current={rateLimits.request_current_usage ?? 0}
 						max={rateLimits.request_max_limit!}
 						resetDuration={rateLimits.request_reset_duration}

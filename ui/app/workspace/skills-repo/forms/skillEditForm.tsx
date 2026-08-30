@@ -17,6 +17,7 @@ import { cn } from "@/lib/utils";
 import { validateSkillForm, validateVersionBump } from "@/lib/validators/skills";
 import { AlertTriangle, Check, Copy, Eye, Info, Loader2, Plus, Save, Search, Settings2, X } from "lucide-react";
 import { useRef, useState } from "react";
+import { Trans, useTranslation } from "react-i18next";
 import { FileManagerSection } from "../components/fileManagerView";
 import { FilePreviewPane } from "../components/filePreview";
 import { composeFrontmatter, type SkillFormReturn } from "../components/helpers";
@@ -45,6 +46,7 @@ export function SkillEditView({
 	isSaving: boolean;
 	mode?: "edit" | "create";
 }) {
+	const { t } = useTranslation("skillsRepo");
 	const isCreate = mode === "create";
 	const [bodyTab, setBodyTab] = useState<"edit" | "preview">("edit");
 	const [showPreviewDialog, setShowPreviewDialog] = useState(false);
@@ -129,8 +131,8 @@ export function SkillEditView({
 		setVersionPopover(null);
 	};
 	const { copy: copyPreviewContent, copied: copiedPreviewContent } = useCopyToClipboard({
-		successMessage: "Copied raw SKILL.md",
-		errorMessage: "Failed to copy raw SKILL.md",
+		successMessage: t("form.copiedRaw"),
+		errorMessage: t("form.copyRawFailed"),
 	});
 
 	const previewContent =
@@ -160,7 +162,7 @@ export function SkillEditView({
 		<div className="flex h-full min-h-0 flex-col overflow-hidden">
 			<div className="shrink-0 overflow-y-auto px-4">
 				{/* Breadcrumb */}
-				<nav aria-label="Breadcrumb" className="py-4">
+				<nav aria-label={t("shared.breadcrumbAria")} className="py-4">
 					<ol className="text-muted-foreground flex min-w-0 items-center gap-1.5 text-sm">
 						<li>
 							<button
@@ -169,7 +171,7 @@ export function SkillEditView({
 								onClick={onNavigateToList ?? onBack}
 								className="hover:text-foreground cursor-pointer transition-colors"
 							>
-								Skills
+								{t("form.breadcrumbSkills")}
 							</button>
 						</li>
 						<li aria-hidden="true" className="text-muted-foreground/60">
@@ -177,7 +179,7 @@ export function SkillEditView({
 						</li>
 						{isCreate ? (
 							<li aria-current="page" className="text-foreground min-w-0 truncate font-medium">
-								{form.name || "<new-skill>"}
+								{form.name || t("form.breadcrumbUnnamed")}
 							</li>
 						) : (
 							<>
@@ -195,7 +197,7 @@ export function SkillEditView({
 									/
 								</li>
 								<li aria-current="page" className="text-foreground font-medium">
-									new
+									{t("form.breadcrumbNew")}
 								</li>
 							</>
 						)}
@@ -204,10 +206,7 @@ export function SkillEditView({
 
 				<Alert variant="info">
 					<AlertTriangle aria-hidden="true" />
-					<AlertDescription>
-						Files added to a skill can be downloaded from marketplace URLs without logging in. Anyone who can reach this Bifrost server can
-						request them directly, so do not upload secrets, credentials, private code, or other sensitive files.
-					</AlertDescription>
+					<AlertDescription>{t("form.filesAlert")}</AlertDescription>
 				</Alert>
 
 				{/* Edit sections */}
@@ -215,18 +214,18 @@ export function SkillEditView({
 					<div className="flex flex-col gap-8 pt-4">
 						<section className="flex flex-col gap-2">
 							<div className="flex items-center gap-1.5">
-								<h2 className="text-foreground text-base leading-[normal] font-semibold">Name</h2>
+								<h2 className="text-foreground text-base leading-[normal] font-semibold">{t("form.nameLabel")}</h2>
 								<Tooltip>
 									<TooltipTrigger asChild>
 										<button
 											type="button"
 											className="text-muted-foreground hover:text-foreground inline-flex h-4 w-4 items-center justify-center"
-											aria-label="Skill names cannot be changed after creation"
+											aria-label={t("form.nameLockedAria")}
 										>
 											<Info className="h-3.5 w-3.5" aria-hidden="true" />
 										</button>
 									</TooltipTrigger>
-									<TooltipContent className="max-w-xs text-xs">Name cannot be changed after creation.</TooltipContent>
+									<TooltipContent className="max-w-xs text-xs">{t("form.nameLockedTooltip")}</TooltipContent>
 								</Tooltip>
 							</div>
 							<div className="flex flex-col gap-1">
@@ -237,7 +236,7 @@ export function SkillEditView({
 										form.setName(e.target.value);
 										form.validateField("name", e.target.value);
 									}}
-									placeholder="my-skill-name"
+									placeholder={t("form.namePlaceholder")}
 									className={cn(form.errors.name && "border-destructive")}
 								/>
 								{form.errors.name && (
@@ -258,7 +257,7 @@ export function SkillEditView({
 				<ResizablePanelGroup direction="horizontal" className="h-full min-h-0">
 					{/* Left: files panel */}
 					<ResizablePanel defaultSize="28%" minSize="18%" maxSize="50%" className="bg-card flex min-h-0 flex-col gap-2">
-						<p className="text-muted-foreground/70 px-1 text-[10px] font-semibold tracking-wider uppercase">Details</p>
+						<p className="text-muted-foreground/70 px-1 text-[10px] font-semibold tracking-wider uppercase">{t("form.detailsPane")}</p>
 						<button
 							type="button"
 							data-testid="skill-details-pane-btn"
@@ -274,15 +273,15 @@ export function SkillEditView({
 							)}
 						>
 							<Settings2 className="h-3.5 w-3.5 shrink-0" />
-							Skill Metadata
+							{t("form.metadataTitle")}
 						</button>
-						<p className="text-muted-foreground/70 mt-2 px-1 text-[10px] font-semibold tracking-wider uppercase">Files</p>
+						<p className="text-muted-foreground/70 mt-2 px-1 text-[10px] font-semibold tracking-wider uppercase">{t("form.filesPane")}</p>
 						<div className="bg-card flex min-h-0 flex-1 flex-col rounded-md border">
 							<div className="flex h-9 items-center border-b">
 								<div className="relative grow">
 									<Search className="text-muted-foreground absolute top-1/2 left-2.5 h-4 w-4 -translate-y-1/2" />
 									<Input
-										placeholder="Search files..."
+										placeholder={t("form.searchFiles")}
 										value={fileSearchQuery}
 										onChange={(e) => setFileSearchQuery(e.target.value)}
 										data-testid="sidebar-search"
@@ -358,7 +357,7 @@ export function SkillEditView({
 							/>
 						) : (
 							<div className="flex h-full min-h-0 flex-col overflow-hidden rounded-sm border">
-								<div className="flex h-9 shrink-0 items-center gap-1 border-b px-2" role="tablist" aria-label="Body editor tabs">
+								<div className="flex h-9 shrink-0 items-center gap-1 border-b px-2" role="tablist" aria-label={t("form.bodyTabsAria")}>
 									<button
 										type="button"
 										className={cn(
@@ -370,7 +369,7 @@ export function SkillEditView({
 										role="tab"
 										aria-selected={bodyTab === "edit"}
 									>
-										Edit
+										{t("form.editTab")}
 									</button>
 									<button
 										type="button"
@@ -383,10 +382,10 @@ export function SkillEditView({
 										role="tab"
 										aria-selected={bodyTab === "preview"}
 									>
-										Preview
+										{t("form.previewTab")}
 									</button>
 									<span className="text-muted-foreground ml-auto pr-1 text-xs">
-										Use <code className="font-mono">@</code> to reference files
+										<Trans ns="skillsRepo" i18nKey="form.referenceFilesHint" components={{ 1: <code className="font-mono" /> }} />
 									</span>
 								</div>
 								<div className="min-h-0 grow overflow-y-auto">
@@ -456,18 +455,18 @@ export function SkillEditView({
 					onClick={onCancel}
 					className="text-muted-foreground hover:bg-transparent hover:text-red-600 dark:hover:text-red-400"
 				>
-					Cancel
+					{t("form.cancel")}
 				</Button>
 				<Button variant="outline" size="sm" data-testid="skill-preview-btn" onClick={() => setShowPreviewDialog(true)}>
 					<Eye className="h-3.5 w-3.5" />
-					Preview Raw SKILL.md
+					{t("form.previewRaw")}
 				</Button>
 				{isCreate ? (
 					<Popover open={versionPopover != null} onOpenChange={(open) => !open && closeVersionPopover()}>
 						<PopoverAnchor asChild>
 							<Button size="sm" data-testid="skill-create-save-btn" onClick={() => openVersionPopover(true)} disabled={isSaving}>
 								{isSaving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Plus className="h-3.5 w-3.5" />}
-								{isSaving ? "Creating..." : "Create Skill"}
+								{isSaving ? t("form.creating") : t("form.create")}
 							</Button>
 						</PopoverAnchor>
 						<PopoverContent align="end" className="w-max">
@@ -497,7 +496,7 @@ export function SkillEditView({
 									disabled={isSaving}
 								>
 									{isSaving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
-									{isSaving ? "Saving..." : "Save"}
+									{isSaving ? t("form.saving") : t("form.save")}
 								</Button>
 							</PopoverAnchor>
 							<PopoverContent align="end" className="w-max">
@@ -519,7 +518,7 @@ export function SkillEditView({
 							<PopoverAnchor asChild>
 								<Button size="sm" data-testid="skill-save-serve-btn" onClick={() => openVersionPopover(true)} disabled={isSaving}>
 									{isSaving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
-									{isSaving ? "Saving..." : "Save & Serve"}
+									{isSaving ? t("form.saving") : t("form.saveAndServe")}
 								</Button>
 							</PopoverAnchor>
 							<PopoverContent align="end" className="w-max">
@@ -548,7 +547,7 @@ export function SkillEditView({
 					className="h-[90vh] w-full border-0 p-0 sm:w-[85vw] sm:max-w-[85vw] md:w-[75vw] md:max-w-[75vw]"
 				>
 					<DialogHeader className="sr-only">
-						<DialogTitle>SKILL.md Preview</DialogTitle>
+						<DialogTitle>{t("form.previewTitle")}</DialogTitle>
 					</DialogHeader>
 					<div className="bg-muted relative overflow-hidden rounded-sm border shadow-lg">
 						<div className="absolute top-3 right-3 z-10 flex items-center gap-1">
@@ -558,13 +557,13 @@ export function SkillEditView({
 								data-testid="skill-preview-copy-btn"
 								className="bg-background/70 text-muted-foreground hover:bg-background/90 hover:text-foreground h-8 w-8 rounded-sm"
 								onClick={() => copyPreviewContent(previewContent)}
-								aria-label={copiedPreviewContent ? "Raw SKILL.md copied" : "Copy raw SKILL.md"}
+								aria-label={copiedPreviewContent ? t("form.rawCopiedAria") : t("form.rawCopyAria")}
 							>
 								{copiedPreviewContent ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
 							</Button>
 							<DialogClose className="text-muted-foreground hover:bg-background/80 hover:text-foreground cursor-pointer rounded-sm p-1.5 transition-colors">
 								<X className="h-4 w-4" />
-								<span className="sr-only">Close</span>
+								<span className="sr-only">{t("form.close")}</span>
 							</DialogClose>
 						</div>
 						<ScrollArea className="h-dvh" viewportClassName="bg-muted">
@@ -625,11 +624,12 @@ function DetailsEditorPane({
 	descriptionLength: number;
 	descriptionLimitColor: string;
 }) {
+	const { t } = useTranslation("skillsRepo");
 	return (
 		<div className="flex h-full min-h-0 flex-col overflow-hidden">
 			<ScrollArea className="min-h-0 flex-1 rounded-sm border">
 				<div className="flex flex-col gap-8 p-4">
-					<FormSection title="Description">
+					<FormSection title={t("form.details.descriptionSection")}>
 						<div className="flex flex-col gap-2">
 							<Textarea
 								data-testid="skill-description-input"
@@ -638,7 +638,7 @@ function DetailsEditorPane({
 									form.setDescription(e.target.value);
 									form.validateField("description", e.target.value);
 								}}
-								placeholder="What does this skill do?"
+								placeholder={t("form.details.descriptionPlaceholder")}
 								rows={3}
 								className={form.errors.description ? "border-destructive" : undefined}
 							/>
@@ -651,35 +651,35 @@ function DetailsEditorPane({
 						</div>
 					</FormSection>
 
-					<FormSection title="Spec Fields">
+					<FormSection title={t("form.details.specSection")}>
 						<div className="grid grid-cols-3 gap-4">
 							<div className="flex flex-col gap-1">
-								<Label className="text-muted-foreground text-xs">License</Label>
+								<Label className="text-muted-foreground text-xs">{t("form.details.licenseLabel")}</Label>
 								<Input
 									data-testid="skill-license-input"
 									value={form.license}
 									onChange={(e) => form.setLicense(e.target.value)}
-									placeholder="MIT (optional)"
+									placeholder={t("form.details.licensePlaceholder")}
 									className="h-8 text-sm"
 								/>
 							</div>
 							<div className="flex flex-col gap-1">
-								<Label className="text-muted-foreground text-xs">Compatibility</Label>
+								<Label className="text-muted-foreground text-xs">{t("form.details.compatibilityLabel")}</Label>
 								<Input
 									data-testid="skill-compatibility-input"
 									value={form.compatibility}
 									onChange={(e) => form.setCompatibility(e.target.value)}
-									placeholder="Claude Code, Codex (optional)"
+									placeholder={t("form.details.compatibilityPlaceholder")}
 									className="h-8 text-sm"
 								/>
 							</div>
 							<div className="flex flex-col gap-1">
-								<Label className="text-muted-foreground text-xs">Allowed Tools</Label>
+								<Label className="text-muted-foreground text-xs">{t("form.details.allowedToolsLabel")}</Label>
 								<Input
 									data-testid="skill-allowed-tools-input"
 									value={form.allowedTools}
 									onChange={(e) => form.setAllowedTools(e.target.value)}
-									placeholder="Bash Read Grep (optional)"
+									placeholder={t("form.details.allowedToolsPlaceholder")}
 									className="h-8 text-sm"
 								/>
 							</div>
@@ -687,12 +687,8 @@ function DetailsEditorPane({
 					</FormSection>
 
 					<FormSection
-						title="Metadata"
-						helperText={
-							<>
-								Flat key-value pairs nested under <code className="font-mono">metadata:</code> in SKILL.md
-							</>
-						}
+						title={t("form.details.metadataSection")}
+						helperText={<Trans ns="skillsRepo" i18nKey="form.details.metadataHelper" components={{ 1: <code className="font-mono" /> }} />}
 					>
 						<MetadataTableEditor
 							metadataJson={form.metadataJson}
@@ -704,7 +700,7 @@ function DetailsEditorPane({
 						/>
 					</FormSection>
 
-					<FormSection title="Extra Frontmatter" helperText="Valid JSON merged into the SKILL.md YAML frontmatter">
+					<FormSection title={t("form.details.frontmatterSection")} helperText={t("form.details.extraHelper")}>
 						<div className="flex flex-col gap-2">
 							<div className="h-64 overflow-hidden rounded-sm border">
 								<CodeEditor
@@ -757,6 +753,7 @@ function VersionPopoverBody({
 	onClose: () => void;
 	onSave: (serve: boolean) => void;
 }) {
+	const { t } = useTranslation("skillsRepo");
 	const bumpError = !isCreate && previousVersion ? validateVersionBump(form.version, previousVersion) : null;
 	const versionError = form.errors.version || bumpError;
 	const canSave = !!form.version.trim() && !versionError && !isSaving;
@@ -769,13 +766,13 @@ function VersionPopoverBody({
 	return (
 		<>
 			<div className="mb-3 flex flex-col gap-0.5">
-				<p className="text-sm font-medium">{isCreate ? "Create skill" : "Save new version"}</p>
+				<p className="text-sm font-medium">{isCreate ? t("form.versionPopover.createTitle") : t("form.versionPopover.saveTitle")}</p>
 				<p className="text-muted-foreground text-xs">
-					{isCreate ? "Set the initial version for this skill." : "Choose a new version number for these changes."}
+					{isCreate ? t("form.versionPopover.createDescription") : t("form.versionPopover.saveDescription")}
 				</p>
 			</div>
 			<div className="flex flex-col gap-1.5">
-				<Label className="text-muted-foreground text-xs">Version</Label>
+				<Label className="text-muted-foreground text-xs">{t("form.versionPopover.versionLabel")}</Label>
 				<div className="flex items-center gap-2">
 					{!isCreate && previousVersion && (
 						<>
@@ -797,7 +794,7 @@ function VersionPopoverBody({
 								submit();
 							}
 						}}
-						placeholder="1.0.0"
+						placeholder={t("form.versionPopover.versionPlaceholder")}
 						className={cn("max-w-44 font-mono text-sm", versionError && "border-destructive")}
 					/>
 				</div>
@@ -806,15 +803,15 @@ function VersionPopoverBody({
 						{versionError}
 					</p>
 				) : (
-					!isCreate && <p className="text-muted-foreground text-xs">Bump major (2.x.x), minor (1.1.x), or patch (1.0.1).</p>
+					!isCreate && <p className="text-muted-foreground text-xs">{t("form.versionPopover.bumpHint")}</p>
 				)}
 			</div>
 			<div className="mt-4 flex justify-end gap-2">
 				<Button variant="ghost" size="sm" onClick={onClose}>
-					Cancel
+					{t("form.versionPopover.cancel")}
 				</Button>
 				<Button size="sm" data-testid="skill-version-confirm-btn" disabled={!canSave} onClick={submit}>
-					{isCreate ? "Create" : serve ? "Save & Serve" : "Save"}
+					{isCreate ? t("form.versionPopover.create") : serve ? t("form.versionPopover.saveAndServe") : t("form.versionPopover.save")}
 				</Button>
 			</div>
 		</>

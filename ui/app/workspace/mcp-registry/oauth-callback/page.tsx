@@ -44,9 +44,7 @@ export default function MCPRegistryOAuthCallbackPage() {
 			<div className="bg-card w-full rounded-lg border p-8 text-center shadow-sm">
 				<h1 className="text-xl font-semibold">{status === "success" ? t("oauthCallback.successTitle") : t("oauthCallback.failedTitle")}</h1>
 				{error && <p className="text-destructive mt-2 text-sm">{error}</p>}
-				<p className="text-muted-foreground mt-4 text-sm">
-					{closeAttempted ? t("oauthCallback.closeTab") : t("oauthCallback.canClose")}
-				</p>
+				<p className="text-muted-foreground mt-4 text-sm">{closeAttempted ? t("oauthCallback.closeTab") : t("oauthCallback.canClose")}</p>
 				<div className="mt-6">
 					<Button asChild variant="outline" data-testid="mcp-callback-back-button">
 						<Link to="/workspace/mcp-registry">{t("oauthCallback.backToRegistry")}</Link>

@@ -24,7 +24,9 @@
 		"promptUpdateFailed": "Failed to update prompt",
 		"promptCreateFailed": "Failed to create prompt",
 		"versionCommitted": "Version committed",
-		"versionCommitFailed": "Failed to commit version"
+		"versionCommitFailed": "Failed to commit version",
+		"promptMoveFailed": "Failed to move prompt",
+		"moreFailures": "and {{count}} more"
 	},
 	"sidebar": {
 		"searchPlaceholder": "Search prompts...",
@@ -168,7 +170,9 @@
 		"executingAll": "Executing all",
 		"executeAll": "Execute all",
 		"submitting": "Submitting",
-		"submitAll": "Submit all results"
+		"submitAll": "Submit all results",
+		"count_one": "{{count}} tool call",
+		"mcpServerFallback": "MCP server"
 	},
 	"folderSheet": {
 		"editTitle": "Edit Folder",
@@ -218,5 +222,15 @@
 		"cancel": "Cancel",
 		"committing": "Committing...",
 		"commit": "Commit Version"
+	},
+	"roles": {
+		"system": "System",
+		"user": "User",
+		"assistant": "Assistant",
+		"tool": "Tool"
+	},
+	"errors": {
+		"httpStatus": "HTTP error! status: {{status}}",
+		"noResponseBody": "No response body"
 	}
 }

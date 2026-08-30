@@ -109,7 +109,13 @@ export function VersionDetailDialog({
 							</Button>
 						)}
 						<DialogClose asChild>
-							<Button variant="ghost" size="icon" className="h-8 w-8" data-testid="skill-version-dialog-close" aria-label={t("versionDetails.close")}>
+							<Button
+								variant="ghost"
+								size="icon"
+								className="h-8 w-8"
+								data-testid="skill-version-dialog-close"
+								aria-label={t("versionDetails.close")}
+							>
 								<X className="h-4 w-4" />
 								<span className="sr-only">{t("versionDetails.close")}</span>
 							</Button>

@@ -3,42 +3,50 @@
 // Extracted from pricingOverrideSheet.tsx so read-only consumers (e.g. the
 // model-catalog detail sheet) can reuse the labels without pulling that
 // component's form/mutation dependencies into their bundle.
+//
+// User-facing labels live in the customPricing language pack (fieldGroups.*,
+// fields.*) and are translated at render time via t() / i18n.t(). The `label`
+// strings below are canonical English fallbacks backing i18n defaultValue
+// lookups (see fieldLabelByKey), not direct render output.
+import i18n from "@/lib/i18n";
 
 export const REQUEST_TYPE_GROUPS = [
 	{
-		label: "Chat / Text / Responses",
+		key: "chat",
 		types: ["chat_completion", "text_completion", "responses"],
 	},
 	{
-		label: "Embedding",
+		key: "embedding",
 		types: ["embedding"],
 	},
 	{
-		label: "Rerank",
+		key: "rerank",
 		types: ["rerank"],
 	},
 	{
-		label: "Audio",
+		key: "audio",
 		types: ["speech", "transcription"],
 	},
 	{
-		label: "Image",
+		key: "image",
 		types: ["image_generation", "image_variation", "image_edit"],
 	},
 	{
-		label: "Video",
+		key: "video",
 		types: ["video_generation", "video_remix"],
 	},
 	{
-		label: "OCR",
+		key: "ocr",
 		types: ["ocr"],
 	},
 ] as const;
 
 export const REQUEST_TYPE_OPTIONS = REQUEST_TYPE_GROUPS.flatMap((g) => g.types);
 
+/** Localized label of the group a request type belongs to, resolved at call time. */
 export function getRequestTypeGroup(rt: string): string | undefined {
-	return REQUEST_TYPE_GROUPS.find((g) => (g.types as readonly string[]).includes(rt))?.label;
+	const group = REQUEST_TYPE_GROUPS.find((g) => (g.types as readonly string[]).includes(rt));
+	return group ? i18n.t(`customPricing:fieldGroups.${group.key}`) : undefined;
 }
 
 export const PRICING_FIELDS = [
@@ -535,10 +543,11 @@ export function pricingFieldUnit(key: string): PricingFieldUnit {
 
 export type PricingFieldKey = (typeof PRICING_FIELDS)[number]["key"];
 
-export const fieldLabelByKey = Object.fromEntries(PRICING_FIELDS.map((field) => [field.key, field.label])) as Record<
-	PricingFieldKey,
-	string
->;
+// Canonical English fallbacks for i18n defaultValue lookups (e.g. the
+// model-catalog attribute sheet resolves labels with
+// t(`customPricing:fields.<key>`, { defaultValue: fieldLabelByKey[key] })).
+const fieldLabelEntries = PRICING_FIELDS.map((field) => [field.key, field.label] as const);
+export const fieldLabelByKey = Object.fromEntries(fieldLabelEntries) as Record<PricingFieldKey, string>;
 export const patchKeys = PRICING_FIELDS.map((field) => field.key) as PricingFieldKey[];
 
 export type FieldErrors = Partial<Record<PricingFieldKey | "name" | "scope" | "pattern" | "patch", string>>;

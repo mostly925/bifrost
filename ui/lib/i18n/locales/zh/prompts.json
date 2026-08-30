@@ -24,7 +24,9 @@
 		"promptUpdateFailed": "更新提示词失败",
 		"promptCreateFailed": "创建提示词失败",
 		"versionCommitted": "版本已提交",
-		"versionCommitFailed": "提交版本失败"
+		"versionCommitFailed": "提交版本失败",
+		"promptMoveFailed": "移动提示词失败",
+		"moreFailures": "及其他 {{count}} 个"
 	},
 	"sidebar": {
 		"searchPlaceholder": "搜索提示词...",
@@ -168,7 +170,9 @@
 		"executingAll": "全部执行中",
 		"executeAll": "全部执行",
 		"submitting": "提交中",
-		"submitAll": "提交所有结果"
+		"submitAll": "提交所有结果",
+		"count_one": "{{count}} 次工具调用",
+		"mcpServerFallback": "MCP 服务器"
 	},
 	"folderSheet": {
 		"editTitle": "编辑文件夹",
@@ -218,5 +222,15 @@
 		"cancel": "取消",
 		"committing": "提交中...",
 		"commit": "提交版本"
+	},
+	"roles": {
+		"system": "系统",
+		"user": "用户",
+		"assistant": "助手",
+		"tool": "工具"
+	},
+	"errors": {
+		"httpStatus": "HTTP 错误！状态码：{{status}}",
+		"noResponseBody": "无响应体"
 	}
 }

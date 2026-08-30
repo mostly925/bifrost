@@ -19,9 +19,7 @@ export function ModelLimitsEmptyState({ onAddClick, canCreate = true }: ModelLim
 			</div>
 			<div className="flex flex-col gap-1">
 				<h1 className="text-muted-foreground text-xl font-medium">{t("empty.title")}</h1>
-				<div className="text-muted-foreground mx-auto mt-2 max-w-[600px] text-sm font-normal">
-					{t("empty.description")}
-				</div>
+				<div className="text-muted-foreground mx-auto mt-2 max-w-[600px] text-sm font-normal">{t("empty.description")}</div>
 				<div className="mx-auto mt-6 flex flex-row flex-wrap items-center justify-center gap-2">
 					<Button
 						variant="outline"
@@ -33,12 +31,7 @@ export function ModelLimitsEmptyState({ onAddClick, canCreate = true }: ModelLim
 					>
 						{t("empty.readMore")} <ArrowUpRight className="text-muted-foreground h-3 w-3" />
 					</Button>
-					<Button
-						aria-label={t("empty.addAria")}
-						onClick={onAddClick}
-						disabled={!canCreate}
-						data-testid="model-limits-button-create"
-					>
+					<Button aria-label={t("empty.addAria")} onClick={onAddClick} disabled={!canCreate} data-testid="model-limits-button-create">
 						{t("empty.addLimit")}
 					</Button>
 				</div>

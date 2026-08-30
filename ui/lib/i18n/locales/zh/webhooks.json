@@ -1,4 +1,5 @@
 {
+	"noPermissionEntity": "Webhook",
 	"toasts": {
 		"endpointEnabled": "端点已成功启用",
 		"endpointDisabled": "端点已成功停用",

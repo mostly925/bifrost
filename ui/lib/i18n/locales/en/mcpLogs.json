@@ -1,0 +1,87 @@
+{
+	"noPermissionEntity": "mcp logs",
+	"stats": {
+		"totalExecutions": "Total Executions",
+		"successRate": "Success Rate",
+		"avgLatency": "Avg Latency",
+		"totalCost": "Total Cost"
+	},
+	"columnLabels": {
+		"timestamp": "Time",
+		"tool_name": "Tool Name",
+		"server_label": "Server",
+		"latency": "Latency",
+		"cost": "Cost",
+		"virtual_key": "Virtual Key"
+	},
+	"columns": {
+		"time": "Time",
+		"toolName": "Tool Name",
+		"server": "Server",
+		"app": "App",
+		"latency": "Latency",
+		"cost": "Cost",
+		"virtualKey": "Virtual Key",
+		"invalidDate": "Invalid date",
+		"na": "N/A",
+		"actionsAria": "Log actions"
+	},
+	"errors": {
+		"noDeleteAccess": "No delete access"
+	},
+	"header": {
+		"live": "Live",
+		"searchPlaceholder": "Search MCP logs"
+	},
+	"table": {
+		"waitingForLogs": "Waiting for new MCP logs...",
+		"noResults": "No results found. Try adjusting your filters and/or time range.",
+		"range": "{{from}}-{{to}} of {{total}} entries",
+		"previousAria": "Previous page",
+		"nextAria": "Next page",
+		"page": "Page",
+		"of": "of {{count}}"
+	},
+	"details": {
+		"loadingTitle": "Loading MCP log details",
+		"requestId": "Request ID: {{id}}",
+		"showOriginalValues": "Show original values",
+		"exportAsJson": "Export as JSON",
+		"deleteLog": "Delete log",
+		"deleteConfirmTitle": "Are you sure you want to delete this log?",
+		"deleteConfirmDescription": "This action cannot be undone. This will permanently delete the log entry.",
+		"deleteFailed": "Failed to delete log",
+		"timings": "Timings",
+		"startTimestamp": "Start Timestamp",
+		"endTimestamp": "End Timestamp",
+		"latency": "Latency",
+		"invalidDate": "Invalid date",
+		"na": "NA",
+		"requestDetails": "Request Details",
+		"toolName": "Tool Name",
+		"server": "Server",
+		"virtualKey": "Virtual Key",
+		"llmRequestId": "LLM Request ID",
+		"tabExecution": "Execution",
+		"tabPluginLogs": "Plugin Logs",
+		"arguments": "Arguments",
+		"result": "Result",
+		"metadata": "Metadata",
+		"errorDetails": "Error Details",
+		"noPluginLogs": "No plugin logs for this request."
+	},
+	"emptyState": {
+		"copyAria": "Copy to clipboard",
+		"logStoreHint": "Looks like you haven't configured the log store in your config file.",
+		"title": "Get Started with MCP Tool Execution",
+		"description": "Execute your first MCP tool call to see logs appear",
+		"tabManual": "Manual Tool Execution",
+		"tabAgent": "Agent Mode (Auto-Execute)",
+		"manualDescription": "Full control over tool approval. You explicitly execute each tool call via the API.",
+		"agentDescription": "Autonomous execution for pre-approved tools. Configure auto-executable tools in MCP Gateway settings.",
+		"prerequisites": "Prerequisites",
+		"prereq1": "Configure MCP servers in the MCP Gateway (e.g., filesystem, web_search)",
+		"prereq2": "Set <1>tools_to_execute</1> to whitelist available tools",
+		"prereq3": "For Agent Mode: Configure <1>tools_to_auto_execute</1> for autonomous execution"
+	}
+}

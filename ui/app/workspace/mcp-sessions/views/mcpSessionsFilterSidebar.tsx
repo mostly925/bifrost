@@ -12,7 +12,17 @@ import { ScrollArea } from "@/components/ui/scrollArea";
 import { getUserSearchQuery } from "@/lib/registries/userPicker";
 import { useGetMCPClientsQuery, useGetVirtualKeysQuery } from "@/lib/store";
 import { cn } from "@/lib/utils";
-import { ChevronDown, Fingerprint, KeyRound, LoaderCircle, PanelLeftClose, PanelLeftOpen, RotateCcw, Search, UserRound } from "lucide-react";
+import {
+	ChevronDown,
+	Fingerprint,
+	KeyRound,
+	LoaderCircle,
+	PanelLeftClose,
+	PanelLeftOpen,
+	RotateCcw,
+	Search,
+	UserRound,
+} from "lucide-react";
 import { type Ref, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { TFunction } from "i18next";
@@ -468,7 +478,12 @@ function MCPClientFilterSection({ filters, onFiltersChange }: SidebarProps) {
 	};
 
 	return (
-		<FilterSection title={t("filters.sections.mcpServer")} defaultOpen={hasActive} onOpenChange={setOpened} testId="mcp-sessions-filter-mcp-client-toggle">
+		<FilterSection
+			title={t("filters.sections.mcpServer")}
+			defaultOpen={hasActive}
+			onOpenChange={setOpened}
+			testId="mcp-sessions-filter-mcp-client-toggle"
+		>
 			<SearchableCheckboxList
 				inputRef={searchInputRef}
 				placeholder={t("filters.searchMcpServers")}
@@ -510,7 +525,12 @@ function VirtualKeyFilterSection({ filters, onFiltersChange }: SidebarProps) {
 	};
 
 	return (
-		<FilterSection title={t("filters.sections.virtualKey")} defaultOpen={hasActive} onOpenChange={setOpened} testId="mcp-sessions-filter-vk-toggle">
+		<FilterSection
+			title={t("filters.sections.virtualKey")}
+			defaultOpen={hasActive}
+			onOpenChange={setOpened}
+			testId="mcp-sessions-filter-vk-toggle"
+		>
 			<SearchableCheckboxList
 				inputRef={searchInputRef}
 				placeholder={t("filters.searchVirtualKeys")}
@@ -559,7 +579,12 @@ function UsersFilterSection({ filters, onFiltersChange }: SidebarProps) {
 	};
 
 	return (
-		<FilterSection title={t("filters.sections.users")} defaultOpen={hasActive} onOpenChange={setOpened} testId="mcp-sessions-filter-users-toggle">
+		<FilterSection
+			title={t("filters.sections.users")}
+			defaultOpen={hasActive}
+			onOpenChange={setOpened}
+			testId="mcp-sessions-filter-users-toggle"
+		>
 			<SearchableCheckboxList
 				inputRef={searchInputRef}
 				placeholder={t("filters.searchUsers")}

@@ -90,6 +90,7 @@
 	},
 	"sidebar": {
 		"searchPlaceholder": "Search...",
+		"mcpClientsIcon": "MCP clients icon",
 		"searchAria": "Search sidebar navigation",
 		"collapseAria": "Collapse sidebar",
 		"expandAria": "Expand sidebar",

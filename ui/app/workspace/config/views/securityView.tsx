@@ -18,9 +18,11 @@ import { RbacOperation, RbacResource, useRbac } from "@enterprise/lib";
 import { useGetAuthTypeQuery } from "@enterprise/lib/store/apis/scimApi";
 import { AlertTriangle, Loader2 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 export default function SecurityView() {
+	const { t } = useTranslation("shared");
 	const hasSettingsUpdateAccess = useRbac(RbacResource.Settings, RbacOperation.Update);
 	const { data: bifrostConfig } = useGetCoreConfigQuery({ fromDB: true });
 	const { data: authType, isLoading: authTypeLoading, error: authTypeError } = useGetAuthTypeQuery(undefined, { skip: !IS_ENTERPRISE });
@@ -168,7 +170,11 @@ export default function SecurityView() {
 		if (field === "admin_password") {
 			passwordUnchangedRef.current = false;
 			const passwordPolicyFailures = !value.ref && value.value ? getPasswordPolicyFailures(value.value, false) : [];
-			setPasswordError(passwordPolicyFailures.length > 0 ? `Password must include ${passwordPolicyFailures.join(", ")}.` : "");
+			setPasswordError(
+				passwordPolicyFailures.length > 0
+					? t("passwordPolicy.mustInclude", { items: passwordPolicyFailures.map((key) => t(key)).join(", ") })
+					: "",
+			);
 		}
 		setAuthConfig((prev) => ({ ...prev, [field]: value }));
 	}, []);
@@ -191,7 +197,7 @@ export default function SecurityView() {
 					: [];
 
 			if (passwordPolicyFailures.length > 0) {
-				setPasswordError(`Password must include ${passwordPolicyFailures.join(", ")}.`);
+				setPasswordError(t("passwordPolicy.mustInclude", { items: passwordPolicyFailures.map((key) => t(key)).join(", ") }));
 				passwordInputRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
 				passwordInputRef.current?.focus({ preventScroll: true });
 				return;
@@ -209,11 +215,11 @@ export default function SecurityView() {
 				client_config: localConfig,
 				...(showPasswordSection
 					? {
-						auth_config: {
-							...(authConfig.is_enabled && hasUsername && hasPassword ? authConfig : { ...authConfig, is_enabled: false }),
-							...(isFirstTimeSetup ? { setup_token: setupToken.trim() } : {}),
-						},
-					}
+							auth_config: {
+								...(authConfig.is_enabled && hasUsername && hasPassword ? authConfig : { ...authConfig, is_enabled: false }),
+								...(isFirstTimeSetup ? { setup_token: setupToken.trim() } : {}),
+							},
+						}
 					: {}),
 			}).unwrap();
 			setSetupToken("");
@@ -314,8 +320,8 @@ export default function SecurityView() {
 											onChange={(e) => setSetupToken(e.target.value)}
 										/>
 										<p className="text-muted-foreground text-xs">
-											No admin account exists yet, so this instance is reachable without a password. To finish setup, ask your
-											operator for the setup token configured via <code>setup_token</code> in <code>config.json</code> (or the{" "}
+											No admin account exists yet, so this instance is reachable without a password. To finish setup, ask your operator for
+											the setup token configured via <code>setup_token</code> in <code>config.json</code> (or the{" "}
 											<code>BIFROST_SETUP_TOKEN</code> environment variable) and paste it here.
 										</p>
 									</div>
@@ -370,10 +376,17 @@ export default function SecurityView() {
 						<Select
 							value={localConfig.dual_credential_conflict_behavior || "prefer_idp"}
 							onValueChange={(value) =>
-								setLocalConfig((prev) => ({ ...prev, dual_credential_conflict_behavior: value as CoreConfig["dual_credential_conflict_behavior"] }))
+								setLocalConfig((prev) => ({
+									...prev,
+									dual_credential_conflict_behavior: value as CoreConfig["dual_credential_conflict_behavior"],
+								}))
 							}
 						>
-							<SelectTrigger id="dual-credential-conflict-behavior" data-testid="dual-credential-conflict-behavior-select" className="w-[180px]">
+							<SelectTrigger
+								id="dual-credential-conflict-behavior"
+								data-testid="dual-credential-conflict-behavior-select"
+								className="w-[180px]"
+							>
 								<SelectValue />
 							</SelectTrigger>
 							<SelectContent>

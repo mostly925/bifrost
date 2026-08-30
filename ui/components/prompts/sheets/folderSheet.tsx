@@ -8,6 +8,7 @@ import { useCreateFolderMutation, useUpdateFolderMutation } from "@/lib/store/ap
 import { Folder } from "@/lib/types/prompts";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 interface FolderFormData {
@@ -23,6 +24,7 @@ interface FolderSheetProps {
 }
 
 export function FolderSheet({ open, onOpenChange, folder, onSaved }: FolderSheetProps) {
+	const { t } = useTranslation("prompts");
 	const [createFolder, { isLoading: isCreating }] = useCreateFolderMutation();
 	const [updateFolder, { isLoading: isUpdating }] = useUpdateFolderMutation();
 
@@ -54,18 +56,18 @@ export function FolderSheet({ open, onOpenChange, folder, onSaved }: FolderSheet
 					id: folder.id,
 					data: { name: data.name.trim(), description: data.description.trim() || undefined },
 				}).unwrap();
-				toast.success("Folder updated");
+				toast.success(t("toasts.folderUpdated"));
 			} else {
 				await createFolder({
 					name: data.name.trim(),
 					description: data.description.trim() || undefined,
 				}).unwrap();
-				toast.success("Folder created");
+				toast.success(t("toasts.folderCreated"));
 			}
 			onSaved();
 			onOpenChange(false);
 		} catch (err) {
-			toast.error(`Failed to ${isEditing ? "update" : "create"} folder`, {
+			toast.error(isEditing ? t("toasts.folderUpdateFailed") : t("toasts.folderCreateFailed"), {
 				description: getErrorMessage(err),
 			});
 		}
@@ -82,22 +84,20 @@ export function FolderSheet({ open, onOpenChange, folder, onSaved }: FolderSheet
 			>
 				<form onSubmit={handleSubmit(onSubmit)}>
 					<SheetHeader className="flex flex-col items-start">
-						<SheetTitle>{isEditing ? "Edit Folder" : "Create Folder"}</SheetTitle>
-						<SheetDescription>
-							{isEditing ? "Update the folder name and description." : "Create a new folder to organize your prompts."}
-						</SheetDescription>
+						<SheetTitle>{isEditing ? t("folderSheet.editTitle") : t("folderSheet.createTitle")}</SheetTitle>
+						<SheetDescription>{isEditing ? t("folderSheet.editDescription") : t("folderSheet.createDescription")}</SheetDescription>
 					</SheetHeader>
 
 					<div className="mt-6 space-y-4">
 						<div className="space-y-2">
-							<Label htmlFor="name">Name</Label>
+							<Label htmlFor="name">{t("folderSheet.nameLabel")}</Label>
 							<Input
 								id="name"
 								data-testid="folder-name-input"
-								placeholder="My Prompts"
+								placeholder={t("folderSheet.namePlaceholder")}
 								{...register("name", {
-									required: "Folder name is required",
-									validate: (v) => v.trim().length > 0 || "Folder name cannot be blank",
+									required: t("folderSheet.nameRequired"),
+									validate: (v) => v.trim().length > 0 || t("folderSheet.nameBlank"),
 								})}
 								autoFocus
 							/>
@@ -105,11 +105,11 @@ export function FolderSheet({ open, onOpenChange, folder, onSaved }: FolderSheet
 						</div>
 
 						<div className="space-y-2">
-							<Label htmlFor="description">Description (optional)</Label>
+							<Label htmlFor="description">{t("folderSheet.descriptionLabel")}</Label>
 							<Textarea
 								id="description"
 								data-testid="folder-description-input"
-								placeholder="Prompts for customer support use cases..."
+								placeholder={t("folderSheet.descriptionPlaceholder")}
 								className="resize-none"
 								{...register("description")}
 							/>
@@ -118,10 +118,10 @@ export function FolderSheet({ open, onOpenChange, folder, onSaved }: FolderSheet
 
 					<SheetFooter className="mt-6 flex flex-row items-center justify-end gap-2 p-0">
 						<Button type="button" variant="outline" data-testid="folder-cancel" onClick={() => onOpenChange(false)}>
-							Cancel
+							{t("folderSheet.cancel")}
 						</Button>
 						<Button type="submit" data-testid="folder-submit" disabled={isLoading}>
-							{isLoading ? "Saving..." : isEditing ? "Update" : "Create"}
+							{isLoading ? t("folderSheet.saving") : isEditing ? t("folderSheet.update") : t("folderSheet.create")}
 						</Button>
 					</SheetFooter>
 				</form>

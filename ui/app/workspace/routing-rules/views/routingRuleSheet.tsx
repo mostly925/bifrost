@@ -286,9 +286,9 @@ export function RoutingRuleSheet({ open, onOpenChange, editingRule, onSuccess }:
 		const submitPromise =
 			isEditing && editingRule
 				? updateRoutingRule({
-					id: editingRule.id,
-					data: payload,
-				}).unwrap()
+						id: editingRule.id,
+						data: payload,
+					}).unwrap()
 				: createRoutingRule(payload).unwrap();
 
 		submitPromise
@@ -456,7 +456,7 @@ export function RoutingRuleSheet({ open, onOpenChange, editingRule, onSuccess }:
 									))}
 								{/* Teams, customers and virtual keys are all searched lazily inside their
 								    selectors, each of which surfaces its own empty state. */}
-								{errors.scope_id &&<p className="text-destructive text-sm">{errors.scope_id.message}</p>}
+								{errors.scope_id && <p className="text-destructive text-sm">{errors.scope_id.message}</p>}
 							</div>
 						)}
 

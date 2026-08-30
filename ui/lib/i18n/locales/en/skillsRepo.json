@@ -94,7 +94,15 @@
 		"notFound": "Skill not found",
 		"backToList": "Back to list",
 		"versionsForAria": "Versions for {{name}}",
-		"addNewVersion": "Add New Version"
+		"addNewVersion": "Add New Version",
+		"actionsForAria": "Actions for {{name}}",
+		"downloadZip": "Download ZIP",
+		"delete": "Delete",
+		"deleteTitle": "Delete {{name}}?",
+		"deleteDescription": "This action cannot be undone. The skill, its files, and version history will be permanently deleted.",
+		"cancel": "Cancel",
+		"deleting": "Deleting...",
+		"deleteSkill": "Delete skill"
 	},
 	"metadataEditor": {
 		"keyPlaceholder": "Metadata key",
@@ -105,6 +113,7 @@
 		"copyRawFailed": "Failed to copy raw SKILL.md",
 		"breadcrumbSkills": "Skills",
 		"breadcrumbNew": "new",
+		"breadcrumbUnnamed": "<new-skill>",
 		"filesAlert": "Files added to a skill can be downloaded from marketplace URLs without logging in. Anyone who can reach this Bifrost server can request them directly, so do not upload secrets, credentials, private code, or other sensitive files.",
 		"nameLabel": "Name",
 		"nameLockedAria": "Skill names cannot be changed after creation",
@@ -164,6 +173,7 @@
 		"copiedRaw": "Copied raw SKILL.md",
 		"copyRawFailed": "Failed to copy raw SKILL.md",
 		"breadcrumbSkills": "Skills",
+		"breadcrumbAria": "Breadcrumb",
 		"viewRaw": "View raw SKILL.md",
 		"downloadZip": "Download ZIP",
 		"licenseLabel": "License",
@@ -186,6 +196,7 @@
 		"externalLink": {
 			"title": "Open external link?",
 			"description": "This link opens outside Bifrost in a new browser tab.",
+			"fallback": "external link",
 			"cancel": "Cancel",
 			"open": "Open link"
 		},
@@ -209,7 +220,8 @@
 			"metadataPane": "Metadata",
 			"frontmatterPane": "Extra Frontmatter",
 			"frontmatterTitle": "Extra Frontmatter",
-			"searchFiles": "Search files..."
+			"searchFiles": "Search files...",
+			"rootFallback": "skill"
 		}
 	},
 	"filePreview": {
@@ -253,8 +265,11 @@
 		},
 		"filenameLabel": "Filename",
 		"sourceUrlLabel": "Source URL",
+		"sourceUrlPlaceholder": "https://example.com/file.py",
 		"fileContentLabel": "File content",
+		"fileContentPlaceholder": "File content...",
 		"dataUrlLabel": "Data URL",
+		"dataUrlPlaceholder": "data:text/plain;base64,...",
 		"chooseFileAria": "Choose file to upload",
 		"renameAria": "Rename file",
 		"sourceUrlNote": "This source is saved as a live reference. Bifrost will read from this URL when the skill file is retrieved.",
@@ -286,6 +301,8 @@
 			"deleteFolder": "Delete folder"
 		},
 		"uploadProgress": "Uploading folder files {{completed}}/{{total}}{{into}}",
+		"uploadInto": " into {{folder}}/",
+		"uploadIntoRoot": " into root",
 		"searchFiles": "Search files...",
 		"searchFilesAria": "Search files",
 		"collapseAria": "Collapse {{name}}",

@@ -34,6 +34,7 @@ import { SheetNavigationButtons } from "@/components/sheetNavigationButtons";
 import { useSheetNavigation } from "@/hooks/useSheetNavigation";
 import { Download, Loader2, MoreVertical, Trash2 } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 interface MCPLogDetailSheetProps {
@@ -94,6 +95,7 @@ export function MCPLogDetailSheet({
 	hasPrev = false,
 	hasNext = false,
 }: MCPLogDetailSheetProps) {
+	const { t } = useTranslation(["mcpLogs", "common"]);
 	const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 	const [dropdownOpen, setDropdownOpen] = useState(false);
 	const [showRevealedValues, setShowRevealedValues] = useState(false);
@@ -133,7 +135,7 @@ export function MCPLogDetailSheet({
 			<Sheet open={open} onOpenChange={onOpenChange}>
 				<SheetContent className="flex w-full flex-col gap-4 overflow-x-hidden p-8 sm:max-w-[60%]">
 					<div className="flex h-full items-center justify-center">
-						<SheetTitle className="sr-only">Loading MCP log details</SheetTitle>
+						<SheetTitle className="sr-only">{t("details.loadingTitle")}</SheetTitle>
 						<Loader2 className="text-muted-foreground h-6 w-6 animate-spin" />
 					</div>
 				</SheetContent>
@@ -152,7 +154,7 @@ export function MCPLogDetailSheet({
 				<SheetHeader className="flex flex-row items-center px-0">
 					<div className="flex w-full items-center justify-between">
 						<SheetTitle className="flex w-fit items-center gap-2 font-medium">
-							{displayLog.id && <p className="text-md max-w-full truncate">Request ID: {displayLog.id}</p>}
+							{displayLog.id && <p className="text-md max-w-full truncate">{t("details.requestId", { id: displayLog.id })}</p>}
 							<Badge variant="outline" className={`${StatusColors[getValidatedStatus(displayLog.status)]} uppercase`}>
 								{displayLog.status}
 							</Badge>
@@ -169,7 +171,7 @@ export function MCPLogDetailSheet({
 					{revealAvailable && (
 						<div className="flex items-center gap-2 whitespace-nowrap">
 							<label htmlFor="mcplogdetails-reveal-toggle" className="text-muted-foreground text-[11px] font-medium">
-								Show original values
+								{t("details.showOriginalValues")}
 							</label>
 							<Switch
 								id="mcplogdetails-reveal-toggle"
@@ -196,7 +198,7 @@ export function MCPLogDetailSheet({
 									}}
 								>
 									<Download className="h-4 w-4" />
-									Export as JSON
+									{t("details.exportAsJson")}
 								</DropdownMenuItem>
 								{handleDelete ? (
 									<>
@@ -210,7 +212,7 @@ export function MCPLogDetailSheet({
 											}}
 										>
 											<Trash2 className="h-4 w-4" />
-											Delete log
+											{t("details.deleteLog")}
 										</DropdownMenuItem>
 									</>
 								) : null}
@@ -218,11 +220,11 @@ export function MCPLogDetailSheet({
 						</DropdownMenu>
 						<AlertDialogContent>
 							<AlertDialogHeader>
-								<AlertDialogTitle>Are you sure you want to delete this log?</AlertDialogTitle>
-								<AlertDialogDescription>This action cannot be undone. This will permanently delete the log entry.</AlertDialogDescription>
+								<AlertDialogTitle>{t("details.deleteConfirmTitle")}</AlertDialogTitle>
+								<AlertDialogDescription>{t("details.deleteConfirmDescription")}</AlertDialogDescription>
 							</AlertDialogHeader>
 							<AlertDialogFooter>
-								<AlertDialogCancel>Cancel</AlertDialogCancel>
+								<AlertDialogCancel>{t("common:actions.cancel")}</AlertDialogCancel>
 								<AlertDialogAction
 									onClick={async (e) => {
 										e.preventDefault();
@@ -232,13 +234,13 @@ export function MCPLogDetailSheet({
 											setDeleteDialogOpen(false);
 											onOpenChange(false);
 										} catch (err) {
-											const errorMessage = err instanceof Error ? err.message : "Failed to delete log";
+											const errorMessage = err instanceof Error ? err.message : t("details.deleteFailed");
 											toast.error(errorMessage);
 											// Keep dialog open on error so user can see the error and retry
 										}
 									}}
 								>
-									Delete
+									{t("common:actions.delete")}
 								</AlertDialogAction>
 							</AlertDialogFooter>
 						</AlertDialogContent>
@@ -246,40 +248,40 @@ export function MCPLogDetailSheet({
 				</SheetHeader>
 				<div className="space-y-4 rounded-sm border px-6 py-4">
 					<div className="space-y-4">
-						<BlockHeader title="Timings" />
+						<BlockHeader title={t("details.timings")} />
 						<div className="grid w-full grid-cols-3 items-center justify-between gap-4">
 							<LogEntryDetailsView
 								className="w-full"
-								label="Start Timestamp"
+								label={t("details.startTimestamp")}
 								value={
 									isValid(new Date(displayLog.timestamp))
 										? format(new Date(displayLog.timestamp), "yyyy-MM-dd hh:mm:ss aa")
-										: "Invalid date"
+										: t("details.invalidDate")
 								}
 							/>
 							<LogEntryDetailsView
 								className="w-full"
-								label="End Timestamp"
+								label={t("details.endTimestamp")}
 								value={
 									isValid(new Date(displayLog.timestamp))
 										? format(addMilliseconds(new Date(displayLog.timestamp), displayLog.latency || 0), "yyyy-MM-dd hh:mm:ss aa")
-										: "Invalid date"
+										: t("details.invalidDate")
 								}
 							/>
 							<LogEntryDetailsView
 								className="w-full"
-								label="Latency"
-								value={displayLog.latency ? `${displayLog.latency.toFixed(2)}ms` : "NA"}
+								label={t("details.latency")}
+								value={displayLog.latency ? `${displayLog.latency.toFixed(2)}ms` : t("details.na")}
 							/>
 						</div>
 					</div>
 					<DottedSeparator />
 					<div className="space-y-4">
-						<BlockHeader title="Request Details" />
+						<BlockHeader title={t("details.requestDetails")} />
 						<div className="grid w-full grid-cols-3 items-start justify-between gap-4">
 							<LogEntryDetailsView
 								className="col-span-2 w-full"
-								label="Tool Name"
+								label={t("details.toolName")}
 								value={
 									<Link
 										to="/workspace/mcp-logs"
@@ -293,7 +295,7 @@ export function MCPLogDetailSheet({
 							/>
 							<LogEntryDetailsView
 								className="w-full"
-								label="Server"
+								label={t("details.server")}
 								value={
 									displayLog.server_label ? (
 										<Link
@@ -313,7 +315,7 @@ export function MCPLogDetailSheet({
 							{displayLog.virtual_key && (
 								<LogEntryDetailsView
 									className="w-full"
-									label="Virtual Key"
+									label={t("details.virtualKey")}
 									value={
 										<Link
 											to="/workspace/governance/virtual-keys"
@@ -329,7 +331,7 @@ export function MCPLogDetailSheet({
 							{displayLog.llm_request_id && (
 								<LogEntryDetailsView
 									className="col-span-3 w-full"
-									label="LLM Request ID"
+									label={t("details.llmRequestId")}
 									value={
 										<Link
 											to="/workspace/logs"
@@ -349,10 +351,10 @@ export function MCPLogDetailSheet({
 				<Tabs key={displayLog.id} defaultValue="execution" className="gap-2">
 					<TabsList className="bg-muted/60 h-10 w-fit">
 						<TabsTrigger value="execution" className="px-3">
-							Execution
+							{t("details.tabExecution")}
 						</TabsTrigger>
 						<TabsTrigger value="plugins" className="px-3">
-							Plugin Logs
+							{t("details.tabPluginLogs")}
 							{pluginLogCount > 0 ? (
 								<span className="bg-background text-muted-foreground ml-1.5 rounded-sm border px-2 py-0.5 text-[10px] tabular-nums">
 									{pluginLogCount}
@@ -365,7 +367,7 @@ export function MCPLogDetailSheet({
 						{/* Arguments */}
 						{displayedArguments && (
 							<div className="w-full rounded-sm border">
-								<div className="border-b px-6 py-2 text-sm font-medium">Arguments</div>
+								<div className="border-b px-6 py-2 text-sm font-medium">{t("details.arguments")}</div>
 								<CodeEditor
 									className="z-0 w-full"
 									shouldAdjustInitialHeight={true}
@@ -382,7 +384,7 @@ export function MCPLogDetailSheet({
 						{/* Result */}
 						{displayedResult && displayLog.status !== "processing" && (
 							<div className="w-full rounded-sm border">
-								<div className="border-b px-6 py-2 text-sm font-medium">Result</div>
+								<div className="border-b px-6 py-2 text-sm font-medium">{t("details.result")}</div>
 								<CodeEditor
 									className="z-0 w-full"
 									shouldAdjustInitialHeight={true}
@@ -399,7 +401,7 @@ export function MCPLogDetailSheet({
 						{/* Metadata */}
 						{displayLog.metadata && Object.keys(displayLog.metadata).length > 0 && (
 							<div className="space-y-4 rounded-sm border px-6 py-4">
-								<BlockHeader title="Metadata" />
+								<BlockHeader title={t("details.metadata")} />
 								<div className="grid w-full grid-cols-3 items-start justify-between gap-4">
 									{Object.entries(displayLog.metadata).map(([key, value]) => (
 										<LogEntryDetailsView key={key} className="w-full" label={key} value={String(value)} />
@@ -411,7 +413,9 @@ export function MCPLogDetailSheet({
 						{/* Error Details */}
 						{displayedErrorDetails && (
 							<div className="border-destructive/50 w-full rounded-sm border">
-								<div className="border-destructive/50 text-destructive border-b px-6 py-2 text-sm font-medium">Error Details</div>
+								<div className="border-destructive/50 text-destructive border-b px-6 py-2 text-sm font-medium">
+									{t("details.errorDetails")}
+								</div>
 								<CodeEditor
 									className="z-0 w-full"
 									shouldAdjustInitialHeight={true}
@@ -431,7 +435,7 @@ export function MCPLogDetailSheet({
 							<PluginLogsView pluginLogs={displayLog.plugin_logs} />
 						) : (
 							<div className="text-muted-foreground rounded-sm border border-dashed p-5 text-center text-sm">
-								No plugin logs for this request.
+								{t("details.noPluginLogs")}
 							</div>
 						)}
 					</TabsContent>

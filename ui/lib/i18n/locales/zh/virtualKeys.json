@@ -292,5 +292,6 @@
 			"entityRequired": "选择分配类型后，请选择有效的团队、客户或用户",
 			"virtualKeyRequired": "缺少虚拟密钥"
 		}
-	}
+	},
+	"noPermissionEntity": "虚拟密钥"
 }

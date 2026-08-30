@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import { Message, type CompletionUsage, type ToolCall, type VariableMap, replaceVariablesInMessages } from "@/lib/message";
 import { getErrorMessage } from "@/lib/store";
 import type { ModelParams } from "@/lib/types/prompts";
@@ -91,7 +92,10 @@ export async function executePrompt(
 		});
 
 		if (!response.ok) {
-			let errorMessage = `HTTP error! status: ${response.status}`;
+			// i18n.t in place: this error string is built deep inside the fetch helper
+			// before any callback fires; hoisting it to a component would change the
+			// ExecutionCallbacks contract. It is surfaced to the user via onError.
+			let errorMessage = i18n.t("prompts:errors.httpStatus", { status: response.status });
 			try {
 				const data = await response.json();
 				errorMessage = data.error?.error || data.error?.message || errorMessage;
@@ -118,7 +122,7 @@ export async function executePrompt(
 			}
 		} else {
 			const reader = response.body?.getReader();
-			if (!reader) throw new Error("No response body");
+			if (!reader) throw new Error(i18n.t("prompts:errors.noResponseBody"));
 
 			const decoder = new TextDecoder();
 			let assistantContent = "";
@@ -239,7 +243,9 @@ export async function executeToolCall(toolCall: ToolCall, config: Pick<Execution
 	});
 
 	if (!response.ok) {
-		let errorMessage = `HTTP error! status: ${response.status}`;
+		// i18n.t in place: same rationale as executePrompt — user-visible error built
+		// inside this helper before the caller can translate it.
+		let errorMessage = i18n.t("prompts:errors.httpStatus", { status: response.status });
 		try {
 			const data = await response.json();
 			errorMessage = data.error?.message || data.error?.error || errorMessage;
@@ -248,7 +254,7 @@ export async function executeToolCall(toolCall: ToolCall, config: Pick<Execution
 			if (authRequired) {
 				throw new MCPAuthRequiredError({
 					kind: authRequired.kind,
-					mcpClientName: authRequired.mcp_client_name || "MCP server",
+					mcpClientName: authRequired.mcp_client_name || i18n.t("prompts:toolCall.mcpServerFallback"),
 					authorizeUrl: authRequired.authorize_url || authRequired.submit_url || "",
 					message: authRequired.message || errorMessage,
 				});

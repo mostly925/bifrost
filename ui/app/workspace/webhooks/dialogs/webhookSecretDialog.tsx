@@ -41,7 +41,7 @@ export function WebhookSecretDialog({ reveal, onClose }: WebhookSecretDialogProp
 					<Button
 						variant="ghost"
 						size="sm"
-						aria-label="Copy signing secret"
+						aria-label={t("secretDialog.copyAria")}
 						onClick={() => reveal && copy(reveal.secret)}
 						data-testid="webhook-secret-copy-btn"
 					>

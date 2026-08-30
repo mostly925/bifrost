@@ -94,7 +94,15 @@
 		"notFound": "未找到技能",
 		"backToList": "返回列表",
 		"versionsForAria": "{{name}} 的版本",
-		"addNewVersion": "添加新版本"
+		"addNewVersion": "添加新版本",
+		"actionsForAria": "{{name}} 的操作",
+		"downloadZip": "下载 ZIP",
+		"delete": "删除",
+		"deleteTitle": "删除 {{name}}？",
+		"deleteDescription": "此操作无法撤销。该技能及其文件和版本历史将被永久删除。",
+		"cancel": "取消",
+		"deleting": "删除中...",
+		"deleteSkill": "删除技能"
 	},
 	"metadataEditor": {
 		"keyPlaceholder": "元数据键",
@@ -105,6 +113,7 @@
 		"copyRawFailed": "复制原始 SKILL.md 失败",
 		"breadcrumbSkills": "技能",
 		"breadcrumbNew": "新建",
+		"breadcrumbUnnamed": "<新技能>",
 		"filesAlert": "添加到技能中的文件无需登录即可通过 Marketplace 链接下载。任何能访问此 Bifrost 服务器的人都可以直接请求这些文件，因此请勿上传密钥、凭据、私有代码或其他敏感文件。",
 		"nameLabel": "名称",
 		"nameLockedAria": "技能名称在创建后无法更改",
@@ -164,6 +173,7 @@
 		"copiedRaw": "已复制原始 SKILL.md",
 		"copyRawFailed": "复制原始 SKILL.md 失败",
 		"breadcrumbSkills": "技能",
+		"breadcrumbAria": "面包屑",
 		"viewRaw": "查看原始 SKILL.md",
 		"downloadZip": "下载 ZIP",
 		"licenseLabel": "许可证",
@@ -186,6 +196,7 @@
 		"externalLink": {
 			"title": "打开外部链接？",
 			"description": "此链接将在新浏览器标签页中打开，离开 Bifrost。",
+			"fallback": "外部链接",
 			"cancel": "取消",
 			"open": "打开链接"
 		},
@@ -209,7 +220,8 @@
 			"metadataPane": "元数据",
 			"frontmatterPane": "附加 Frontmatter",
 			"frontmatterTitle": "附加 Frontmatter",
-			"searchFiles": "搜索文件..."
+			"searchFiles": "搜索文件...",
+			"rootFallback": "技能"
 		}
 	},
 	"filePreview": {
@@ -253,8 +265,11 @@
 		},
 		"filenameLabel": "文件名",
 		"sourceUrlLabel": "来源 URL",
+		"sourceUrlPlaceholder": "https://example.com/file.py",
 		"fileContentLabel": "文件内容",
+		"fileContentPlaceholder": "文件内容...",
 		"dataUrlLabel": "Data URL",
+		"dataUrlPlaceholder": "data:text/plain;base64,...",
 		"chooseFileAria": "选择要上传的文件",
 		"renameAria": "重命名文件",
 		"sourceUrlNote": "此来源保存为实时引用。获取技能文件时，Bifrost 将从该 URL 读取。",
@@ -286,6 +301,8 @@
 			"deleteFolder": "删除文件夹"
 		},
 		"uploadProgress": "正在上传文件夹文件 {{completed}}/{{total}}{{into}}",
+		"uploadInto": "，目标：{{folder}}/",
+		"uploadIntoRoot": "，目标：根目录",
 		"searchFiles": "搜索文件...",
 		"searchFilesAria": "搜索文件",
 		"collapseAria": "折叠 {{name}}",

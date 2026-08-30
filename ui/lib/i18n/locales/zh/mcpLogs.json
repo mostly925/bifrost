@@ -1,0 +1,87 @@
+{
+	"noPermissionEntity": "MCP 日志",
+	"stats": {
+		"totalExecutions": "总执行次数",
+		"successRate": "成功率",
+		"avgLatency": "平均延迟",
+		"totalCost": "总成本"
+	},
+	"columnLabels": {
+		"timestamp": "时间",
+		"tool_name": "工具名称",
+		"server_label": "服务器",
+		"latency": "延迟",
+		"cost": "成本",
+		"virtual_key": "虚拟密钥"
+	},
+	"columns": {
+		"time": "时间",
+		"toolName": "工具名称",
+		"server": "服务器",
+		"app": "应用",
+		"latency": "延迟",
+		"cost": "成本",
+		"virtualKey": "虚拟密钥",
+		"invalidDate": "无效日期",
+		"na": "N/A",
+		"actionsAria": "日志操作"
+	},
+	"errors": {
+		"noDeleteAccess": "没有删除权限"
+	},
+	"header": {
+		"live": "实时",
+		"searchPlaceholder": "搜索 MCP 日志"
+	},
+	"table": {
+		"waitingForLogs": "等待新的 MCP 日志...",
+		"noResults": "未找到结果。请尝试调整筛选条件和/或时间范围。",
+		"range": "第 {{from}}-{{to}} 条，共 {{total}} 条",
+		"previousAria": "上一页",
+		"nextAria": "下一页",
+		"page": "第",
+		"of": "页，共 {{count}} 页"
+	},
+	"details": {
+		"loadingTitle": "正在加载 MCP 日志详情",
+		"requestId": "请求 ID：{{id}}",
+		"showOriginalValues": "显示原始值",
+		"exportAsJson": "导出为 JSON",
+		"deleteLog": "删除日志",
+		"deleteConfirmTitle": "确定要删除这条日志吗？",
+		"deleteConfirmDescription": "此操作无法撤销。该日志条目将被永久删除。",
+		"deleteFailed": "删除日志失败",
+		"timings": "时间信息",
+		"startTimestamp": "开始时间",
+		"endTimestamp": "结束时间",
+		"latency": "延迟",
+		"invalidDate": "无效日期",
+		"na": "无",
+		"requestDetails": "请求详情",
+		"toolName": "工具名称",
+		"server": "服务器",
+		"virtualKey": "虚拟密钥",
+		"llmRequestId": "LLM 请求 ID",
+		"tabExecution": "执行",
+		"tabPluginLogs": "插件日志",
+		"arguments": "参数",
+		"result": "结果",
+		"metadata": "元数据",
+		"errorDetails": "错误详情",
+		"noPluginLogs": "该请求没有插件日志。"
+	},
+	"emptyState": {
+		"copyAria": "复制到剪贴板",
+		"logStoreHint": "看起来你还没有在 config 文件中配置日志存储。",
+		"title": "开始使用 MCP 工具执行",
+		"description": "执行你的第一次 MCP 工具调用，日志就会出现在这里",
+		"tabManual": "手动执行工具",
+		"tabAgent": "智能体模式（自动执行）",
+		"manualDescription": "完全掌控工具审批，你可以通过 API 显式执行每一次工具调用。",
+		"agentDescription": "对预批准的工具自动执行，可在 MCP Gateway 设置中配置可自动执行的工具。",
+		"prerequisites": "前提条件",
+		"prereq1": "在 MCP Gateway 中配置 MCP 服务器（如 filesystem、web_search）",
+		"prereq2": "设置 <1>tools_to_execute</1>，将可用工具加入白名单",
+		"prereq3": "智能体模式：配置 <1>tools_to_auto_execute</1> 以实现自动执行"
+	}
+}

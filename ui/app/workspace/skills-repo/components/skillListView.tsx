@@ -53,6 +53,7 @@ import {
 	Trash2,
 } from "lucide-react";
 import { useState } from "react";
+import { Trans, useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { PAGE_SIZE, formatDateShort, useDebouncedValue } from "./helpers";
 
@@ -61,6 +62,7 @@ const SKILLS_REPOSITORY_DOCS_URL = "https://docs.getbifrost.ai/features/skills-r
 // ---------- MarketplacePopover ----------
 
 function MarketplacePopover() {
+	const { t } = useTranslation("skillsRepo");
 	const [copiedKey, setCopiedKey] = useState<string | null>(null);
 	const [open, setOpen] = useState(false);
 	const marketplaceBaseUrl = `${getExampleBaseUrl()}/api`;
@@ -84,11 +86,11 @@ function MarketplacePopover() {
 			.then(() => {
 				setCopiedKey(key);
 				setOpen(false);
-				toast.success("Copied to clipboard");
+				toast.success(t("list.copied"));
 				setTimeout(() => setCopiedKey(null), 2000);
 			})
 			.catch(() => {
-				toast.error("Failed to copy to clipboard");
+				toast.error(t("list.copyFailed"));
 			});
 	};
 
@@ -97,12 +99,12 @@ function MarketplacePopover() {
 			<PopoverTrigger asChild>
 				<Button variant="outline" size="sm">
 					<Package className="h-3.5 w-3.5" />
-					Register as Marketplace
+					{t("list.registerMarketplace")}
 				</Button>
 			</PopoverTrigger>
 			<PopoverContent align="end" className="w-auto max-w-md p-0">
 				<div className="border-b px-3 py-2">
-					<p className="text-muted-foreground text-xs font-medium">Copy CLI command to register this repository</p>
+					<p className="text-muted-foreground text-xs font-medium">{t("list.registerHint")}</p>
 				</div>
 				<div className="py-1">
 					{items.map((item) => (
@@ -110,7 +112,7 @@ function MarketplacePopover() {
 							key={item.key}
 							data-testid={`skill-copy-marketplace-${item.key}`}
 							className="hover:bg-muted/50 flex w-full cursor-pointer items-center gap-3 px-3 py-2 text-left transition-colors"
-							aria-label={`Copy ${item.label} command`}
+							aria-label={t("list.copyCommandAria", { label: item.label })}
 							onClick={() => handleCopy(item.key, item.command)}
 						>
 							<div className="min-w-0 flex-1">
@@ -148,6 +150,7 @@ function SortableHeader({
 	order: SortOrder;
 	onToggle: (column: SortColumn) => void;
 }) {
+	const { t } = useTranslation("skillsRepo");
 	const isActive = sortBy === column;
 	let Icon = ArrowUpDown;
 	if (isActive && order === "desc") Icon = ArrowDown;
@@ -158,7 +161,7 @@ function SortableHeader({
 			onClick={() => onToggle(column)}
 			className="!px-0"
 			data-testid={`skill-sort-${column}`}
-			aria-label={`Sort by ${label}`}
+			aria-label={t("list.sortByAria", { label })}
 		>
 			{label}
 			<Icon className={cn("h-4 w-4", isActive && "text-foreground")} />
@@ -183,6 +186,7 @@ function SkillActionsMenu({
 	onEdit: (id: string) => void;
 	onDelete: (id: string) => Promise<void>;
 }) {
+	const { t } = useTranslation("skillsRepo");
 	const [isOpen, setIsOpen] = useState(false);
 	const [deleteOpen, setDeleteOpen] = useState(false);
 	const [isDownloading, setIsDownloading] = useState(false);
@@ -202,7 +206,7 @@ function SkillActionsMenu({
 			link.click();
 			document.body.removeChild(link);
 		} catch {
-			toast.error("Failed to download skill");
+			toast.error(t("list.downloadFailed"));
 		} finally {
 			if (url) URL.revokeObjectURL(url);
 			setIsDownloading(false);
@@ -218,7 +222,7 @@ function SkillActionsMenu({
 						size="icon"
 						className="h-8 w-8"
 						data-testid={`skill-actions-menu-${skill.name}`}
-						aria-label={`Actions for ${skill.name}`}
+						aria-label={t("list.actionsForAria", { name: skill.name })}
 					>
 						<MoreHorizontal className="h-4 w-4" />
 					</Button>
@@ -235,7 +239,7 @@ function SkillActionsMenu({
 						}}
 					>
 						{isDownloading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
-						{isDownloading ? "Downloading..." : "Download ZIP"}
+						{isDownloading ? t("list.downloading") : t("list.downloadZip")}
 					</DropdownMenuItem>
 					<DropdownMenuItem
 						variant="destructive"
@@ -249,7 +253,7 @@ function SkillActionsMenu({
 						}}
 					>
 						<Trash2 className="h-4 w-4" />
-						Delete
+						{t("list.delete")}
 					</DropdownMenuItem>
 				</DropdownMenuContent>
 			</DropdownMenu>
@@ -257,20 +261,18 @@ function SkillActionsMenu({
 			<AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
 				<AlertDialogContent>
 					<AlertDialogHeader>
-						<AlertDialogTitle>Delete {skill.name}?</AlertDialogTitle>
-						<AlertDialogDescription>
-							This action cannot be undone. The skill, its files, and version history will be permanently deleted.
-						</AlertDialogDescription>
+						<AlertDialogTitle>{t("list.deleteTitle", { name: skill.name })}</AlertDialogTitle>
+						<AlertDialogDescription>{t("list.deleteDescription")}</AlertDialogDescription>
 					</AlertDialogHeader>
 					<AlertDialogFooter>
-						<AlertDialogCancel>Cancel</AlertDialogCancel>
+						<AlertDialogCancel>{t("list.cancel")}</AlertDialogCancel>
 						<AlertDialogAction data-testid="skill-delete-confirm-btn" onClick={() => onDelete(skill.id)} disabled={isDeleting}>
 							{isDeleting ? (
 								<>
-									<Loader2 className="h-3.5 w-3.5 animate-spin" /> Deleting...
+									<Loader2 className="h-3.5 w-3.5 animate-spin" /> {t("list.deleting")}
 								</>
 							) : (
-								"Delete skill"
+								t("list.deleteSkill")
 							)}
 						</AlertDialogAction>
 					</AlertDialogFooter>
@@ -289,6 +291,7 @@ export function SkillsListView({
 	onSelectSkill: (id: string, edit?: boolean) => void;
 	onCreateNew: () => void;
 }) {
+	const { t } = useTranslation("skillsRepo");
 	const hasCreateAccess = useRbac(RbacResource.SkillsRepository, RbacOperation.Create);
 	const hasEditAccess = useRbac(RbacResource.SkillsRepository, RbacOperation.Update);
 	const hasDeleteAccess = useRbac(RbacResource.SkillsRepository, RbacOperation.Delete);
@@ -335,9 +338,9 @@ export function SkillsListView({
 	const handleDeleteSkill = async (id: string) => {
 		try {
 			await deleteSkill(id).unwrap();
-			toast.success("Skill deleted");
+			toast.success(t("list.deleted"));
 		} catch (err: unknown) {
-			toast.error("Failed to delete skill", {
+			toast.error(t("list.deleteFailed"), {
 				description: getErrorMessage(err),
 			});
 		}
@@ -346,10 +349,10 @@ export function SkillsListView({
 	const handleBumpAllSkillsVersion = async (bump: AllSkillsVersionBump) => {
 		try {
 			const result = await bumpAllSkillsVersion({ bump }).unwrap();
-			toast.success(`All-skills version bumped to ${result.version}`);
+			toast.success(t("list.allSkillsVersionBumped", { version: result.version }));
 			refetchAllSkillsVersion();
 		} catch (err: unknown) {
-			toast.error("Failed to bump all-skills version", {
+			toast.error(t("list.bumpAllSkillsFailed"), {
 				description: getErrorMessage(err),
 			});
 		}
@@ -362,9 +365,9 @@ export function SkillsListView({
 	if (isError) {
 		return (
 			<div className="flex flex-col items-center justify-center gap-3 py-20">
-				<p className="text-muted-foreground text-sm">Failed to load skills</p>
+				<p className="text-muted-foreground text-sm">{t("list.loadFailed")}</p>
 				<Button variant="outline" size="sm" onClick={refetch}>
-					Retry
+					{t("list.retry")}
 				</Button>
 			</div>
 		);
@@ -378,25 +381,22 @@ export function SkillsListView({
 					<BookOpenText className="h-24 w-24" strokeWidth={1} />
 				</div>
 				<div className="flex flex-col gap-1">
-					<h1 className="text-muted-foreground text-xl font-medium">Create, version, and share Agent Skills from Bifrost</h1>
-					<div className="text-muted-foreground mx-auto mt-2 max-w-xl text-sm font-normal">
-						Manage SKILL.md instructions and supporting files in one place, publish immutable versions, and expose them as installable
-						plugins for Claude Code, Codex, and other skill-aware clients.
-					</div>
+					<h1 className="text-muted-foreground text-xl font-medium">{t("list.emptyTitle")}</h1>
+					<div className="text-muted-foreground mx-auto mt-2 max-w-xl text-sm font-normal">{t("list.emptyDescription")}</div>
 					<div className="mx-auto mt-6 flex flex-row flex-wrap items-center justify-center gap-2">
 						<Button
 							variant="outline"
-							aria-label="Read more about skills (opens in new tab)"
+							aria-label={t("list.emptyReadMoreAria")}
 							data-testid="skills-button-read-more"
 							onClick={() => {
 								window.open(`${SKILLS_REPOSITORY_DOCS_URL}?utm_source=bfd`, "_blank", "noopener,noreferrer");
 							}}
 						>
-							Read more <ArrowUpRight className="text-muted-foreground h-3 w-3" />
+							{t("list.emptyReadMore")} <ArrowUpRight className="text-muted-foreground h-3 w-3" />
 						</Button>
 						{hasCreateAccess && (
-							<Button aria-label="Create your first skill" data-testid="skill-create-btn" onClick={onCreateNew}>
-								Create Skill
+							<Button aria-label={t("list.emptyCreateAria")} data-testid="skill-create-btn" onClick={onCreateNew}>
+								{t("list.emptyCreate")}
 							</Button>
 						)}
 					</div>
@@ -411,10 +411,10 @@ export function SkillsListView({
 			<div className="mb-4 flex shrink-0 items-center justify-between">
 				<div>
 					<div className="flex items-center gap-2">
-						<h2 className="text-lg font-semibold">Skills Repository</h2>
-						<Badge aria-label="Skills Repository is in beta">Beta</Badge>
+						<h2 className="text-lg font-semibold">{t("list.title")}</h2>
+						<Badge aria-label={t("list.betaAria")}>{t("list.beta")}</Badge>
 					</div>
-					<p className="text-muted-foreground text-sm">Manage Agent Skills for distribution to AI coding assistants</p>
+					<p className="text-muted-foreground text-sm">{t("list.subtitle")}</p>
 				</div>
 				<div className="flex items-center gap-2">
 					{isGitAvailable ? (
@@ -425,15 +425,12 @@ export function SkillsListView({
 								<span tabIndex={0}>
 									<Button variant="outline" size="sm" disabled>
 										<Package className="h-3.5 w-3.5" />
-										Register as Marketplace
+										{t("list.registerMarketplace")}
 									</Button>
 								</span>
 							</TooltipTrigger>
 							<TooltipContent side="bottom">
-								<p className="max-w-xs text-xs">
-									Git is not available on the server. Install git and restart Bifrost to enable marketplace registration for Claude Code and
-									Codex.
-								</p>
+								<p className="max-w-xs text-xs">{t("list.gitTooltip")}</p>
 							</TooltipContent>
 						</Tooltip>
 					)}
@@ -456,7 +453,7 @@ export function SkillsListView({
 								document.body.removeChild(link);
 								URL.revokeObjectURL(url);
 							} catch {
-								toast.error("Failed to download skills");
+								toast.error(t("list.downloadAllFailed"));
 							} finally {
 								setIsDownloadingAll(false);
 							}
@@ -464,12 +461,12 @@ export function SkillsListView({
 						disabled={!skills?.length || isDownloadingAll}
 					>
 						{isDownloadingAll ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
-						{isDownloadingAll ? "Downloading..." : "Download All Skills"}
+						{isDownloadingAll ? t("list.downloading") : t("list.downloadAll")}
 					</Button>
 					{hasCreateAccess && (
 						<Button data-testid="skill-create-btn" onClick={onCreateNew} size="sm">
 							<Plus className="h-4 w-4" />
-							New Skill
+							{t("list.newSkill")}
 						</Button>
 					)}
 				</div>
@@ -481,8 +478,8 @@ export function SkillsListView({
 					<Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
 					<Input
 						data-testid="skill-search-input"
-						aria-label="Search skills by name"
-						placeholder="Search skills..."
+						aria-label={t("list.searchAria")}
+						placeholder={t("list.searchPlaceholder")}
 						value={search}
 						onChange={(e) => {
 							setSearch(e.target.value);
@@ -497,11 +494,10 @@ export function SkillsListView({
 							<Info className="text-muted-foreground h-3.5 w-3.5 cursor-help" />
 						</TooltipTrigger>
 						<TooltipContent side="bottom" className="max-w-xs text-xs">
-							When registered as a marketplace, an "all-skills" plugin is available that installs every skill in this repository at once.
-							Its version bumps automatically on changes; use the dropdown to bump manually if needed.
+							{t("list.allSkillsTooltip")}
 						</TooltipContent>
 					</Tooltip>
-					<span className="text-muted-foreground whitespace-nowrap">all-skills version</span>
+					<span className="text-muted-foreground whitespace-nowrap">{t("list.allSkillsVersion")}</span>
 					{hasEditAccess ? (
 						<DropdownMenu>
 							<DropdownMenuTrigger asChild>
@@ -530,7 +526,7 @@ export function SkillsListView({
 										disabled={isBumpingAllSkillsVersion}
 										onSelect={() => handleBumpAllSkillsVersion(bump)}
 									>
-										Bump {bump}
+										{t("list.bump", { bump })}
 									</DropdownMenuItem>
 								))}
 							</DropdownMenuContent>
@@ -549,16 +545,22 @@ export function SkillsListView({
 					<TableHeader className="bg-muted sticky top-0 z-20">
 						<TableRow className="hover:bg-transparent">
 							<TableHead className="w-60">
-								<SortableHeader column="name" label="Name" sortBy={sortBy} order={sortOrder} onToggle={toggleSort} />
+								<SortableHeader column="name" label={t("list.column.name")} sortBy={sortBy} order={sortOrder} onToggle={toggleSort} />
 							</TableHead>
-							<TableHead>Description</TableHead>
-							<TableHead className="w-36">Version</TableHead>
-							<TableHead className="w-36">Files</TableHead>
+							<TableHead>{t("list.column.description")}</TableHead>
+							<TableHead className="w-36">{t("list.column.version")}</TableHead>
+							<TableHead className="w-36">{t("list.column.files")}</TableHead>
 							<TableHead className="w-44">
-								<SortableHeader column="updated_at" label="Updated" sortBy={sortBy} order={sortOrder} onToggle={toggleSort} />
+								<SortableHeader
+									column="updated_at"
+									label={t("list.column.updated")}
+									sortBy={sortBy}
+									order={sortOrder}
+									onToggle={toggleSort}
+								/>
 							</TableHead>
 							<TableHead className={`bg-muted sticky right-0 z-30 w-14 text-right ${PIN_SHADOW_RIGHT}`}>
-								<span className="sr-only">Actions</span>
+								<span className="sr-only">{t("list.actionsColumnAria")}</span>
 							</TableHead>
 						</TableRow>
 					</TableHeader>
@@ -568,11 +570,11 @@ export function SkillsListView({
 								<TableCell colSpan={6} className="py-12 text-center">
 									<div className="flex flex-col items-center gap-2">
 										<FileText className="text-muted-foreground h-8 w-8" />
-										<p className="text-muted-foreground text-sm">{search ? "No skills match your search" : "No skills created yet"}</p>
+										<p className="text-muted-foreground text-sm">{search ? t("list.noMatch") : t("list.noSkills")}</p>
 										{!search && hasCreateAccess && (
 											<Button variant="outline" size="sm" onClick={onCreateNew} className="mt-2">
 												<Plus className="h-3.5 w-3.5" />
-												Create your first skill
+												{t("list.createFirst")}
 											</Button>
 										)}
 									</div>
@@ -613,7 +615,12 @@ export function SkillsListView({
 										</TableCell>
 										<TableCell>
 											<span className="text-muted-foreground text-xs">
-												<span className="text-foreground">{fileCount}</span> files
+												<Trans
+													ns="skillsRepo"
+													i18nKey="list.filesCount"
+													values={{ count: fileCount }}
+													components={{ 1: <span className="text-foreground" /> }}
+												/>
 											</span>
 										</TableCell>
 										<TableCell className="text-muted-foreground text-sm">{formatDateShort(skill.updated_at)}</TableCell>
@@ -642,7 +649,11 @@ export function SkillsListView({
 			{total > 0 && (
 				<div className="flex shrink-0 items-center justify-between text-xs">
 					<div className="text-muted-foreground flex items-center gap-2">
-						{(offset + 1).toLocaleString()}-{Math.min(offset + PAGE_SIZE, total).toLocaleString()} of {total.toLocaleString()} entries
+						{t("list.pagination", {
+							from: (offset + 1).toLocaleString(),
+							to: Math.min(offset + PAGE_SIZE, total).toLocaleString(),
+							total: total.toLocaleString(),
+						})}
 					</div>
 					<div className="flex items-center gap-2">
 						<Button
@@ -651,14 +662,14 @@ export function SkillsListView({
 							data-testid="skill-pagination-prev"
 							onClick={() => setOffset(Math.max(0, offset - PAGE_SIZE))}
 							disabled={offset === 0 || isFetching}
-							aria-label="Previous page"
+							aria-label={t("list.previousPage")}
 						>
 							<ChevronLeft className="size-3" />
 						</Button>
 						<div className="flex items-center gap-1">
-							<span>Page</span>
+							<span>{t("list.page")}</span>
 							<span>{Math.floor(offset / PAGE_SIZE) + 1}</span>
-							<span>of {Math.ceil(total / PAGE_SIZE)}</span>
+							<span>{t("list.ofPages", { pages: Math.ceil(total / PAGE_SIZE) })}</span>
 						</div>
 						<Button
 							variant="ghost"
@@ -666,7 +677,7 @@ export function SkillsListView({
 							data-testid="skill-pagination-next"
 							onClick={() => setOffset(offset + PAGE_SIZE)}
 							disabled={offset + PAGE_SIZE >= total || isFetching}
-							aria-label="Next page"
+							aria-label={t("list.nextPage")}
 						>
 							<ChevronRight className="size-3" />
 						</Button>

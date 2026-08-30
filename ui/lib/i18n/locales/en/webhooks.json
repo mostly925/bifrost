@@ -1,4 +1,5 @@
 {
+	"noPermissionEntity": "webhooks",
 	"toasts": {
 		"endpointEnabled": "Endpoint enabled successfully",
 		"endpointDisabled": "Endpoint disabled successfully",

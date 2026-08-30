@@ -159,9 +159,7 @@ export default function AddNewPluginSheet({ open, onClose, onCreate, plugin }: A
 			<SheetContent className="flex w-full flex-col overflow-x-hidden pt-4">
 				<SheetHeader className="flex flex-col items-start px-8 py-4" headerClassName="mb-0 sticky top-0 bg-card z-10">
 					<SheetTitle>{isEditMode ? t("sheet.updateTitle") : t("sheet.installTitle")}</SheetTitle>
-					<SheetDescription>
-						{isEditMode ? t("sheet.updateDescription") : t("sheet.installDescription")}
-					</SheetDescription>
+					<SheetDescription>{isEditMode ? t("sheet.updateDescription") : t("sheet.installDescription")}</SheetDescription>
 				</SheetHeader>
 
 				<Form {...form}>

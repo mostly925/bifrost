@@ -75,5 +75,6 @@
 		"updateFailed": "Failed to update plugin",
 		"deleted": "Plugin deleted successfully",
 		"fixErrors": "Please fix the form errors before submitting"
-	}
+	},
+	"noPermissionEntity": "plugins"
 }

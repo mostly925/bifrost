@@ -1,3 +1,4 @@
+import i18n from "@/lib/i18n";
 import { KnownProvidersNames } from "@/lib/constants/logs";
 import { isRedacted } from "@/lib/utils/validation";
 import { z } from "zod";
@@ -9,37 +10,37 @@ z.config({
 		if (issue.code === "invalid_type") {
 			// Field is missing / undefined
 			if (issue.input === undefined || issue.input === null) {
-				return "This field is required";
+				return i18n.t("shared:zod.required");
 			}
 			const expected = issue.expected;
 			const received = typeof issue.input;
-			if (expected === "number") return "Must be a valid number";
-			if (expected === "string") return "Must be a valid text value";
-			if (expected === "boolean") return "Must be true or false";
-			return `Expected ${expected}, received ${received}`;
+			if (expected === "number") return i18n.t("shared:zod.mustBeNumber");
+			if (expected === "string") return i18n.t("shared:zod.mustBeText");
+			if (expected === "boolean") return i18n.t("shared:zod.mustBeBoolean");
+			return i18n.t("shared:zod.expectedReceived", { expected, received });
 		}
 		if (issue.code === "too_small") {
 			if (issue.origin === "string" && issue.minimum === 1) {
-				return "This field is required";
+				return i18n.t("shared:zod.required");
 			}
 			if (issue.origin === "number") {
-				return `Must be at least ${issue.minimum}`;
+				return i18n.t("shared:zod.mustBeAtLeast", { min: issue.minimum });
 			}
 			if (issue.origin === "array" && issue.minimum === 1) {
-				return "At least one item is required";
+				return i18n.t("shared:zod.atLeastOneItem");
 			}
 		}
 		if (issue.code === "too_big") {
 			if (issue.origin === "number") {
-				return `Must be at most ${issue.maximum}`;
+				return i18n.t("shared:zod.mustBeAtMost", { max: issue.maximum });
 			}
 			if (issue.origin === "string") {
-				return `Must be at most ${issue.maximum} characters`;
+				return i18n.t("shared:zod.mustBeAtMostChars", { max: issue.maximum });
 			}
 		}
 		if (issue.code === "invalid_format") {
-			if (issue.format === "url") return "Must be a valid URL";
-			if (issue.format === "email") return "Must be a valid email";
+			if (issue.format === "url") return i18n.t("shared:zod.mustBeUrl");
+			if (issue.format === "email") return i18n.t("shared:zod.mustBeEmail");
 		}
 		return undefined; // fall back to Zod default
 	},
@@ -51,7 +52,7 @@ z.config({
 export const knownProviderSchema = z.enum(KnownProvidersNames as unknown as [string, ...string[]]);
 
 // Custom provider name schema (branded type simulation)
-export const customProviderNameSchema = z.string().min(1, "Custom provider name is required");
+export const customProviderNameSchema = z.string().min(1, { error: () => i18n.t("config:validation.customProviderNameRequired") });
 
 // Model provider name schema (union of known and custom providers)
 export const modelProviderNameSchema = z.union([knownProviderSchema, customProviderNameSchema]);
@@ -85,7 +86,7 @@ export const azureKeyConfigSchema = z
 		scopes: z.array(z.string()).optional(),
 	})
 	.refine((data) => isSecretVarSet(data.endpoint), {
-		message: "Endpoint is required",
+		error: () => i18n.t("config:validation.endpointRequired"),
 		path: ["endpoint"],
 	})
 	.refine(
@@ -103,7 +104,7 @@ export const azureKeyConfigSchema = z
 			return hasClientId && hasClientSecret && hasTenantId;
 		},
 		{
-			message: "Client ID, Client Secret, and Tenant ID are all required for Entra ID authentication",
+			error: () => i18n.t("config:validation.entraIdFieldsRequired"),
 			path: ["client_id"],
 		},
 	);
@@ -119,11 +120,11 @@ export const vertexKeyConfigSchema = z
 		force_single_region: z.boolean().optional(),
 	})
 	.refine((data) => isSecretVarSet(data.project_id), {
-		message: "Project ID is required",
+		error: () => i18n.t("config:validation.projectIdRequired"),
 		path: ["project_id"],
 	})
 	.refine((data) => isSecretVarSet(data.region), {
-		message: "Region is required",
+		error: () => i18n.t("config:validation.regionRequired"),
 		path: ["region"],
 	})
 	.refine(
@@ -135,14 +136,14 @@ export const vertexKeyConfigSchema = z
 			return true;
 		},
 		{
-			message: "Auth Credentials is required for service account JSON authentication",
+			error: () => i18n.t("config:validation.serviceAccountJsonCredentialsRequired"),
 			path: ["auth_credentials"],
 		},
 	);
 
 // S3 bucket configuration for Bedrock batch operations
 export const s3BucketConfigSchema = z.object({
-	bucket_name: z.string().min(1, "Bucket name is required"),
+	bucket_name: z.string().min(1, { error: () => i18n.t("config:validation.bucketNameRequired") }),
 	prefix: z.string().optional(),
 	is_default: z.boolean().optional(),
 });
@@ -183,7 +184,7 @@ export const bedrockKeyConfigSchema = z
 			return isSecretVarSet(data.region);
 		},
 		{
-			message: "Region is required",
+			error: () => i18n.t("config:validation.regionRequired"),
 			path: ["region"],
 		},
 	)
@@ -200,7 +201,7 @@ export const bedrockKeyConfigSchema = z
 			return hasAccessKey && hasSecretKey;
 		},
 		{
-			message: "Both Access Key and Secret Key are required for explicit credentials",
+			error: () => i18n.t("config:validation.credentialsPairRequired"),
 			path: ["access_key"],
 		},
 	);
@@ -220,7 +221,7 @@ export const bedrockMantleKeyConfigSchema = z
 		endpoints: bedrockEndpointsSchema.optional(),
 	})
 	.refine((data) => isSecretVarSet(data.region), {
-		message: "Region is required",
+		error: () => i18n.t("config:validation.regionRequired"),
 		path: ["region"],
 	})
 	.refine(
@@ -237,7 +238,7 @@ export const bedrockMantleKeyConfigSchema = z
 			return hasAccessKey && hasSecretKey;
 		},
 		{
-			message: "Both Access Key and Secret Key are required for explicit credentials",
+			error: () => i18n.t("config:validation.credentialsPairRequired"),
 			path: ["access_key"],
 		},
 	);
@@ -246,10 +247,13 @@ export const bedrockMantleKeyConfigSchema = z
 export const vllmKeyConfigSchema = z
 	.object({
 		url: secretVarSchema.optional(),
-		model_name: z.string().trim().min(1, "Model name is required"),
+		model_name: z
+			.string()
+			.trim()
+			.min(1, { error: () => i18n.t("config:validation.modelNameRequired") }),
 	})
 	.refine((data) => isSecretVarSet(data.url), {
-		message: "Server URL is required",
+		error: () => i18n.t("config:validation.serverUrlRequired"),
 		path: ["url"],
 	});
 
@@ -263,7 +267,7 @@ export const ollamaKeyConfigSchema = z
 		url: secretVarSchema.optional(),
 	})
 	.refine((data) => isSecretVarSet(data.url), {
-		message: "Server URL is required",
+		error: () => i18n.t("config:validation.serverUrlRequired"),
 		path: ["url"],
 	});
 
@@ -273,7 +277,7 @@ export const sglKeyConfigSchema = z
 		url: secretVarSchema.optional(),
 	})
 	.refine((data) => isSecretVarSet(data.url), {
-		message: "Server URL is required",
+		error: () => i18n.t("config:validation.serverUrlRequired"),
 		path: ["url"],
 	});
 
@@ -296,7 +300,10 @@ export const modelFamilySchema = z.enum([
 // provider sub-configs flattened to top-level optional fields (matches Go's
 // embedded-pointer-struct JSON output).
 const aliasConfigObjectSchema = z.object({
-	model_id: z.string().trim().min(1, "Model ID is required"),
+	model_id: z
+		.string()
+		.trim()
+		.min(1, { error: () => i18n.t("config:validation.modelIdRequired") }),
 	model_name: z.string().trim().optional(),
 	model_family: modelFamilySchema.optional(),
 	description: z.string().optional(),
@@ -328,8 +335,8 @@ export const aliasConfigSchema = z.preprocess(
 // Model provider key schema
 export const modelProviderKeySchema = z
 	.object({
-		id: z.string().min(1, "Id is required"),
-		name: z.string().min(1, "Name is required"),
+		id: z.string().min(1, { error: () => i18n.t("config:validation.idRequired") }),
+		name: z.string().min(1, { error: () => i18n.t("config:validation.nameRequired") }),
 		value: secretVarSchema.optional(),
 		models: z.array(z.string()).optional().default(["*"]),
 		blacklisted_models: z.array(z.string()).default([]).optional(),
@@ -344,13 +351,18 @@ export const modelProviderKeySchema = z
 				if (!Number.isFinite(num)) {
 					ctx.addIssue({
 						code: "custom",
-						message: "Weight must be a valid number between 0 and 1",
+						message: i18n.t("config:validation.weightInvalidNumber"),
 					});
 					return z.NEVER;
 				}
 				return num;
 			})
-			.pipe(z.number().min(0, "Weight must be equal to or greater than 0").max(1, "Weight must be equal to or less than 1")),
+			.pipe(
+				z
+					.number()
+					.min(0, { error: () => i18n.t("config:validation.weightGte0") })
+					.max(1, { error: () => i18n.t("config:validation.weightLte1") }),
+			),
 		aliases: z.record(z.string(), aliasConfigSchema).optional(),
 		azure_key_config: azureKeyConfigSchema.optional(),
 		vertex_key_config: vertexKeyConfigSchema.optional(),
@@ -403,7 +415,7 @@ export const modelProviderKeySchema = z
 			return isSecretVarSet(data.value);
 		},
 		{
-			message: "API Key is required",
+			error: () => i18n.t("config:validation.apiKeyRequired"),
 			path: ["value"],
 		},
 	);
@@ -411,46 +423,49 @@ export const modelProviderKeySchema = z
 // Network config schema
 export const networkConfigSchema = z
 	.object({
-		base_url: z.union([z.string().url("Must be a valid URL"), z.string().length(0)]).optional(),
+		base_url: z.union([z.string().url({ error: () => i18n.t("shared:zod.mustBeUrl") }), z.string().length(0)]).optional(),
 		extra_headers: z.record(z.string(), z.string()).optional(),
 		default_request_timeout_in_seconds: z
 			.number()
-			.min(1, "Timeout must be greater than 0 seconds")
-			.max(3600, "Timeout must be less than 3600 seconds"),
-		max_retries: z.number().min(0, "Max retries must be greater than 0").max(10, "Max retries must be less than 10"),
+			.min(1, { error: () => i18n.t("config:validation.timeoutGreaterThanZero") })
+			.max(3600, { error: () => i18n.t("config:validation.timeoutLessThan3600") }),
+		max_retries: z
+			.number()
+			.min(0, { error: () => i18n.t("config:validation.maxRetriesGreaterThanZero") })
+			.max(10, { error: () => i18n.t("config:validation.maxRetriesLessThan10") }),
 		retry_backoff_initial: z.number().min(100),
 		retry_backoff_max: z.number().min(100),
 		insecure_skip_verify: z.boolean().optional(),
 		ca_cert_pem: secretVarSchema.optional(),
 		stream_idle_timeout_in_seconds: z
 			.number()
-			.int("Stream idle timeout must be a whole number of seconds")
-			.min(5, "Stream idle timeout must be at least 5 seconds")
-			.max(3600, "Stream idle timeout must be at most 3600 seconds i.e. 60 minutes")
+			.int({ error: () => i18n.t("config:validation.streamIdleWholeSeconds") })
+			.min(5, { error: () => i18n.t("config:validation.streamIdleAtLeast5") })
+			.max(3600, { error: () => i18n.t("config:validation.streamIdleAtMost3600") })
 			.optional(),
 		keep_alive_timeout_in_seconds: z
 			.number()
-			.int("Keep-alive timeout must be a whole number of seconds")
-			.min(1, "Keep-alive timeout must be at least 1 second")
-			.max(3600, "Keep-alive timeout must be at most 3600 seconds i.e. 60 minutes")
+			.int({ error: () => i18n.t("config:validation.keepAliveWholeSeconds") })
+			.min(1, { error: () => i18n.t("config:validation.keepAliveAtLeast1") })
+			.max(3600, { error: () => i18n.t("config:validation.keepAliveAtMost3600") })
 			.optional(),
 		max_conns_per_host: z
 			.number()
-			.int("Max connections must be a whole number")
-			.min(1, "Max connections must be at least 1")
-			.max(10000, "Max connections must be at most 10000")
+			.int({ error: () => i18n.t("config:validation.maxConnsWhole") })
+			.min(1, { error: () => i18n.t("config:validation.maxConnsAtLeast1") })
+			.max(10000, { error: () => i18n.t("config:validation.maxConnsAtMost10000") })
 			.optional(),
 		enforce_http2: z.boolean().optional(),
 		http2_ping_interval_in_seconds: z
 			.number()
-			.int("HTTP/2 ping interval must be a whole number of seconds")
-			.min(0, "HTTP/2 ping interval must be at least 0 seconds")
-			.max(3600, "HTTP/2 ping interval must be at most 3600 seconds i.e. 60 minutes")
+			.int({ error: () => i18n.t("config:validation.http2PingWholeSeconds") })
+			.min(0, { error: () => i18n.t("config:validation.http2PingAtLeast0") })
+			.max(3600, { error: () => i18n.t("config:validation.http2PingAtMost3600") })
 			.optional(),
 		allow_private_network: z.boolean().optional(),
 	})
 	.refine((d) => d.retry_backoff_initial <= d.retry_backoff_max, {
-		message: "retry_backoff_initial must be <= retry_backoff_max",
+		error: () => i18n.t("config:validation.backoffInitialLTEMax"),
 		path: ["retry_backoff_initial"],
 	});
 
@@ -461,68 +476,74 @@ export const networkFormConfigSchema = z
 			.union([
 				z
 					.string()
-					.url("Must be a valid URL")
+					.url({ error: () => i18n.t("shared:zod.mustBeUrl") })
 					.refine((url) => url.startsWith("https://") || url.startsWith("http://"), {
-						message: "Must be a valid HTTP or HTTPS URL",
+						error: () => i18n.t("config:validation.mustBeHttpUrl"),
 					}),
 				z.string().length(0),
 			])
 			.optional(),
 		extra_headers: z.record(z.string(), z.string()).optional(),
 		default_request_timeout_in_seconds: z.coerce
-			.number("Timeout must be a number")
-			.min(1, "Timeout must be greater than 0 seconds")
-			.max(172800, "Timeout must be less than 172800 seconds i.e. 48 hours"),
+			.number({ error: () => i18n.t("config:validation.timeoutMustBeNumber") })
+			.min(1, { error: () => i18n.t("config:validation.timeoutGreaterThanZero") })
+			.max(172800, { error: () => i18n.t("config:validation.timeoutLessThan172800") }),
 		max_retries: z.coerce
-			.number("Max retries must be a number")
-			.min(0, "Max retries must be greater than 0")
-			.max(10, "Max retries must be less than 10"),
+			.number({ error: () => i18n.t("config:validation.maxRetriesMustBeNumber") })
+			.min(0, { error: () => i18n.t("config:validation.maxRetriesGreaterThanZero") })
+			.max(10, { error: () => i18n.t("config:validation.maxRetriesLessThan10") }),
 		retry_backoff_initial: z.coerce
-			.number("Retry backoff initial must be a number")
-			.min(100, "Retry backoff initial must be at least 100ms")
-			.max(1000000, "Retry backoff initial must be at most 1000000ms"),
+			.number({ error: () => i18n.t("config:validation.backoffInitialMustBeNumber") })
+			.min(100, { error: () => i18n.t("config:validation.backoffInitialAtLeast100") })
+			.max(1000000, { error: () => i18n.t("config:validation.backoffInitialAtMost1000000") }),
 		retry_backoff_max: z.coerce
-			.number("Retry backoff max must be a number")
-			.min(100, "Retry backoff max must be at least 100ms")
-			.max(1000000, "Retry backoff max must be at most 1000000ms"),
+			.number({ error: () => i18n.t("config:validation.backoffMaxMustBeNumber") })
+			.min(100, { error: () => i18n.t("config:validation.backoffMaxAtLeast100") })
+			.max(1000000, { error: () => i18n.t("config:validation.backoffMaxAtMost1000000") }),
 		insecure_skip_verify: z.boolean().optional(),
 		ca_cert_pem: secretVarSchema.optional(),
 		stream_idle_timeout_in_seconds: z.coerce
-			.number("Stream idle timeout must be a number")
-			.int("Stream idle timeout must be a whole number of seconds")
-			.min(5, "Stream idle timeout must be at least 5 seconds")
-			.max(3600, "Stream idle timeout must be at most 3600 seconds i.e. 60 minutes")
+			.number({ error: () => i18n.t("config:validation.streamIdleMustBeNumber") })
+			.int({ error: () => i18n.t("config:validation.streamIdleWholeSeconds") })
+			.min(5, { error: () => i18n.t("config:validation.streamIdleAtLeast5") })
+			.max(3600, { error: () => i18n.t("config:validation.streamIdleAtMost3600") })
 			.optional(),
 		keep_alive_timeout_in_seconds: z.coerce
-			.number("Keep-alive timeout must be a number")
-			.int("Keep-alive timeout must be a whole number of seconds")
-			.min(1, "Keep-alive timeout must be at least 1 second")
-			.max(3600, "Keep-alive timeout must be at most 3600 seconds i.e. 60 minutes")
+			.number({ error: () => i18n.t("config:validation.keepAliveMustBeNumber") })
+			.int({ error: () => i18n.t("config:validation.keepAliveWholeSeconds") })
+			.min(1, { error: () => i18n.t("config:validation.keepAliveAtLeast1") })
+			.max(3600, { error: () => i18n.t("config:validation.keepAliveAtMost3600") })
 			.optional(),
 		max_conns_per_host: z.coerce
-			.number("Max connections must be a number")
-			.int("Max connections must be a whole number")
-			.min(1, "Max connections must be at least 1")
-			.max(10000, "Max connections must be at most 10000")
+			.number({ error: () => i18n.t("config:validation.maxConnsMustBeNumber") })
+			.int({ error: () => i18n.t("config:validation.maxConnsWhole") })
+			.min(1, { error: () => i18n.t("config:validation.maxConnsAtLeast1") })
+			.max(10000, { error: () => i18n.t("config:validation.maxConnsAtMost10000") })
 			.optional(),
 		enforce_http2: z.boolean().optional(),
 		http2_ping_interval_in_seconds: z.coerce
-			.number("HTTP/2 ping interval must be a number")
-			.int("HTTP/2 ping interval must be a whole number of seconds")
-			.min(0, "HTTP/2 ping interval must be at least 0 seconds")
-			.max(3600, "HTTP/2 ping interval must be at most 3600 seconds i.e. 60 minutes")
+			.number({ error: () => i18n.t("config:validation.http2PingMustBeNumber") })
+			.int({ error: () => i18n.t("config:validation.http2PingWholeSeconds") })
+			.min(0, { error: () => i18n.t("config:validation.http2PingAtLeast0") })
+			.max(3600, { error: () => i18n.t("config:validation.http2PingAtMost3600") })
 			.optional(),
 		allow_private_network: z.boolean().optional(),
 	})
 	.refine((d) => d.retry_backoff_initial <= d.retry_backoff_max, {
-		message: "Initial backoff must be less than or equal to max backoff",
+		error: () => i18n.t("config:validation.initialBackoffLTEMax"),
 		path: ["retry_backoff_initial"],
 	});
 
 // Concurrency and buffer size schema
 export const concurrencyAndBufferSizeSchema = z.object({
-	concurrency: z.number().min(1, "Concurrency must be greater than 0").max(100, "Concurrency must be less than or equal to 100"),
-	buffer_size: z.number().min(1, "Buffer size must be greater than 0").max(1000, "Buffer size must be less than or equal to 1000"),
+	concurrency: z
+		.number()
+		.min(1, { error: () => i18n.t("config:validation.concurrencyGreaterThanZero") })
+		.max(100, { error: () => i18n.t("config:validation.concurrencyLte100") }),
+	buffer_size: z
+		.number()
+		.min(1, { error: () => i18n.t("config:validation.bufferSizeGreaterThanZero") })
+		.max(1000, { error: () => i18n.t("config:validation.bufferSizeLte1000") }),
 });
 
 // Proxy type schema
@@ -544,7 +565,7 @@ export const proxyConfigSchema = z
 			data.url?.type === "vault" ||
 			(data.url?.value && data.url.value.trim().length > 0),
 		{
-			message: "Proxy URL is required when using HTTP or SOCKS5 proxy",
+			error: () => i18n.t("config:validation.proxyUrlRequiredHttpSocks"),
 			path: ["url"],
 		},
 	)
@@ -564,7 +585,7 @@ export const proxyConfigSchema = z
 			return true;
 		},
 		{
-			message: "Must be a valid URL (e.g., http://proxy.example.com:8080)",
+			error: () => i18n.t("config:validation.proxyUrlFormat"),
 			path: ["url"],
 		},
 	);
@@ -593,7 +614,7 @@ export const proxyFormConfigSchema = z
 			return true;
 		},
 		{
-			message: "Proxy URL is required when using HTTP or SOCKS5 proxy",
+			error: () => i18n.t("config:validation.proxyUrlRequiredHttpSocks"),
 			path: ["url"],
 		},
 	)
@@ -614,7 +635,7 @@ export const proxyFormConfigSchema = z
 			return true;
 		},
 		{
-			message: "Must be a valid URL (e.g., http://proxy.example.com:8080)",
+			error: () => i18n.t("config:validation.proxyUrlFormat"),
 			path: ["url"],
 		},
 	);
@@ -679,7 +700,7 @@ export const customProviderConfigSchema = z
 			return true;
 		},
 		{
-			message: "Is keyless is not allowed for Bedrock",
+			error: () => i18n.t("config:validation.keylessNotAllowedBedrock"),
 			path: ["is_key_less"],
 		},
 	);
@@ -687,7 +708,7 @@ export const customProviderConfigSchema = z
 // Form-specific custom provider config schema
 export const formCustomProviderConfigSchema = z
 	.object({
-		base_provider_type: z.string().min(1, "Base provider type is required"),
+		base_provider_type: z.string().min(1, { error: () => i18n.t("config:validation.baseProviderTypeRequired") }),
 		is_key_less: z.boolean().optional(),
 		allowed_requests: allowedRequestsSchema.optional(),
 		request_path_overrides: z.record(z.string(), z.string().optional()).optional(),
@@ -700,14 +721,14 @@ export const formCustomProviderConfigSchema = z
 			return true;
 		},
 		{
-			message: "Is keyless is not allowed for Bedrock",
+			error: () => i18n.t("config:validation.keylessNotAllowedBedrock"),
 			path: ["is_key_less"],
 		},
 	);
 
 // Full model provider config schema
 export const modelProviderConfigSchema = z.object({
-	keys: z.array(modelProviderKeySchema).min(1, "At least one key is required"),
+	keys: z.array(modelProviderKeySchema).min(1, { error: () => i18n.t("config:validation.atLeastOneKeyRequired") }),
 	network_config: networkConfigSchema.optional(),
 	concurrency_and_buffer_size: concurrencyAndBufferSizeSchema.optional(),
 	proxy_config: proxyConfigSchema.optional(),
@@ -724,7 +745,7 @@ export const modelProviderSchema = modelProviderConfigSchema.extend({
 
 // Form-specific model provider config schema
 export const formModelProviderConfigSchema = z.object({
-	keys: z.array(modelProviderKeySchema).min(1, "At least one key is required"),
+	keys: z.array(modelProviderKeySchema).min(1, { error: () => i18n.t("config:validation.atLeastOneKeyRequired") }),
 	network_config: networkConfigSchema.optional(),
 	concurrency_and_buffer_size: concurrencyAndBufferSizeSchema.optional(),
 	proxy_config: proxyConfigSchema.optional(),
@@ -736,13 +757,13 @@ export const formModelProviderConfigSchema = z.object({
 
 // Flexible model provider schema for form data - allows any string for name
 export const formModelProviderSchema = formModelProviderConfigSchema.extend({
-	name: z.string().min(1, "Provider name is required"),
+	name: z.string().min(1, { error: () => i18n.t("config:validation.providerNameRequired") }),
 });
 
 // Add provider request schema
 export const addProviderRequestSchema = z.object({
 	provider: modelProviderNameSchema,
-	keys: z.array(modelProviderKeySchema).min(1, "At least one key is required"),
+	keys: z.array(modelProviderKeySchema).min(1, { error: () => i18n.t("config:validation.atLeastOneKeyRequired") }),
 	network_config: networkConfigSchema.optional(),
 	concurrency_and_buffer_size: concurrencyAndBufferSizeSchema.optional(),
 	proxy_config: proxyConfigSchema.optional(),
@@ -755,7 +776,7 @@ export const addProviderRequestSchema = z.object({
 
 // Update provider request schema
 export const updateProviderRequestSchema = z.object({
-	keys: z.array(modelProviderKeySchema).min(1, "At least one key is required"),
+	keys: z.array(modelProviderKeySchema).min(1, { error: () => i18n.t("config:validation.atLeastOneKeyRequired") }),
 	network_config: networkConfigSchema,
 	concurrency_and_buffer_size: concurrencyAndBufferSizeSchema,
 	proxy_config: proxyConfigSchema,
@@ -791,8 +812,11 @@ const providerBackedCacheConfigSchema = baseCacheConfigSchema
 	.extend({
 		provider: modelProviderNameSchema,
 		keys: z.array(modelProviderKeySchema).optional(),
-		embedding_model: z.string().min(1, "Embedding model is required"),
-		dimension: z.number().int().min(2, "Dimension must be greater than 1 for provider-backed semantic cache"),
+		embedding_model: z.string().min(1, { error: () => i18n.t("config:validation.embeddingModelRequired") }),
+		dimension: z
+			.number()
+			.int()
+			.min(2, { error: () => i18n.t("config:validation.embeddingDimensionMin") }),
 	})
 	.strict();
 
@@ -846,16 +870,16 @@ export const performanceFormSchema = z.object({
 	concurrency_and_buffer_size: z
 		.object({
 			concurrency: z
-				.number({ error: "Concurrency must be a number" })
-				.min(1, "Concurrency must be greater than 0")
-				.max(100000, "Concurrency must be less than 100000"),
+				.number({ error: () => i18n.t("config:validation.concurrencyMustBeNumber") })
+				.min(1, { error: () => i18n.t("config:validation.concurrencyGreaterThanZero") })
+				.max(100000, { error: () => i18n.t("config:validation.concurrencyLessThan100000") }),
 			buffer_size: z
-				.number({ error: "Buffer size must be a number" })
-				.min(1, "Buffer size must be greater than 0")
-				.max(100000, "Buffer size must be less than 100000"),
+				.number({ error: () => i18n.t("config:validation.bufferSizeMustBeNumber") })
+				.min(1, { error: () => i18n.t("config:validation.bufferSizeGreaterThanZero") })
+				.max(100000, { error: () => i18n.t("config:validation.bufferSizeLessThan100000") }),
 		})
 		.refine((data) => data.concurrency <= data.buffer_size, {
-			message: "Concurrency must be less than or equal to buffer size",
+			error: () => i18n.t("config:validation.concurrencyLTEBufferSize"),
 			path: ["concurrency"],
 		}),
 });
@@ -887,7 +911,7 @@ export const otelConfigSchema = z
 		collector_url: secretVarSchema.default({ value: "" }),
 		trace_type: z
 			.enum(["genai_extension", "vercel", "open_inference"], {
-				message: "Please select a trace type",
+				error: () => i18n.t("config:validation.selectTraceType"),
 			})
 			.default("genai_extension"),
 		// Common headers go to both endpoints; per-signal headers override on collision.
@@ -896,7 +920,7 @@ export const otelConfigSchema = z
 		metrics_headers: z.record(z.string(), secretVarSchema).optional(),
 		protocol: z
 			.enum(["http", "grpc"], {
-				message: "Please select a protocol",
+				error: () => i18n.t("config:validation.selectProtocol"),
 			})
 			.default("http"),
 		// TLS configuration
@@ -930,7 +954,7 @@ export const otelConfigSchema = z
 					ctx.addIssue({
 						code: "custom",
 						path,
-						message: "Must be a valid HTTP or HTTPS URL",
+						message: i18n.t("config:validation.mustBeHttpUrl"),
 					});
 					return false;
 				}
@@ -939,7 +963,7 @@ export const otelConfigSchema = z
 				ctx.addIssue({
 					code: "custom",
 					path,
-					message: "Must be a valid HTTP or HTTPS URL",
+					message: i18n.t("config:validation.mustBeHttpUrl"),
 				});
 				return false;
 			}
@@ -952,7 +976,7 @@ export const otelConfigSchema = z
 				ctx.addIssue({
 					code: "custom",
 					path,
-					message: `Must be in the format <host>:<port> for gRPC (e.g. ${example})`,
+					message: i18n.t("config:validation.hostPortFormat", { example }),
 				});
 				return false;
 			}
@@ -961,7 +985,7 @@ export const otelConfigSchema = z
 				ctx.addIssue({
 					code: "custom",
 					path,
-					message: "Port must be between 1 and 65535",
+					message: i18n.t("config:validation.portRange"),
 				});
 				return false;
 			}
@@ -974,7 +998,7 @@ export const otelConfigSchema = z
 				ctx.addIssue({
 					code: "custom",
 					path: ["collector_url"],
-					message: "Collector address is required",
+					message: i18n.t("config:validation.collectorAddressRequired"),
 				});
 			}
 
@@ -994,7 +1018,7 @@ export const otelConfigSchema = z
 				ctx.addIssue({
 					code: "custom",
 					path: ["metrics_endpoint"],
-					message: "Metrics endpoint is required when metrics push is enabled",
+					message: i18n.t("config:validation.metricsEndpointRequired"),
 				});
 			} else if (metricsEndpoint && (data.metrics_endpoint?.type === "plain_text" || !data.metrics_endpoint?.type) && protocol === "http") {
 				validateHttpUrl(metricsEndpoint, ["metrics_endpoint"]);
@@ -1008,7 +1032,7 @@ export const otelConfigSchema = z
 // it carries one or more export profiles, each independently enable-able.
 export const otelFormSchema = z.object({
 	enabled: z.boolean().default(true),
-	profiles: z.array(otelConfigSchema).min(1, "At least one profile is required"),
+	profiles: z.array(otelConfigSchema).min(1, { error: () => i18n.t("config:validation.atLeastOneProfileRequired") }),
 });
 
 // Maxim Configuration Schema
@@ -1031,13 +1055,13 @@ export const maximFormSchema = z
 				ctx.addIssue({
 					code: "custom",
 					path: ["maxim_config", "api_key"],
-					message: "API key is required",
+					message: i18n.t("config:validation.maximApiKeyRequired"),
 				});
 			} else if (!apiKey.startsWith("sk_mx_")) {
 				ctx.addIssue({
 					code: "custom",
 					path: ["maxim_config", "api_key"],
-					message: "API key must start with 'sk_mx_'",
+					message: i18n.t("config:validation.maximApiKeyPrefix"),
 				});
 			}
 		}
@@ -1063,14 +1087,14 @@ export const prometheusConfigSchema = z
 					ctx.addIssue({
 						code: "custom",
 						path: ["push_gateway_url"],
-						message: "Must be a valid HTTP or HTTPS URL",
+						message: i18n.t("config:validation.mustBeHttpUrl"),
 					});
 				}
 			} catch {
 				ctx.addIssue({
 					code: "custom",
 					path: ["push_gateway_url"],
-					message: "Must be a valid URL (e.g., http://pushgateway:9091)",
+					message: i18n.t("config:validation.prometheusPushUrlFormat"),
 				});
 			}
 		}
@@ -1082,14 +1106,14 @@ export const prometheusConfigSchema = z
 			ctx.addIssue({
 				code: "custom",
 				path: ["basic_auth_password"],
-				message: "Password is required when username is provided",
+				message: i18n.t("config:validation.prometheusPasswordRequired"),
 			});
 		}
 		if (hasPassword && !hasUsername) {
 			ctx.addIssue({
 				code: "custom",
 				path: ["basic_auth_username"],
-				message: "Username is required when password is provided",
+				message: i18n.t("config:validation.prometheusUsernameRequired"),
 			});
 		}
 	});
@@ -1108,7 +1132,7 @@ export const prometheusFormSchema = z
 				ctx.addIssue({
 					code: "custom",
 					path: ["prometheus_config", "push_gateway_url"],
-					message: "Push Gateway URL is required when the push gateway is enabled",
+					message: i18n.t("config:validation.pushGatewayUrlRequired"),
 				});
 			}
 		}
@@ -1124,19 +1148,24 @@ export const mcpClientUpdateSchema = z
 		disabled: z.boolean().optional(),
 		name: z
 			.string()
-			.min(1, "Name is required")
+			.min(1, { error: () => i18n.t("config:validation.nameRequired") })
 			.refine((val) => !val.includes("-"), {
-				message: "Client name cannot contain hyphens",
+				error: () => i18n.t("config:validation.clientNameNoHyphens"),
 			})
 			.refine((val) => !val.includes(" "), {
-				message: "Client name cannot contain spaces",
+				error: () => i18n.t("config:validation.clientNameNoSpaces"),
 			})
 			.refine((val) => !/^[0-9]/.test(val), {
-				message: "Client name cannot start with a number",
+				error: () => i18n.t("config:validation.clientNameNoLeadingNumber"),
 			}),
 		headers: z.record(z.string(), secretVarSchema).optional().nullable(),
 		per_user_header_keys: z
-			.array(z.string().trim().min(1, "Header name cannot be empty"))
+			.array(
+				z
+					.string()
+					.trim()
+					.min(1, { error: () => i18n.t("config:validation.headerNameRequired") }),
+			)
 			.optional()
 			.refine(
 				(headers) => {
@@ -1144,7 +1173,7 @@ export const mcpClientUpdateSchema = z
 					const normalized = headers.map((h) => h.trim().toLowerCase());
 					return normalized.length === new Set(normalized).size;
 				},
-				{ message: "Duplicate header names are not allowed" },
+				{ error: () => i18n.t("config:validation.duplicateHeaderNames") },
 			),
 		tools_to_execute: z
 			.array(z.string())
@@ -1155,14 +1184,14 @@ export const mcpClientUpdateSchema = z
 					const hasWildcard = tools.includes("*");
 					return !hasWildcard || tools.length === 1;
 				},
-				{ message: "Wildcard '*' cannot be combined with other tool names" },
+				{ error: () => i18n.t("config:validation.wildcardToolsExclusive") },
 			)
 			.refine(
 				(tools) => {
 					if (!tools) return true;
 					return tools.length === new Set(tools).size;
 				},
-				{ message: "Duplicate tool names are not allowed" },
+				{ error: () => i18n.t("config:validation.duplicateToolNames") },
 			),
 		tools_to_auto_execute: z
 			.array(z.string())
@@ -1173,16 +1202,16 @@ export const mcpClientUpdateSchema = z
 					const hasWildcard = tools.includes("*");
 					return !hasWildcard || tools.length === 1;
 				},
-				{ message: "Wildcard '*' cannot be combined with other tool names" },
+				{ error: () => i18n.t("config:validation.wildcardToolsExclusive") },
 			)
 			.refine(
 				(tools) => {
 					if (!tools) return true;
 					return tools.length === new Set(tools).size;
 				},
-				{ message: "Duplicate tool names are not allowed" },
+				{ error: () => i18n.t("config:validation.duplicateToolNames") },
 			),
-		tool_pricing: z.record(z.string(), z.number().min(0, "Cost must be non-negative")).optional(),
+		tool_pricing: z.record(z.string(), z.number().min(0, { error: () => i18n.t("config:validation.toolCostNonNegative") })).optional(),
 		tool_sync_interval: z.number().optional(), // -1 = disabled, 0 = use global, >0 = custom interval in minutes
 		tool_execution_timeout: z.number().int().min(0).optional(), // 0 = use global, >0 = per-server timeout in seconds
 		allowed_extra_headers: z
@@ -1194,7 +1223,7 @@ export const mcpClientUpdateSchema = z
 					const hasWildcard = headers.includes("*");
 					return !hasWildcard || headers.length === 1;
 				},
-				{ message: "Wildcard '*' cannot be combined with specific header names" },
+				{ error: () => i18n.t("config:validation.wildcardHeadersExclusive") },
 			),
 		oauth_config: z
 			.object({
@@ -1203,22 +1232,25 @@ export const mcpClientUpdateSchema = z
 				authorize_url: z
 					.string()
 					.optional()
-					.refine((val) => !val || /^https?:\/\/.+$/.test(val), { message: "Authorize URL must start with http:// or https://" }),
+					.refine((val) => !val || /^https?:\/\/.+$/.test(val), { error: () => i18n.t("config:validation.authorizeUrlFormat") }),
 				token_url: z
 					.string()
 					.optional()
-					.refine((val) => !val || /^https?:\/\/.+$/.test(val), { message: "Token URL must start with http:// or https://" }),
+					.refine((val) => !val || /^https?:\/\/.+$/.test(val), { error: () => i18n.t("config:validation.tokenUrlFormat") }),
 				registration_url: z
 					.string()
 					.optional()
-					.refine((val) => !val || /^https?:\/\/.+$/.test(val), { message: "Registration URL must start with http:// or https://" }),
+					.refine((val) => !val || /^https?:\/\/.+$/.test(val), { error: () => i18n.t("config:validation.registrationUrlFormat") }),
 				scopes: z.array(z.string()).optional(),
 				resource: z.string().optional(),
 			})
 			.optional(),
 		token_exchange: z
 			.object({
-				audience: z.string().trim().min(1, "Audience is required"),
+				audience: z
+					.string()
+					.trim()
+					.min(1, { error: () => i18n.t("config:validation.audienceRequired") }),
 				use_idp_credentials: z.boolean().optional(),
 				client_id: secretVarSchema.optional(),
 				client_secret: secretVarSchema.optional(),
@@ -1226,7 +1258,7 @@ export const mcpClientUpdateSchema = z
 					.string()
 					.optional()
 					.refine((val) => !val || /^https?:\/\/.+$/.test(val), {
-						message: "Authorization Server URL must start with http:// or https://",
+						error: () => i18n.t("config:validation.authorizationServerUrlFormat"),
 					}),
 				scopes: z.array(z.string()).optional(),
 			})
@@ -1246,7 +1278,7 @@ export const mcpClientUpdateSchema = z
 			ctx.addIssue({
 				code: "custom",
 				path: ["per_user_header_keys"],
-				message: "Declare at least one header name users must supply.",
+				message: i18n.t("config:validation.declareAtLeastOneHeader"),
 			});
 		}
 	});
@@ -1279,7 +1311,7 @@ export const globalProxyConfigSchema = z
 			return true;
 		},
 		{
-			message: "Proxy URL is required when proxy is enabled",
+			error: () => i18n.t("config:validation.globalProxyUrlRequired"),
 			path: ["url"],
 		},
 	)
@@ -1297,7 +1329,7 @@ export const globalProxyConfigSchema = z
 			return true;
 		},
 		{
-			message: "Must be a valid URL (e.g., http://proxy.example.com:8080)",
+			error: () => i18n.t("config:validation.proxyUrlFormat"),
 			path: ["url"],
 		},
 	);
@@ -1322,32 +1354,43 @@ export const globalHeaderFilterFormSchema = z.object({
 // Routing rule creation schema
 export const routingRuleSchema = z
 	.object({
-		name: z.string().min(1, "Rule name is required").max(255, "Rule name must be less than 255 characters"),
-		description: z.string().max(1000, "Description must be less than 1000 characters").optional(),
+		name: z
+			.string()
+			.min(1, { error: () => i18n.t("config:validation.ruleNameRequired") })
+			.max(255, { error: () => i18n.t("config:validation.ruleNameMax") }),
+		description: z
+			.string()
+			.max(1000, { error: () => i18n.t("config:validation.ruleDescriptionMax") })
+			.optional(),
 		cel_expression: z.string().optional(),
-		provider: z.string().min(1, "Provider is required"),
+		provider: z.string().min(1, { error: () => i18n.t("config:validation.routingProviderRequired") }),
 		model: z.string().optional(),
 		fallbacks: z.array(z.string()).optional().default([]),
 		scope: z.enum(["global", "team", "customer", "virtual_key"]),
 		scope_id: z.string().optional(),
-		priority: z.number().min(0, "Priority must be 0 or greater").max(1000, "Priority must be 1000 or less"),
+		priority: z
+			.number()
+			.min(0, { error: () => i18n.t("config:validation.priorityGte0") })
+			.max(1000, { error: () => i18n.t("config:validation.priorityLte1000") }),
 		enabled: z.boolean().default(true),
 		chain_rule: z.boolean().default(false),
 	})
 	.refine((data) => data.scope === "global" || (data.scope_id != null && data.scope_id.trim() !== ""), {
-		message: "Scope ID is required when scope is not global",
+		error: () => i18n.t("config:validation.scopeIdRequired"),
 		path: ["scope_id"],
 	});
 
 // Budget override form schema (BudgetOverrideDialog)
 export const budgetOverrideFormSchema = z
 	.object({
-		amount: z.number("Additional budget must be greater than 0.").positive("Additional budget must be greater than 0."),
+		amount: z
+			.number({ error: () => i18n.t("config:validation.additionalBudgetPositive") })
+			.positive({ error: () => i18n.t("config:validation.additionalBudgetPositive") }),
 		mode: z.enum(["cycles", "forever"]),
 		cycles: z.number().optional(),
 	})
 	.refine((data) => data.mode !== "cycles" || (data.cycles !== undefined && Number.isSafeInteger(data.cycles) && data.cycles > 0), {
-		message: "Reset cycles must be a positive whole number.",
+		error: () => i18n.t("config:validation.resetCyclesPositive"),
 		path: ["cycles"],
 	});
 

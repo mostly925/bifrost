@@ -1,4 +1,25 @@
 {
+	"zod": {
+		"required": "This field is required",
+		"mustBeNumber": "Must be a valid number",
+		"mustBeText": "Must be a valid text value",
+		"mustBeBoolean": "Must be true or false",
+		"expectedReceived": "Expected {{expected}}, received {{received}}",
+		"mustBeAtLeast": "Must be at least {{min}}",
+		"atLeastOneItem": "At least one item is required",
+		"mustBeAtMost": "Must be at most {{max}}",
+		"mustBeAtMostChars": "Must be at most {{max}} characters",
+		"mustBeUrl": "Must be a valid URL",
+		"mustBeEmail": "Must be a valid email"
+	},
+	"passwordPolicy": {
+		"mustInclude": "Password must include {{items}}.",
+		"atLeast12Characters": "at least 12 characters",
+		"oneUppercaseLetter": "one uppercase letter",
+		"oneLowercaseLetter": "one lowercase letter",
+		"oneNumber": "one number",
+		"oneSpecialCharacter": "one special character"
+	},
 	"table": {
 		"columnConfigAria": "Column configuration",
 		"toggleColumns": "Toggle Columns",
@@ -74,5 +95,13 @@
 		"description": "Enable logging to view LLM and MCP request logs, traces, and observability data.",
 		"enabling": "Enabling…",
 		"enable": "Enable logging"
+	},
+	"usageDisplay": {
+		"calendarSuffix": " (calendar)",
+		"resets": "Resets {{duration}}",
+		"tokensLabel": "tokens",
+		"reqLabel": "req",
+		"overrideLabel": "override",
+		"basePlusOverride": "Base {{base}} + {{amount}} override"
 	}
 }

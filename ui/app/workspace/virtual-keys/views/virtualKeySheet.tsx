@@ -1227,9 +1227,11 @@ export default function VirtualKeySheet({ virtualKey, defaultTeamId, onSave, onC
 																data-testid="vk-provider-config-link"
 															>
 																<span>
-																	<Trans ns="virtualKeys" i18nKey="sheet.noProvidersLeft">
-																		No providers left to configure. <span className="text-primary font-medium underline">Click to add</span>
-																	</Trans>
+																	<Trans
+																		ns="virtualKeys"
+																		i18nKey="sheet.noProvidersLeft"
+																		components={{ 1: <span className="text-primary font-medium underline" /> }}
+																	/>
 																</span>
 															</SelectItem>
 														);
@@ -1351,11 +1353,11 @@ export default function VirtualKeySheet({ virtualKey, defaultTeamId, onSave, onC
 													</TooltipTrigger>
 													<TooltipContent>
 														<p>
-															<Trans ns="virtualKeys" i18nKey="sheet.mcpConfigurationsTooltip">
-																Configure which MCP clients this virtual key can use and their allowed tools. Leaving this section empty
-																blocks all MCP tools. After adding an MCP client, you must select specific tools or choose{" "}
-																<span className="font-medium">Allow All Tools</span> to grant tool access.
-															</Trans>
+															<Trans
+																ns="virtualKeys"
+																i18nKey="sheet.mcpConfigurationsTooltip"
+																components={{ 1: <span className="font-medium" /> }}
+															/>
 														</p>
 													</TooltipContent>
 												</Tooltip>

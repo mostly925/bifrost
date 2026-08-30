@@ -90,6 +90,7 @@
 	},
 	"sidebar": {
 		"searchPlaceholder": "搜索...",
+		"mcpClientsIcon": "MCP 客户端图标",
 		"searchAria": "搜索侧边栏导航",
 		"collapseAria": "收起侧边栏",
 		"expandAria": "展开侧边栏",

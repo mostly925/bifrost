@@ -24,7 +24,7 @@ const baselinePath = checkIndex === -1 ? undefined : args[checkIndex + 1];
 if (checkIndex !== -1 && !baselinePath) {
 	throw new Error("--check requires a baseline JSON path");
 }
-const targetArg = args.find((arg, index) => !arg.startsWith("--") && index !== checkIndex + 1);
+const targetArg = args.find((arg, index) => !arg.startsWith("--") && (checkIndex === -1 || index !== checkIndex + 1));
 const jsonOutput = args.includes("--json");
 const scanRoot = targetArg ? resolve(uiRoot, targetArg) : uiRoot;
 

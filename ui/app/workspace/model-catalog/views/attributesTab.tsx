@@ -15,6 +15,7 @@ import { RbacOperation, RbacResource, useRbac } from "@enterprise/lib";
 import { ChevronLeft, ChevronRight, Edit, Search } from "lucide-react";
 import { useQueryStates } from "nuqs";
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import AttributeSheet from "./attributeSheet";
 import OverriddenPrice from "./overriddenPrice";
 
@@ -48,6 +49,7 @@ interface AttributesTabProps {
 }
 
 export default function AttributesTab({ hasAccess }: AttributesTabProps) {
+	const { t } = useTranslation(["modelCatalog", "common"]);
 	const hasUpdateAccess = useRbac(RbacResource.ModelProvider, RbacOperation.Update);
 
 	// Search and provider filter live in the URL so they survive a refresh and
@@ -111,9 +113,9 @@ export default function AttributesTab({ hasAccess }: AttributesTabProps) {
 	if (error) {
 		return (
 			<div className="flex h-full flex-col items-center justify-center gap-4 text-center">
-				<p className="text-muted-foreground text-sm">Failed to load models</p>
+				<p className="text-muted-foreground text-sm">{t("errors.loadModelsFailed")}</p>
 				<button type="button" onClick={refetch} className="text-sm underline" data-testid="model-catalog-retry-button">
-					Retry
+					{t("common:actions.retry")}
 				</button>
 			</div>
 		);
@@ -126,8 +128,8 @@ export default function AttributesTab({ hasAccess }: AttributesTabProps) {
 			<div className="flex min-h-0 w-full grow flex-col overflow-hidden">
 				<div className="mb-4 flex shrink-0 items-center justify-between">
 					<div>
-						<h2 className="text-lg font-semibold">Models</h2>
-						<p className="text-muted-foreground text-sm">Attach descriptions and tags to specific models.</p>
+						<h2 className="text-lg font-semibold">{t("attributes.title")}</h2>
+						<p className="text-muted-foreground text-sm">{t("attributes.description")}</p>
 					</div>
 				</div>
 
@@ -135,8 +137,8 @@ export default function AttributesTab({ hasAccess }: AttributesTabProps) {
 					<div className="relative max-w-sm flex-1">
 						<Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
 						<Input
-							aria-label="Search models"
-							placeholder="Search by model name..."
+							aria-label={t("search.modelsAria")}
+							placeholder={t("search.modelsPlaceholder")}
 							value={search}
 							onChange={(e) => setUrlState({ search: e.target.value || null })}
 							className="pl-9"
@@ -145,10 +147,10 @@ export default function AttributesTab({ hasAccess }: AttributesTabProps) {
 					</div>
 					<Select value={providerFilter || "__all__"} onValueChange={(v) => setUrlState({ provider: v === "__all__" ? null : v })}>
 						<SelectTrigger className="w-[200px]" data-testid="model-catalog-provider-filter">
-							<SelectValue placeholder="All providers" />
+							<SelectValue placeholder={t("filters.allProviders")} />
 						</SelectTrigger>
 						<SelectContent>
-							<SelectItem value="__all__">All providers</SelectItem>
+							<SelectItem value="__all__">{t("filters.allProviders")}</SelectItem>
 							{providerOptions.map((p) => (
 								<SelectItem key={p} value={p}>
 									{ProviderLabels[p as ProviderName] || p}
@@ -162,14 +164,14 @@ export default function AttributesTab({ hasAccess }: AttributesTabProps) {
 					<Table containerClassName="h-full overflow-y-auto overflow-x-hidden" className="table-fixed">
 						<TableHeader className="bg-muted sticky top-0 z-20">
 							<TableRow className="hover:bg-transparent">
-								<TableHead className="w-[116px] font-medium">Provider</TableHead>
-								<TableHead className="font-medium">Model</TableHead>
-								<TableHead className="w-[104px] px-2 text-right font-medium">Input</TableHead>
-								<TableHead className="w-[104px] px-2 text-right font-medium">Output</TableHead>
-								<TableHead className="w-[112px] px-2 text-right font-medium">Cache Write</TableHead>
-								<TableHead className="w-[108px] px-2 text-right font-medium">Cache Read</TableHead>
-								<TableHead className="font-medium">Description</TableHead>
-								<TableHead className="w-[68px] font-medium">Other</TableHead>
+								<TableHead className="w-[116px] font-medium">{t("table.provider")}</TableHead>
+								<TableHead className="font-medium">{t("table.model")}</TableHead>
+								<TableHead className="w-[104px] px-2 text-right font-medium">{t("table.input")}</TableHead>
+								<TableHead className="w-[104px] px-2 text-right font-medium">{t("table.output")}</TableHead>
+								<TableHead className="w-[112px] px-2 text-right font-medium">{t("table.cacheWrite")}</TableHead>
+								<TableHead className="w-[108px] px-2 text-right font-medium">{t("table.cacheRead")}</TableHead>
+								<TableHead className="font-medium">{t("table.description")}</TableHead>
+								<TableHead className="w-[68px] font-medium">{t("table.other")}</TableHead>
 								<TableHead className="w-[80px] px-1"></TableHead>
 							</TableRow>
 						</TableHeader>
@@ -178,7 +180,7 @@ export default function AttributesTab({ hasAccess }: AttributesTabProps) {
 								<TableRow>
 									<TableCell colSpan={9} className="h-24 text-center">
 										<span className="text-muted-foreground text-sm">
-											{!debouncedSearch && !providerFilter ? "No models loaded yet." : "No matching models."}
+											{!debouncedSearch && !providerFilter ? t("table.noModelsLoaded") : t("table.noMatchingModels")}
 										</span>
 									</TableCell>
 								</TableRow>
@@ -241,13 +243,11 @@ export default function AttributesTab({ hasAccess }: AttributesTabProps) {
 												) : (
 													<div className="flex flex-wrap gap-1 pr-4">
 														{extraKeys.length > 0 && (
-															<Badge variant="secondary">
-																{extraKeys.length} {extraKeys.length === 1 ? "attribute" : "attributes"}
-															</Badge>
+															<Badge variant="secondary">{t("table.attributesCount", { count: extraKeys.length })}</Badge>
 														)}
 														{overrideCount > 0 && (
 															<Badge variant="outline" data-testid={`model-catalog-override-badge-${testKey}`}>
-																{overrideCount} {overrideCount === 1 ? "override" : "overrides"}
+																{t("table.overridesCount", { count: overrideCount })}
 															</Badge>
 														)}
 													</div>
@@ -260,7 +260,7 @@ export default function AttributesTab({ hasAccess }: AttributesTabProps) {
 													className="ml-6 h-7 w-7"
 													disabled={!hasUpdateAccess}
 													onClick={() => setEditing(m)}
-													aria-label={`Edit attributes for ${m.name}`}
+													aria-label={t("table.editAttributesAria", { model: m.name })}
 													data-testid={`model-catalog-edit-${testKey}`}
 												>
 													<Edit className="h-4 w-4" />
@@ -277,8 +277,11 @@ export default function AttributesTab({ hasAccess }: AttributesTabProps) {
 				{totalCount > 0 && (
 					<div className="flex shrink-0 items-center justify-between text-xs" data-testid="model-catalog-pagination">
 						<div className="text-muted-foreground">
-							{(offset + 1).toLocaleString()}–{Math.min(offset + PAGE_SIZE, totalCount).toLocaleString()} of {totalCount.toLocaleString()}{" "}
-							entries
+							{t("pagination.entries", {
+								from: (offset + 1).toLocaleString(),
+								to: Math.min(offset + PAGE_SIZE, totalCount).toLocaleString(),
+								total: totalCount.toLocaleString(),
+							})}
 						</div>
 						<div className="flex items-center gap-2">
 							<Button
@@ -287,14 +290,14 @@ export default function AttributesTab({ hasAccess }: AttributesTabProps) {
 								onClick={() => setOffset(Math.max(0, offset - PAGE_SIZE))}
 								disabled={offset === 0}
 								data-testid="model-catalog-pagination-prev-btn"
-								aria-label="Previous page"
+								aria-label={t("pagination.prevAria")}
 							>
 								<ChevronLeft className="size-3" />
 							</Button>
 							<div className="flex items-center gap-1">
-								<span>Page</span>
+								<span>{t("pagination.page")}</span>
 								<span>{Math.floor(offset / PAGE_SIZE) + 1}</span>
-								<span>of {Math.ceil(totalCount / PAGE_SIZE)}</span>
+								<span>{t("pagination.of", { total: Math.ceil(totalCount / PAGE_SIZE) })}</span>
 							</div>
 							<Button
 								variant="ghost"
@@ -302,7 +305,7 @@ export default function AttributesTab({ hasAccess }: AttributesTabProps) {
 								onClick={() => setOffset(offset + PAGE_SIZE)}
 								disabled={offset + PAGE_SIZE >= totalCount}
 								data-testid="model-catalog-pagination-next-btn"
-								aria-label="Next page"
+								aria-label={t("pagination.nextAria")}
 							>
 								<ChevronRight className="size-3" />
 							</Button>

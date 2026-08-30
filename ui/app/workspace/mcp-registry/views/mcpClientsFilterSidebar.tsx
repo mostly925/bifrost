@@ -424,7 +424,9 @@ function SearchableCheckboxList({
 					testId={testIdPrefix ? `${testIdPrefix}-checkbox-${item.key}` : undefined}
 				/>
 			))}
-			{filtered.length === 0 && <div className="text-muted-foreground flex h-9 items-center px-3 text-xs">{t("clients.filters.noResults")}</div>}
+			{filtered.length === 0 && (
+				<div className="text-muted-foreground flex h-9 items-center px-3 text-xs">{t("clients.filters.noResults")}</div>
+			)}
 		</>
 	);
 }
@@ -466,7 +468,12 @@ function VKAccessFilterSection({ filters, onFiltersChange }: SidebarProps) {
 	};
 
 	return (
-		<FilterSection title={t("clients.filters.sections.vkAccess")} defaultOpen={hasActive} onOpenChange={setOpened} testId="mcp-clients-filter-vk-access-toggle">
+		<FilterSection
+			title={t("clients.filters.sections.vkAccess")}
+			defaultOpen={hasActive}
+			onOpenChange={setOpened}
+			testId="mcp-clients-filter-vk-access-toggle"
+		>
 			<SearchableCheckboxList
 				inputRef={searchInputRef}
 				placeholder={t("clients.filters.searchVirtualKeys")}

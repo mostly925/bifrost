@@ -75,5 +75,6 @@
 		"updateFailed": "更新插件失败",
 		"deleted": "插件删除成功",
 		"fixErrors": "请先修正表单错误再提交"
-	}
+	},
+	"noPermissionEntity": "插件"
 }

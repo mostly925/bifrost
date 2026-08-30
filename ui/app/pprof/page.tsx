@@ -842,9 +842,7 @@ export default function PprofPage() {
 	if (error && !data) {
 		return (
 			<div className="flex min-h-screen items-center justify-center">
-				<div className="rounded-lg border border-red-800 bg-red-900/20 px-6 py-4 text-red-400">
-					{t("states.error")}
-				</div>
+				<div className="rounded-lg border border-red-800 bg-red-900/20 px-6 py-4 text-red-400">{t("states.error")}</div>
 			</div>
 		);
 	}
@@ -1073,9 +1071,7 @@ export default function PprofPage() {
 									</span>
 								)}
 							</div>
-							<p className="mt-1 text-xs text-zinc-500">
-								{t("leaks.description")}
-							</p>
+							<p className="mt-1 text-xs text-zinc-500">{t("leaks.description")}</p>
 						</div>
 						<LeakTable candidates={leakCandidates} expandedKeys={expandedLeaks} onToggle={toggleLeakExpand} />
 					</div>
@@ -1088,9 +1084,7 @@ export default function PprofPage() {
 								<span className="font-medium text-zinc-300">{t("inuse.title")}</span>
 								<span className="text-sm text-zinc-500">{t("tables.siteCount", { count: sortedInuseAllocations.length })}</span>
 							</div>
-							<p className="mt-1 text-xs text-zinc-500">
-								{t("inuse.description")}
-							</p>
+							<p className="mt-1 text-xs text-zinc-500">{t("inuse.description")}</p>
 						</div>
 						<AllocationTable
 							allocations={sortedInuseAllocations}
@@ -1112,9 +1106,7 @@ export default function PprofPage() {
 								<span className="font-medium text-zinc-300">{t("cumulative.title")}</span>
 								<span className="text-sm text-zinc-500">{t("tables.siteCount", { count: sortedAllocations.length })}</span>
 							</div>
-							<p className="mt-1 text-xs text-zinc-500">
-								{t("cumulative.description")}
-							</p>
+							<p className="mt-1 text-xs text-zinc-500">{t("cumulative.description")}</p>
 						</div>
 						<AllocationTable
 							allocations={sortedAllocations}

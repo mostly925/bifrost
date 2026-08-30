@@ -1,0 +1,114 @@
+{
+	"noPermissionEntity": "模型目录",
+	"tabs": {
+		"overview": "概览",
+		"models": "模型"
+	},
+	"attributes": {
+		"title": "模型",
+		"description": "为指定模型附加描述与标签。"
+	},
+	"overview": {
+		"title": "模型目录",
+		"description": "所有已配置供应商、模型和用量的总览。",
+		"totalProviders": "供应商总数",
+		"totalModels": "模型总数",
+		"totalRequests24h": "请求总数（24 小时）",
+		"totalCost24h": "总费用（24 小时）"
+	},
+	"filters": {
+		"allProviders": "全部供应商"
+	},
+	"search": {
+		"modelsAria": "搜索模型",
+		"modelsPlaceholder": "按模型名称搜索..."
+	},
+	"table": {
+		"provider": "供应商",
+		"model": "模型",
+		"input": "输入",
+		"output": "输出",
+		"cacheWrite": "缓存写入",
+		"cacheRead": "缓存读取",
+		"description": "描述",
+		"other": "其他",
+		"models": "模型",
+		"modelsTooltip": "最近 30 天内使用过的模型",
+		"totalTraffic24h": "总流量（24 小时）",
+		"totalCost24h": "总费用（24 小时）",
+		"custom": "自定义",
+		"moreModels": "还有 {{remaining}} 个",
+		"noMatchingProviders": "未找到匹配的供应商。",
+		"noModelsLoaded": "尚未加载任何模型。",
+		"noMatchingModels": "没有匹配的模型。",
+		"attributesCount_one": "{{count}} 个属性",
+		"attributesCount_other": "{{count}} 个属性",
+		"overridesCount_one": "{{count}} 个覆盖",
+		"overridesCount_other": "{{count}} 个覆盖",
+		"editAttributesAria": "编辑 {{model}} 的属性"
+	},
+	"pagination": {
+		"entries": "第 {{from}}–{{to}} 条，共 {{total}} 条",
+		"page": "第",
+		"of": "页，共 {{total}} 页",
+		"prevAria": "上一页",
+		"nextAria": "下一页"
+	},
+	"empty": {
+		"title": "尚未配置任何供应商",
+		"description": "配置你的第一个模型供应商，即可查看所有供应商、API 密钥、模型和用量指标的总览。",
+		"configureProviders": "配置供应商"
+	},
+	"errors": {
+		"loadModelsFailed": "加载模型失败",
+		"loadProvidersFailed": "加载供应商失败",
+		"noPermission": "你没有执行此操作的权限"
+	},
+	"sheet": {
+		"title": "编辑模型属性",
+		"description": "更新此模型的描述及其他属性。这些属性存储在定价行中，并在定价同步时保留。",
+		"provider": "供应商",
+		"model": "模型",
+		"pricing": "定价",
+		"pricingSource": "来源",
+		"input": "输入",
+		"output": "输出",
+		"cacheWrite": "缓存写入",
+		"cacheRead": "缓存读取",
+		"pricingOverrides": "定价覆盖",
+		"manage": "管理",
+		"descriptionLabel": "描述",
+		"descriptionPlaceholder": "此模型的简短描述，将在使用 additional_attributes.description 的位置显示。",
+		"otherAttributes": "其他属性",
+		"noAdditionalAttributes": "暂无其他属性。可添加键值对来补充描述之外的信息。",
+		"keyPlaceholder": "键",
+		"valuePlaceholder": "值",
+		"saveChanges": "保存更改"
+	},
+	"overrides": {
+		"applied": "已应用",
+		"matches": "通配 {{pattern}}",
+		"exact": "精确 {{pattern}}",
+		"caveats": {
+			"providerKey": "仅对通过匹配的供应商密钥路由的请求生效。",
+			"virtualKey": "仅对使用匹配的虚拟密钥的请求生效。",
+			"virtualKeyProvider": "仅对使用匹配的虚拟密钥和供应商的请求生效。",
+			"virtualKeyProviderKey": "仅对使用匹配的虚拟密钥和供应商密钥的请求生效。",
+			"user": "仅对来自匹配用户的请求生效。",
+			"userProvider": "仅对来自匹配的用户和供应商的请求生效。",
+			"userProviderKey": "仅对来自匹配的用户和供应商密钥的请求生效。"
+		}
+	},
+	"price": {
+		"originalAria": "原价：",
+		"effectiveAria": "生效价格：",
+		"overriddenByName": "已被 “{{name}}” 覆盖",
+		"overridden": "已被自定义定价覆盖"
+	},
+	"toasts": {
+		"saved": "属性已保存",
+		"attributeKeyRequired": "属性行必须填写键名",
+		"duplicateAttributeKey": "属性键重复：{{key}}",
+		"reservedDescription": "请改用描述字段，而不是添加名为 'description' 的属性行"
+	}
+}

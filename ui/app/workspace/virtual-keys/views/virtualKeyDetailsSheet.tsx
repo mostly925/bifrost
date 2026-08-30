@@ -99,7 +99,8 @@ export default function VirtualKeyDetailSheet({
 		if (providerRows.length > 0) sections.push({ key: "provider", title: t("details.providerBudgetSection"), rows: providerRows });
 		for (const mb of config.model_budgets ?? []) {
 			const rows = toRows(mb.budgets);
-			if (rows.length > 0) sections.push({ key: `m:${mb.model_name}`, title: t("details.modelBudgetSection", { model: mb.model_name }), rows });
+			if (rows.length > 0)
+				sections.push({ key: `m:${mb.model_name}`, title: t("details.modelBudgetSection", { model: mb.model_name }), rows });
 		}
 		return sections;
 	};
@@ -263,9 +264,11 @@ export default function VirtualKeyDetailSheet({
 														{config.weight != null ? (
 															t("details.weightWithValue", { value: config.weight })
 														) : (
-															<Trans ns="virtualKeys" i18nKey="details.weightNotSet">
-																Weight: <span className="text-muted-foreground italic">Not Set</span>
-															</Trans>
+															<Trans
+																ns="virtualKeys"
+																i18nKey="details.weightNotSet"
+																components={{ 1: <span className="text-muted-foreground italic" /> }}
+															/>
 														)}
 													</Badge>
 													{!isManagedByProfile ? (
@@ -373,7 +376,9 @@ export default function VirtualKeyDetailSheet({
 																	<div className="text-muted-foreground flex items-center justify-between text-xs">
 																		<span>
 																			{t("details.usage.resets", { period: parseResetPeriod(b.reset_duration) })}
-																			{virtualKey.calendar_aligned && supportsCalendarAlignment(b.reset_duration) && t("details.usage.calendarSuffix")}
+																			{virtualKey.calendar_aligned &&
+																				supportsCalendarAlignment(b.reset_duration) &&
+																				t("details.usage.calendarSuffix")}
 																			{fiscalQuarterNote(b.reset_duration, b.reset_config)}
 																		</span>
 																		{b.last_reset ? (
@@ -497,7 +502,9 @@ export default function VirtualKeyDetailSheet({
 																					<div className="text-muted-foreground flex items-center justify-between text-xs">
 																						<span>
 																							{t("details.usage.resets", { period: parseResetPeriod(b.reset_duration) })}
-																							{virtualKey.calendar_aligned && supportsCalendarAlignment(b.reset_duration) && t("details.usage.calendarSuffix")}
+																							{virtualKey.calendar_aligned &&
+																								supportsCalendarAlignment(b.reset_duration) &&
+																								t("details.usage.calendarSuffix")}
 																							{fiscalQuarterNote(b.reset_duration, b.reset_config)}
 																						</span>
 																						{b.last_reset ? (
@@ -623,7 +630,9 @@ export default function VirtualKeyDetailSheet({
 							<h3 className="font-semibold">
 								{t("details.budgetInformation")}
 								{isManagedByProfile && managingProfile?.budgets?.length ? (
-									<span className="text-muted-foreground ml-2 text-xs font-normal">{t("details.fromProfile", { name: managingProfile.name })}</span>
+									<span className="text-muted-foreground ml-2 text-xs font-normal">
+										{t("details.fromProfile", { name: managingProfile.name })}
+									</span>
 								) : null}
 							</h3>
 							{isManagedByProfile && managingProfile?.user_id ? <ViewUserDetailsButton userId={managingProfile.user_id} /> : null}
@@ -686,7 +695,9 @@ export default function VirtualKeyDetailSheet({
 						<h3 className="font-semibold">
 							{t("details.rateLimits")}
 							{isManagedByProfile && hasApRateLimit ? (
-								<span className="text-muted-foreground ml-2 text-xs font-normal">{t("details.fromProfile", { name: managingProfile?.name })}</span>
+								<span className="text-muted-foreground ml-2 text-xs font-normal">
+									{t("details.fromProfile", { name: managingProfile?.name })}
+								</span>
 							) : null}
 						</h3>
 
