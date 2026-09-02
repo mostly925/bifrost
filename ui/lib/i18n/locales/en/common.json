@@ -183,5 +183,31 @@
 		"no": "No",
 		"enabled": "Enabled",
 		"disabled": "Disabled"
+	},
+	"noPermission": {
+		"title": "You don't have permission to view {{entity}}",
+		"description": "Contact your administrator to request access to this resource.",
+		"entities": {
+			"accessProfiles": "access-profiles",
+			"adaptiveRouting": "adaptive routing",
+			"alerting": "alerting",
+			"auditLogs": "audit logs",
+			"circuitBreaker": "circuit breaker",
+			"clusterConfiguration": "cluster configuration",
+			"configuration": "configuration",
+			"dashboard": "dashboard",
+			"edgeDevices": "edge devices",
+			"edgeInventory": "edge inventory",
+			"edgeSettings": "edge settings",
+			"governance": "governance",
+			"guardrailsConfiguration": "guardrails configuration",
+			"logs": "logs",
+			"mcpGatewaySettings": "MCP gateway settings",
+			"mcpToolGroups": "MCP tool groups",
+			"modelProviders": "model providers",
+			"rolesPermissions": "roles and permissions",
+			"skillsRepository": "skills repository",
+			"userProvisioning": "user provisioning"
+		}
 	}
 }

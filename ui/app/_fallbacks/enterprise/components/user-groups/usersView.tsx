@@ -1,14 +1,16 @@
 import { Users } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import ContactUsView from "../views/contactUsView";
 
 export default function UsersView() {
+	const { t } = useTranslation("enterprise");
 	return (
 		<div className="w-full">
 			<ContactUsView
 				className="mx-auto min-h-[80vh]"
 				icon={<Users className="h-[5.5rem] w-[5.5rem]" strokeWidth={1} />}
-				title="Unlock users & user governance"
-				description="Manage users, set per-user budgets and rate limits, and control access with enterprise-grade governance. This feature is part of the Bifrost enterprise license."
+				title={t("upsell.users.title")}
+				description={t("upsell.users.description")}
 				readmeLink="https://docs.getbifrost.ai/enterprise/advanced-governance"
 			/>
 		</div>

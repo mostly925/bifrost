@@ -183,5 +183,31 @@
 		"no": "否",
 		"enabled": "已启用",
 		"disabled": "已禁用"
+	},
+	"noPermission": {
+		"title": "您没有查看 {{entity}} 的权限",
+		"description": "请联系管理员申请访问该资源。",
+		"entities": {
+			"accessProfiles": "访问配置",
+			"adaptiveRouting": "自适应路由",
+			"alerting": "告警",
+			"auditLogs": "审计日志",
+			"circuitBreaker": "熔断器",
+			"clusterConfiguration": "集群配置",
+			"configuration": "配置",
+			"dashboard": "仪表盘",
+			"edgeDevices": "边缘设备",
+			"edgeInventory": "边缘清单",
+			"edgeSettings": "边缘设置",
+			"governance": "治理",
+			"guardrailsConfiguration": "护栏配置",
+			"logs": "日志",
+			"mcpGatewaySettings": "MCP 网关设置",
+			"mcpToolGroups": "MCP 工具组",
+			"modelProviders": "模型供应商",
+			"rolesPermissions": "角色与权限",
+			"skillsRepository": "技能仓库",
+			"userProvisioning": "用户同步"
+		}
 	}
 }

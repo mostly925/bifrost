@@ -16,6 +16,7 @@ declare module "i18next" {
 			dashboard: typeof import("./locales/en/dashboard.json");
 			devProfiler: typeof import("./locales/en/devProfiler.json");
 			docs: typeof import("./locales/en/docs.json");
+			enterprise: typeof import("./locales/en/enterprise.json");
 			filters: typeof import("./locales/en/filters.json");
 			governance: typeof import("./locales/en/governance.json");
 			logs: typeof import("./locales/en/logs.json");

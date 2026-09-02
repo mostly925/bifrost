@@ -1,13 +1,15 @@
 import { ToolCase } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import ContactUsView from "../views/contactUsView";
 
 export default function MCPToolGroups() {
+	const { t } = useTranslation("enterprise");
 	return (
 		<>
 			<div className="mb-4 flex items-center justify-between gap-4">
 				<div>
-					<h2 className="text-lg font-semibold tracking-tight">MCP Tool Groups</h2>
-					<p className="text-muted-foreground text-sm">Configure tool groups for MCP servers to organize and govern tools.</p>
+					<h2 className="text-lg font-semibold tracking-tight">{t("mcpToolGroups.header")}</h2>
+					<p className="text-muted-foreground text-sm">{t("mcpToolGroups.subheader")}</p>
 				</div>
 			</div>
 			<div className="rounded-sm border">
@@ -15,8 +17,8 @@ export default function MCPToolGroups() {
 					<ContactUsView
 						className="mx-auto w-full max-w-lg"
 						icon={<ToolCase className="h-[5.5rem] w-[5.5rem]" strokeWidth={1} />}
-						title="Unlock MCP Tool Groups"
-						description="This feature is a part of the Bifrost enterprise license. Configure tool groups for MCP servers to organize your MCP tools and govern them across your organization."
+						title={t("upsell.mcpToolGroups.title")}
+						description={t("upsell.mcpToolGroups.description")}
 						readmeLink="https://docs.getbifrost.ai/mcp/overview"
 					/>
 				</div>

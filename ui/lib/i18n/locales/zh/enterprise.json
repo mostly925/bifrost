@@ -1,0 +1,66 @@
+{
+	"contactUs": {
+		"readMore": "了解更多",
+		"readMoreAria": "了解此功能的更多信息（在新标签页中打开）",
+		"bookDemo": "预约演示",
+		"bookDemoAria": "预约演示（在新标签页中打开 Calendly）"
+	},
+	"mcpToolGroups": {
+		"header": "MCP 工具组",
+		"subheader": "为 MCP 服务器配置工具组，以组织和管控工具。"
+	},
+	"upsell": {
+		"alertingChannels": {
+			"title": "解锁告警渠道，实现主动监控",
+			"description": "此功能属于 Bifrost 企业版权益。配置 Slack、PagerDuty、OpsGenie 和 Webhook 告警，在预算与性能问题发生前提前应对。"
+		},
+		"alertingRules": {
+			"title": "解锁告警规则，实现主动监控",
+			"description": "此功能属于 Bifrost 企业版权益。定义告警规则，在预算、延迟和性能劣化演变为事故之前及时发现。"
+		},
+		"alertingHistory": {
+			"title": "解锁告警历史，实现主动监控",
+			"description": "此功能属于 Bifrost 企业版权益。集中查看告警投递结果、失败记录与恢复事件。"
+		},
+		"mcpToolGroups": {
+			"title": "解锁 MCP 工具组",
+			"description": "此功能属于 Bifrost 企业版权益。为 MCP 服务器配置工具组，整理您的 MCP 工具，并在整个组织范围内进行管控。"
+		},
+		"users": {
+			"title": "解锁用户与用户治理",
+			"description": "管理用户、设置按用户的预算与速率限制，并通过企业级治理控制访问。此功能属于 Bifrost 企业版权益。"
+		},
+		"businessUnits": {
+			"title": "解锁业务单元与高级治理",
+			"description": "通过企业级治理管理用户与业务单元。此功能属于 Bifrost 企业版权益。"
+		},
+		"scim": {
+			"title": "解锁基于 SCIM 的用户同步访问管理",
+			"description": "此功能属于 Bifrost 企业版权益。我们很乐意进一步了解您的使用场景，以及我们可以如何帮助您。"
+		},
+		"rbac": {
+			"title": "解锁角色与权限，提升安全性",
+			"description": "此功能属于 Bifrost 企业版权益。我们很乐意进一步了解您的使用场景，以及我们可以如何帮助您。"
+		},
+		"accessProfiles": {
+			"title": "解锁访问配置，提升性能",
+			"description": "此功能属于 Bifrost 企业版权益。创建访问配置以控制对资源的访问。"
+		},
+		"auditLogs": {
+			"title": "解锁审计日志，增强合规性",
+			"description": "此功能属于 Bifrost 企业版权益。我们很乐意进一步了解您的使用场景，以及我们可以如何帮助您。"
+		},
+		"guardrails": {
+			"title": "解锁护栏，提升安全性",
+			"description": "此功能属于 Bifrost 企业版权益。我们很乐意进一步了解您的使用场景，以及我们可以如何帮助您。"
+		},
+		"cluster": {
+			"title": "解锁集群模式，实现可靠扩展",
+			"description": "此功能属于 Bifrost 企业版权益。我们很乐意进一步了解您的使用场景，以及我们可以如何帮助您。"
+		},
+		"adaptiveRouting": {
+			"title": "解锁自适应路由，提升性能",
+			"description": "此功能属于 Bifrost 企业版权益。我们很乐意进一步了解您的使用场景，以及我们可以如何帮助您。"
+		}
+	}
+}
