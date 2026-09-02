@@ -9,22 +9,12 @@ import { Link } from "@tanstack/react-router";
 import { BookIcon, Globe, Radio, Terminal, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 import { MCPLibraryDeleteDialog } from "./mcpLibraryDeleteDialog";
+import { authLabel, categoryLabel, transportLabel } from "./mcpLibraryTaxonomy";
 
 const MAX_VISIBLE_TAGS = 3;
 export const MCP_ICON_FALLBACK = "/images/mcp.svg";
-
-/** Map connection_type to a human-friendly transport label. */
-export function transportLabel(connectionType: string): string {
-	switch (connectionType) {
-		case "stdio":
-			return "stdio";
-		case "sse":
-			return "SSE";
-		default:
-			return "HTTP";
-	}
-}
 
 /** Map connection_type to an icon for the compact transport badge. */
 export function transportIcon(connectionType: string) {
@@ -38,21 +28,6 @@ export function transportIcon(connectionType: string) {
 	}
 }
 
-export function authLabel(authType?: string): string {
-	switch (authType) {
-		case "headers":
-			return "Headers";
-		case "oauth":
-			return "OAuth";
-		case "per_user_headers":
-			return "User headers";
-		case "per_user_oauth":
-			return "User OAuth";
-		default:
-			return "No auth";
-	}
-}
-
 interface MCPLibraryServerCardProps {
 	server: MCPLibraryEntry;
 	isInstalled: boolean;
@@ -62,6 +37,7 @@ interface MCPLibraryServerCardProps {
 }
 
 export function MCPLibraryServerCard({ server, isInstalled, canCreateMCPClient, canDelete, onInstall }: MCPLibraryServerCardProps) {
+	const { t } = useTranslation("mcpLibrary");
 	const [deleteEntry, { isLoading: isDeleting }] = useDeleteMCPLibraryEntryMutation();
 	const [confirmOpen, setConfirmOpen] = useState(false);
 	const isCustom = server.source === "custom";
@@ -69,7 +45,7 @@ export function MCPLibraryServerCard({ server, isInstalled, canCreateMCPClient, 
 	const handleDelete = async () => {
 		try {
 			await deleteEntry(server.id).unwrap();
-			toast.success(`"${server.name}" removed from the library.`);
+			toast.success(t("serverCard.removedToast", { name: server.name }));
 			setConfirmOpen(false);
 		} catch (error) {
 			toast.error(getErrorMessage(error));
@@ -104,23 +80,27 @@ export function MCPLibraryServerCard({ server, isInstalled, canCreateMCPClient, 
 								<span className="block truncate">{server.name}</span>
 							</CardTitle>
 							<div className="flex shrink-0 items-center gap-1.5">
-								{isCustom && <Badge variant="outline">Custom</Badge>}
-								{isInstalled && <Badge variant="success">Installed</Badge>}
+								{isCustom && <Badge variant="outline">{t("serverCard.customBadge")}</Badge>}
+								{isInstalled && <Badge variant="success">{t("serverCard.installedBadge")}</Badge>}
 							</div>
 						</div>
 						<div className="flex min-w-0 flex-wrap items-center gap-1.5">
 							{server.category && (
 								<Badge variant="outline" className="bg-background/70 max-w-full truncate">
-									{server.category}
+									{categoryLabel(t, server.category)}
 								</Badge>
 							)}
-							{server.publisher && <span className="text-muted-foreground min-w-0 truncate text-xs">by {server.publisher}</span>}
+							{server.publisher && (
+								<span className="text-muted-foreground min-w-0 truncate text-xs">
+									{t("serverCard.byPublisher", { publisher: server.publisher })}
+								</span>
+							)}
 						</div>
 					</div>
 				</div>
 			</CardHeader>
 			<CardContent className="flex flex-1 flex-col gap-3 px-4 py-3">
-				<CardDescription className="line-clamp-2 min-h-10 leading-5">{server.description || "No description available."}</CardDescription>
+				<CardDescription className="line-clamp-2 min-h-10 leading-5">{server.description || t("serverCard.noDescription")}</CardDescription>
 				{server.tags && server.tags.length > 0 && (
 					<div className="flex min-w-0 flex-wrap items-center gap-1.5">
 						{server.tags.slice(0, MAX_VISIBLE_TAGS).map((tag) => (
@@ -151,10 +131,10 @@ export function MCPLibraryServerCard({ server, isInstalled, canCreateMCPClient, 
 				<div className="text-muted-foreground flex min-w-0 items-center gap-2 text-xs">
 					<span className="flex shrink-0 items-center gap-1">
 						{transportIcon(server.connection_type)}
-						{transportLabel(server.connection_type)}
+						{transportLabel(t, server.connection_type)}
 					</span>
 					<span className="bg-border h-3 w-px shrink-0" />
-					<span className="truncate">{authLabel(server.auth_type)}</span>
+					<span className="truncate">{authLabel(t, server.auth_type)}</span>
 				</div>
 				<div className="flex shrink-0 items-center gap-2">
 					{canDelete && (
@@ -165,13 +145,13 @@ export function MCPLibraryServerCard({ server, isInstalled, canCreateMCPClient, 
 										variant="outline"
 										size="sm"
 										onClick={() => setConfirmOpen(true)}
-										aria-label={`Remove ${server.name} from library`}
+										aria-label={t("serverCard.removeFromLibraryAria", { name: server.name })}
 										data-testid={`mcp-library-delete-${server.slug}`}
 									>
 										<Trash2 className="h-4 w-4" />
 									</Button>
 								</TooltipTrigger>
-								<TooltipContent>Remove from library</TooltipContent>
+								<TooltipContent>{t("serverCard.removeFromLibrary")}</TooltipContent>
 							</Tooltip>
 						</div>
 					)}
@@ -182,7 +162,7 @@ export function MCPLibraryServerCard({ server, isInstalled, canCreateMCPClient, 
 									asChild
 									variant="outline"
 									size="sm"
-									aria-label={`Open ${server.name} documentation`}
+									aria-label={t("serverCard.docsAria", { name: server.name })}
 									data-testid={`mcp-library-docs-${server.slug}`}
 								>
 									<a href={server.docs_url} target="_blank" rel="noreferrer">
@@ -190,12 +170,12 @@ export function MCPLibraryServerCard({ server, isInstalled, canCreateMCPClient, 
 									</a>
 								</Button>
 							</TooltipTrigger>
-							<TooltipContent>Documentation</TooltipContent>
+							<TooltipContent>{t("serverCard.docs")}</TooltipContent>
 						</Tooltip>
 					)}
 					{isInstalled ? (
 						<Button asChild size="sm" data-testid={`mcp-library-open-${server.slug}`}>
-							<Link to="/workspace/mcp-registry">Open</Link>
+							<Link to="/workspace/mcp-registry">{t("serverCard.open")}</Link>
 						</Button>
 					) : (
 						<Button
@@ -204,7 +184,7 @@ export function MCPLibraryServerCard({ server, isInstalled, canCreateMCPClient, 
 							disabled={!canCreateMCPClient}
 							data-testid={`mcp-library-install-${server.slug}`}
 						>
-							Install
+							{t("serverCard.install")}
 						</Button>
 					)}
 				</div>

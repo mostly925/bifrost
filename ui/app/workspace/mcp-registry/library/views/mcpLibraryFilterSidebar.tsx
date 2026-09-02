@@ -8,6 +8,8 @@ import { useGetMCPLibraryFilterDataQuery } from "@/lib/store";
 import { cn } from "@/lib/utils";
 import { ChevronDown, PanelLeftClose, PanelLeftOpen, RotateCcw, Search } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { authLabel, categoryLabel, transportLabel } from "./mcpLibraryTaxonomy";
 
 const COLLAPSE_STORAGE_KEY = "mcp-library-filter-sidebar-collapsed";
 
@@ -39,6 +41,7 @@ interface SidebarProps {
 // ---------------------------------------------------------------------------
 
 export function MCPLibraryFilterSidebar({ filters, onFiltersChange }: SidebarProps) {
+	const { t } = useTranslation("mcpLibrary");
 	const [collapsed, setCollapsed] = useState(false);
 
 	useEffect(() => {
@@ -73,12 +76,12 @@ export function MCPLibraryFilterSidebar({ filters, onFiltersChange }: SidebarPro
 				type="button"
 				onClick={toggleCollapsed}
 				className="bg-card group flex h-full w-10 shrink-0 cursor-pointer flex-col items-center gap-3 rounded-r-md py-4 text-sm font-medium"
-				title="Show filters"
-				aria-label="Show filters"
+				title={t("filters.showAria")}
+				aria-label={t("filters.showAria")}
 				data-testid="mcpLibraryFilterSidebar-toggle-show"
 			>
 				<PanelLeftOpen className="text-muted-foreground group-hover:text-foreground size-4 transition-colors" />
-				<span className="rotate-180 select-none [writing-mode:vertical-rl]">Filters</span>
+				<span className="rotate-180 select-none [writing-mode:vertical-rl]">{t("filters.title")}</span>
 				{activeFilterCount > 0 && (
 					<span className="bg-primary/10 text-primary flex size-6 items-center justify-center rounded-full text-xs font-medium">
 						{activeFilterCount}
@@ -91,7 +94,7 @@ export function MCPLibraryFilterSidebar({ filters, onFiltersChange }: SidebarPro
 	return (
 		<div className="bg-card flex h-full w-64 shrink-0 flex-col rounded-r-md">
 			<div className="flex h-11 items-center justify-between border-b pr-2 pl-5">
-				<span className="text-sm font-semibold">Filters</span>
+				<span className="text-sm font-semibold">{t("filters.title")}</span>
 				<div className="flex items-center gap-1">
 					{activeFilterCount > 0 && (
 						<Button
@@ -102,7 +105,7 @@ export function MCPLibraryFilterSidebar({ filters, onFiltersChange }: SidebarPro
 							data-testid="mcpLibraryFilterSidebar-reset-button"
 						>
 							<RotateCcw className="size-3" />
-							Reset
+							{t("filters.reset")}
 						</Button>
 					)}
 					<Button
@@ -110,8 +113,8 @@ export function MCPLibraryFilterSidebar({ filters, onFiltersChange }: SidebarPro
 						size="icon"
 						className="size-7"
 						onClick={toggleCollapsed}
-						title="Hide filters"
-						aria-label="Hide filters"
+						title={t("filters.hideAria")}
+						aria-label={t("filters.hideAria")}
 						data-testid="mcpLibraryFilterSidebar-toggle-hide"
 					>
 						<PanelLeftClose className="size-4" />
@@ -122,41 +125,44 @@ export function MCPLibraryFilterSidebar({ filters, onFiltersChange }: SidebarPro
 			<ScrollArea className="flex flex-1 overflow-y-auto p-2 pb-0" viewportClassName="no-table">
 				{isError ? (
 					<div className="flex flex-col items-center gap-3 px-3 py-8 text-center" data-testid="mcpLibraryFilterSidebar-error">
-						<p className="text-muted-foreground text-sm">Failed to load filters.</p>
+						<p className="text-muted-foreground text-sm">{t("filters.loadFailed")}</p>
 						<Button variant="outline" size="sm" onClick={() => refetch()} data-testid="mcpLibraryFilterSidebar-retry-button">
 							<RotateCcw className="size-3" />
-							Retry
+							{t("filters.retry")}
 						</Button>
 					</div>
 				) : (
 					<div className="flex grow flex-col gap-1">
 						<CheckboxFilterSection
-							title="Category"
+							title={t("filters.sections.category")}
 							items={filterData?.categories || []}
 							selected={filters.categories}
 							loading={isLoading}
 							defaultOpen
+							labelFor={(item) => categoryLabel(t, item)}
 							onChange={(categories) => onFiltersChange({ ...filters, categories })}
 							testIdPrefix="mcp-library-filter-category"
 						/>
 						<CheckboxFilterSection
-							title="Connection Type"
+							title={t("filters.sections.connectionType")}
 							items={filterData?.connection_types || []}
 							selected={filters.connection_types}
 							loading={isLoading}
+							labelFor={(item) => transportLabel(t, item)}
 							onChange={(connection_types) => onFiltersChange({ ...filters, connection_types })}
 							testIdPrefix="mcp-library-filter-connection-type"
 						/>
 						<CheckboxFilterSection
-							title="Auth Type"
+							title={t("filters.sections.authType")}
 							items={filterData?.auth_types || []}
 							selected={filters.auth_types}
 							loading={isLoading}
+							labelFor={(item) => authLabel(t, item)}
 							onChange={(auth_types) => onFiltersChange({ ...filters, auth_types })}
 							testIdPrefix="mcp-library-filter-auth-type"
 						/>
 						<CheckboxFilterSection
-							title="Tags"
+							title={t("filters.sections.tags")}
 							items={filterData?.tags || []}
 							selected={filters.tags}
 							loading={isLoading}
@@ -253,6 +259,7 @@ function CheckboxFilterSection({
 	defaultOpen = false,
 	onChange,
 	testIdPrefix,
+	labelFor,
 }: {
 	title: string;
 	items: string[];
@@ -261,10 +268,16 @@ function CheckboxFilterSection({
 	defaultOpen?: boolean;
 	onChange: (selected: string[]) => void;
 	testIdPrefix?: string;
+	/** Resolves the displayed label for a raw backend value; defaults to the value itself. */
+	labelFor?: (item: string) => string;
 }) {
+	const { t } = useTranslation("mcpLibrary");
 	const [query, setQuery] = useState("");
+	const resolveLabel = labelFor ?? ((item: string) => item);
 	const normalized = query.trim().toLowerCase();
-	const filtered = normalized ? items.filter((item) => item.toLowerCase().includes(normalized)) : items;
+	const filtered = normalized
+		? items.filter((item) => item.toLowerCase().includes(normalized) || resolveLabel(item).toLowerCase().includes(normalized))
+		: items;
 
 	const hasActive = selected.length > 0;
 	const showSearch = items.length > 5;
@@ -290,7 +303,7 @@ function CheckboxFilterSection({
 					<Input
 						value={query}
 						onChange={(e) => setQuery(e.target.value)}
-						placeholder="Search..."
+						placeholder={t("filters.searchPlaceholder")}
 						className="h-8 border-0 pl-8 text-xs"
 						data-testid={testIdPrefix ? `${testIdPrefix}-search` : undefined}
 					/>
@@ -299,13 +312,13 @@ function CheckboxFilterSection({
 			{filtered.map((item) => (
 				<CheckboxFilterItem
 					key={item}
-					label={item}
+					label={resolveLabel(item)}
 					checked={selected.includes(item)}
 					onCheckedChange={() => toggle(item)}
 					testId={testIdPrefix ? `${testIdPrefix}-checkbox-${item}` : undefined}
 				/>
 			))}
-			{filtered.length === 0 && <div className="text-muted-foreground flex h-9 items-center px-3 text-xs">No results</div>}
+			{filtered.length === 0 && <div className="text-muted-foreground flex h-9 items-center px-3 text-xs">{t("filters.noResults")}</div>}
 		</FilterSection>
 	);
 }

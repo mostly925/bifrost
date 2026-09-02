@@ -128,5 +128,466 @@
 			"dedicatedApplication": "Dedicated application",
 			"identityProviderApplication": "Identity provider application"
 		}
+	},
+	"common": {
+		"success": "Success",
+		"error": "Error",
+		"cancel": "Cancel",
+		"delete": "Delete",
+		"continue": "Continue",
+		"noPermission": "You don't have permission to perform this action"
+	},
+	"table": {
+		"actionsMenuAria": "MCP server actions",
+		"menu": {
+			"edit": "Edit",
+			"authorize": "Authorize",
+			"reconnect": "Reconnect",
+			"reauthorize": "Reauthorize",
+			"refreshAdminCredential": "Refresh admin credential",
+			"reverifyAsMe": "Re-verify as me"
+		},
+		"toasts": {
+			"reconnectedTitle": "Reconnected",
+			"reconnectedDescription": "Client {{name}} reconnected successfully.",
+			"authorizationFailedTitle": "Authorization failed",
+			"unexpectedResponse": "Unexpected response from server. Please try again.",
+			"reauthorizationFailedTitle": "Reauthorization failed",
+			"verifiedTitle": "Verified",
+			"verificationFailedTitle": "Verification failed",
+			"deletedTitle": "Deleted",
+			"deletedDescription": "Client {{name}} removed successfully.",
+			"serverEnabled": "Server enabled successfully",
+			"serverDisabled": "Server disabled successfully",
+			"oauthVerifiedPerUser": "OAuth setup verified successfully. Each user will authenticate individually.",
+			"oauthVerifiedShared": "MCP client connected successfully",
+			"headersVerified": "Headers verified successfully. Each user will submit their own values when using this MCP server.",
+			"alreadyVerifiedTitle": "Already verified",
+			"adminCredentialRefreshed": "Admin discovery credential refreshed successfully.",
+			"reauthorizedShared": "MCP client re-authorized successfully"
+		},
+		"authScope": {
+			"perUser": "Per-User",
+			"shared": "Shared"
+		},
+		"vkAccess": {
+			"all": "All",
+			"none": "None",
+			"count_one": "{{count}} VK",
+			"count_other": "{{count}} VKs"
+		},
+		"deleteDialog": {
+			"title": "Remove MCP Server",
+			"description": "Are you sure you want to remove MCP server {{name}}? You will need to reconnect the server to continue using it."
+		},
+		"exchange": {
+			"verifyTitle": "Verify as me",
+			"reverifyTitle": "Re-verify as me",
+			"verifyDescription": "Establish Bifrost's discovery credential using your identity.",
+			"reverifyDescription": "Renew Bifrost's own discovery credential using your identity.",
+			"infoEstablish": "This exchanges your own signed-in identity to establish Bifrost's discovery credential for <strong>{{name}}</strong>.",
+			"infoRenew": "This exchanges your own signed-in identity to renew Bifrost's discovery credential for <strong>{{name}}</strong>.",
+			"infoDetail": "That credential is only used to periodically fetch this server's tool list, not for real user requests, whose tokens are exchanged automatically on every request.",
+			"infoDetailReverify": "That credential is only used to periodically fetch this server's tool list, not for real user requests, whose tokens are exchanged automatically on every request. You only need this if the credential badge shows it's expired, but running it any time is safe."
+		},
+		"title": "MCP Server Catalog",
+		"subtitle": "Manage servers that can connect to the MCP Tools endpoint.",
+		"libraryBtn": "Library",
+		"newServer": "New MCP Server",
+		"newServerAria": "New MCP Server",
+		"searchAria": "Search MCP servers by name",
+		"searchPlaceholder": "Search by name...",
+		"serverFilter": "Server filter",
+		"columns": {
+			"name": "Name",
+			"connectionType": "Connection Type",
+			"authType": "Auth Type",
+			"authScope": "Auth Scope",
+			"codeMode": "Code Mode",
+			"vkAccess": "VK Access",
+			"enabledTools": "Enabled Tools",
+			"autoExecuteTools": "Auto-execute Tools",
+			"state": "State",
+			"status": "Status"
+		},
+		"columnAria": "{{label}} column guidance",
+		"stateTooltip": {
+			"description": "The client's connection state (healthy, unstable, needs re-authorization, and so on). \"Unstable\" reflects Bifrost's own connection checks to the server, not the results of tool calls made through it: it self-heals and never blocks tool calls. For per-user clients (OAuth, headers, token exchange), this reflects Bifrost's own retained admin credential (used only to periodically refresh the tool list), not any individual user's own session, which is unaffected either way.",
+			"seeAll": "See all connection states"
+		},
+		"emptyRow": "No matching MCP servers found.",
+		"pagination": {
+			"range": "{{from}}-{{to}} of {{total}} entries",
+			"pageOf": "Page {{current}} of {{total}}",
+			"prevAria": "Previous page",
+			"nextAria": "Next page"
+		},
+		"nodeStates": {
+			"disagree": "Instances disagree about this client's state:",
+			"line_one": "{{count}} instance: {{state}}",
+			"line_other": "{{count}} instances: {{state}}"
+		}
+	},
+	"clientSheet": {
+		"description": {
+			"pendingTokenExchange": "This server needs a one-time verification: Bifrost exchanges your signed-in identity token, tests the connection, and discovers tools. Callers then have their own identity tokens exchanged automatically on every tool call.",
+			"pendingPerUserOauth": "This client was declared in config.json. An admin sign-in is needed to verify the OAuth setup and discover tools; Bifrost keeps it on file to refresh the tool list periodically. Each user will still authenticate individually when they use this server.",
+			"pendingOauth": "This client was declared in config.json and needs a one-time OAuth authorization before it can be used.",
+			"needsReauthPerUser": "The admin credential Bifrost keeps on file to refresh this server's tool list needs repair. End-user credentials and tool calls are unaffected. Use Refresh admin credential from the server's actions menu to fix it.",
+			"needsReauth": "This connection's credentials need to be re-authorized. Use Reauthorize from the server's actions menu to redo the OAuth consent flow.",
+			"default": "MCP server configuration and available tools"
+		},
+		"tabs": {
+			"general": "General",
+			"authentication": "Authentication",
+			"tools": "Tools",
+			"access": "Access"
+		},
+		"sections": {
+			"basicInformation": {
+				"title": "Basic Information",
+				"description": "Identify this server and review its connection details."
+			},
+			"serverBehavior": {
+				"title": "Server Behavior",
+				"description": "Control how this server participates in code mode and health checks."
+			},
+			"syncTimeouts": {
+				"title": "Sync & Timeouts",
+				"description": "Override the global tool sync interval and execution timeout for this server."
+			},
+			"headers": {
+				"title": "Headers",
+				"description": "Static headers and header-based access rules sent with every request to this server."
+			},
+			"requiredHeaders": {
+				"title": "Required Headers",
+				"description": "Comma-separated header names each caller must supply on first use, e.g. X-API-Key, X-Tenant-ID. Values are submitted per user, not stored on this server config.",
+				"tooltip": "Changing this list marks existing per-user header submissions as needing an update, so callers resubmit values on next use."
+			},
+			"allowedExtraHeaders": {
+				"title": "Allowed Extra Headers",
+				"description": "Comma-separated dynamic request header names, or * to allow all. Leave empty to block all extra headers."
+			},
+			"tls": {
+				"title": "TLS / Certificate",
+				"description": "Configure certificate verification for HTTPS connections to this server."
+			},
+			"oauth": {
+				"title": "OAuth Configuration",
+				"description": "Credentials and endpoints this server uses to authenticate via OAuth."
+			},
+			"tokenExchange": {
+				"title": "Token Exchange Configuration",
+				"description": "Credentials and scopes used to exchange caller identity tokens for access to this server."
+			},
+			"access": {
+				"title": "Access Control",
+				"description": "Control whether this server is reachable by all virtual keys without explicit per-key assignment."
+			},
+			"virtualKeyAccess": {
+				"title": "Virtual Key Access",
+				"description": "Control which virtual keys can use this server and which tools they're allowed to call."
+			}
+		},
+		"labels": {
+			"name": "Name",
+			"namePlaceholder": "Client name",
+			"connection": "Connection",
+			"envVars": "Environment Variables",
+			"codeModeServer": "Code Mode Server",
+			"codeModeAria": "Learn more about Code Mode",
+			"codeModeTooltip": "Click to learn more about Code Mode",
+			"pingAvailable": "Ping Available for Health Check",
+			"persistentConnection": "Maintain Persistent Connection",
+			"syncInterval": "Tool Sync Interval (minutes)",
+			"executionTimeout": "Tool Execution Timeout (seconds)",
+			"usingGlobal": "Using global setting",
+			"disableClient": "Disable Client",
+			"headerName": "Header name",
+			"headerValue": "Header value",
+			"scopes": "Scopes",
+			"resource": "Resource",
+			"clientId": "Client ID",
+			"clientSecret": "Client Secret",
+			"authorizeUrl": "Authorization URL",
+			"tokenUrl": "Token URL",
+			"registrationUrl": "Registration URL",
+			"audience": "Audience",
+			"exchangeApplication": "Exchange application",
+			"exchangeClientId": "Exchange Client ID",
+			"exchangeClientSecret": "Exchange Client Secret",
+			"authServerUrl": "Authorization Server URL",
+			"addVirtualKey": "Add Virtual Key",
+			"virtualKey": "Virtual Key",
+			"allowedTools": "Allowed Tools",
+			"saveChanges": "Save Changes"
+		},
+		"tooltips": {
+			"name": "Use a descriptive, meaningful name that clearly identifies the server. For example, use \"google_drive\" instead of \"gdrive\", or \"hacker_news\" instead of \"hn\". This name is used as the Python module name in code mode.",
+			"ping": "Enable to use lightweight ping method for health checks. Disable if your MCP server doesn't support ping - will use listTools instead.",
+			"persistentConnection": "Enable to keep one shared connection open and reused across every caller. Disable to connect fresh on every call instead.",
+			"syncInterval": "Override the global tool sync interval for this server. Leave empty to use global setting. Set to -1 to disable sync for this server.",
+			"executionTimeout": "Override the global tool execution timeout for this server. Leave empty or set to 0 to use the global setting.",
+			"disableClient": "When enabled, the client's connection, health monitor, and tool syncer are shut down. Tools from this client will not be available for inference until it is re-enabled.",
+			"allowAllVirtualKeys": "When enabled, this MCP server is accessible to all virtual keys without requiring explicit per-key assignment. All tools are allowed by default. If a virtual key has an explicit MCP config for this server, that config takes precedence and overrides this behaviour."
+		},
+		"warnings": {
+			"stickinessOpen": "Toggling this takes effect immediately on save: the shared connection will be opened now.",
+			"stickinessClose": "Toggling this takes effect immediately on save: the existing shared connection will be closed now.",
+			"oauthDisabled": "OAuth config cannot be rotated while the client is disabled. Re-enable the client to update it.",
+			"oauthRotation": "Changing any OAuth config field immediately signs out every current session on this MCP client, shared and per-user alike. Everyone will need to re-authenticate.",
+			"tokenExchangeEviction": "Changing any token exchange field immediately evicts every cached exchanged token for this server. The next tool call for each caller re-exchanges a fresh token."
+		},
+		"oauthFields": {
+			"clientIdPlaceholder": "Enter new OAuth client ID",
+			"clientIdHelper": "Leave empty to keep existing credentials unchanged.",
+			"clientSecretPlaceholder": "Enter new OAuth client secret"
+		},
+		"tokenExchange": {
+			"audienceTooltipEntra": "The resource app's Application (client) ID at your identity provider - a bare GUID, not the api://... Application ID URI shown under Expose an API. Exchanged tokens are scoped to it.",
+			"audienceTooltipDefault": "The resource identifier this server is registered as at your identity provider. Exchanged tokens are scoped to it.",
+			"dedicatedDescription": "A separate identity-provider app, scoped only to this server. Recommended for most providers.",
+			"idpDescription": "Reuses your SSO login application's own credentials. Required for Microsoft Entra ID.",
+			"entraWarning": "Your identity provider is Microsoft Entra ID - a dedicated application might not be available, switch to Identity provider application.",
+			"clientIdPlaceholder": "bifrost-exchange or env.EXCHANGE_CLIENT_ID",
+			"clientSecretPlaceholder": "env.EXCHANGE_CLIENT_SECRET",
+			"clientSecretHelper": "Omit for public clients.",
+			"authServerUrlHelper": "Leave blank to use the deployment's SSO login issuer.",
+			"scopesHelperDefault": "Comma-separated.",
+			"scopesHelperEntra": "Comma-separated. offline_access alone combines with the audience's default access - any other scope replaces it entirely instead of adding to it."
+		},
+		"tools": {
+			"allowAllLabel": "Allow All Tools",
+			"allowAllDescription": "Allow all current and future tools",
+			"availableTools": "Available Tools ({{count}})",
+			"description": "Enable, auto-execute, and price individual tools exposed by this server.",
+			"allEnabled": "All enabled",
+			"noneEnabled": "None enabled",
+			"enabledCount": "{{count}} enabled",
+			"enableAllAria": "Enable all tools ({{status}})",
+			"allAutoExecute": "All auto-execute",
+			"noneAutoExecute": "None auto-execute",
+			"autoExecuteCount": "{{count}} auto-execute",
+			"autoExecuteAllAria": "Auto-execute all tools ({{status}})",
+			"toolName": "Tool Name",
+			"enabled": "Enabled",
+			"autoExecute": "Auto-execute",
+			"cost": "Cost (USD)",
+			"autoExecuteAria": "Learn more about Auto-execute and Agent Mode",
+			"autoExecuteTooltip": "Applies only when Bifrost runs the LLM loop in Agent Mode. In MCP Gateway mode, the connected client (Claude Desktop, Cursor, etc.) controls tool approval and this setting is ignored. Click to learn more.",
+			"enableToolAria": "Enable {{name}}",
+			"disableToolAria": "Disable {{name}}",
+			"enableAutoExecuteAria": "Enable auto-execute for {{name}}",
+			"disableAutoExecuteAria": "Disable auto-execute for {{name}}",
+			"parametersSchema": "Parameters Schema",
+			"noParameters": "No parameters defined",
+			"noTools": "No tools available"
+		},
+		"access": {
+			"allowAllVirtualKeys": "Allow on All Virtual Keys",
+			"overrideNote": "Configuring access for a virtual key here overrides the <span>Allow on All Virtual Keys</span> setting for that key.",
+			"allToolsAllowed": "All tools allowed",
+			"noToolsAllowed": "No tools allowed",
+			"selectTools": "Select tools...",
+			"allKeysAccess": "All virtual keys can access this MCP server unless a key has an explicit override.",
+			"noKeysAccess": "No virtual keys have access to this MCP server"
+		},
+		"footer": {
+			"noChanges": "No changes to save"
+		},
+		"unsavedDialog": {
+			"title": "Unsaved Changes",
+			"description": "You have unsaved changes. Are you sure you want to navigate away? Your changes will be lost.",
+			"discard": "Discard Changes"
+		},
+		"toasts": {
+			"headerKeysRequiredTitle": "Header keys required",
+			"headerKeysRequiredDescription": "Declare at least one header name users must supply.",
+			"updatedDescription": "MCP client updated successfully"
+		}
+	},
+	"clientForm": {
+		"title": "New MCP Server",
+		"description": "Configure and connect to a new Model Context Protocol server.",
+		"name": {
+			"label": "Name",
+			"placeholder": "Server name",
+			"required": "Server name is required",
+			"minLength": "Server name must be at least 3 characters",
+			"maxLength": "Server name cannot exceed 50 characters",
+			"format": "Server name can only contain letters, numbers, and underscores",
+			"noLeadingDigit": "Server name cannot start with a number"
+		},
+		"sections": {
+			"serverBehavior": {
+				"title": "Server Behavior",
+				"description": "Control how this server participates in code mode and health checks."
+			},
+			"connection": {
+				"title": "Connection & Authentication",
+				"description": "Choose how Bifrost connects to this server and, for network transports, how requests are authenticated."
+			},
+			"headers": {
+				"title": "Headers",
+				"description": "Static headers sent with every request to this server."
+			},
+			"requiredHeaders": {
+				"title": "Required Headers",
+				"description": "Comma-separated header names each caller must supply on first use, e.g. X-API-Key, X-Tenant-ID. Values are submitted per user, not stored on this server config."
+			},
+			"staticHeaders": {
+				"title": "Static Headers",
+				"description": "Optional, applied alongside the values each caller supplies."
+			},
+			"tokenExchange": {
+				"title": "Token Exchange Configuration",
+				"description": "Credentials and scopes used to exchange caller identity tokens for access to this server."
+			},
+			"oauth": {
+				"title": "OAuth Configuration",
+				"description": "Credentials and endpoints this server uses to authenticate via OAuth."
+			},
+			"tls": {
+				"title": "TLS / Certificate",
+				"description": "Configure certificate verification for HTTPS connections to this server."
+			}
+		},
+		"labels": {
+			"codeModeServer": "Code Mode Server",
+			"codeModeAria": "Learn more about Code Mode",
+			"codeModeTooltip": "Click to learn more about Code Mode",
+			"pingAvailable": "Ping Available for Health Check",
+			"persistentConnection": "Maintain Persistent Connection",
+			"connectionType": "Connection Type",
+			"connectionUrl": "Connection URL",
+			"authType": "Authentication Type",
+			"authScope": "Auth Scope",
+			"headerName": "Header name",
+			"headerValue": "Header value",
+			"command": "Command",
+			"args": "Arguments (comma-separated)",
+			"envVars": "Environment Variables",
+			"create": "Create"
+		},
+		"selects": {
+			"connectionTypePlaceholder": "Select connection type",
+			"http": "HTTP (Streamable)",
+			"sse": "Server-Sent Events (SSE)",
+			"stdio": "STDIO",
+			"authTypePlaceholder": "Select authentication type",
+			"none": "None",
+			"headers": "Headers",
+			"oauth": "OAuth 2.0",
+			"tokenExchange": "Token Exchange (On-Behalf-Of)",
+			"authScopePlaceholder": "Select auth scope",
+			"shared": "Shared",
+			"perUser": "Per-User"
+		},
+		"notes": {
+			"connectionLocked": "Connection type and authentication settings cannot be changed later.",
+			"dockerTitle": "Docker Notice",
+			"dockerBody": "If not using the official Bifrost Docker image, STDIO connections may not work if required commands (npx, python, etc.) aren't installed. You can safely ignore this if running locally or using a custom image with the necessary dependencies."
+		},
+		"tooltips": {
+			"ping": "Enable to use lightweight ping method for health checks. Disable if your MCP server doesn't support ping - will use listTools instead.",
+			"persistentConnection": "Enable to keep one shared connection open and reused across every caller. Disable to connect fresh on every call instead, same as per-user auth types. Only applies to HTTP connections; SSE and STDIO always keep a persistent connection.",
+			"envVars": "Add a value for each variable, or leave it blank to read the value from the environment where Bifrost runs."
+		},
+		"envValuePlaceholder": "Value (or leave blank to use host env)",
+		"tokenExchange": {
+			"audience": "Audience",
+			"audienceTooltipEntra": "The resource app's Application (client) ID at your identity provider - a bare GUID, not the api://... Application ID URI shown under Expose an API. Exchanged tokens are scoped to it.",
+			"audienceTooltipDefault": "The resource identifier this server is registered as at your identity provider. Exchanged tokens are scoped to it.",
+			"exchangeApplication": "Exchange application",
+			"dedicatedDescription": "A separate identity-provider app, scoped only to this server. Recommended for most providers.",
+			"idpDescription": "Reuses your SSO login application's own credentials. Required for Microsoft Entra ID.",
+			"entraWarning": "Your identity provider is Microsoft Entra ID - a dedicated application might not work, switch to Identity provider application.",
+			"exchangeClientId": "Exchange Client ID",
+			"clientIdTooltip": "A dedicated application at your identity provider with the token exchange (or on-behalf-of) grant enabled and permission to request this audience. Not the SSO login application. Ignored when using identity provider credentials above.",
+			"clientIdPlaceholder": "bifrost-exchange or env.EXCHANGE_CLIENT_ID",
+			"clientSecretPlaceholder": "env.EXCHANGE_CLIENT_SECRET",
+			"exchangeClientSecretOptional": "Exchange Client Secret (optional)",
+			"clientSecretHelper": "Omit for public clients.",
+			"authServerUrlOptional": "Authorization Server URL (optional)",
+			"authServerUrlTooltip": "Only needed when the audience above is registered on a different authorization server than the one your SSO login uses - for example, Okta's per-resource Custom Authorization Servers. Leave blank to use your SSO login's issuer, which is correct for most providers.",
+			"scopesOptional": "Scopes (optional)",
+			"scopesHelper": "Comma-separated scopes to request on exchanged tokens. Include <code>offline_access</code> (where your identity provider supports it) so the retained discovery credential can renew itself in the background.",
+			"scopesHelperEntra": "<code>offline_access</code> alone is the only scope combined with the audience's default resource access - any other scope replaces the default entirely instead of adding to it."
+		},
+		"oauthFields": {
+			"scopesOptional": "Scopes (optional, comma-separated)",
+			"resource": "Resource",
+			"clientIdOptional": "OAuth Client ID (optional)",
+			"clientIdPlaceholder": "your-client-id (auto-generated if empty)",
+			"clientIdHelper": "Will be auto-generated via dynamic registration if left empty and provider supports it",
+			"clientIdTooltip": "Leave empty to use Dynamic Client Registration (RFC 7591). Bifrost will automatically register with the OAuth provider if supported.",
+			"clientSecretOptional": "OAuth Client Secret (optional for PKCE)",
+			"clientSecretPlaceholder": "your-client-secret",
+			"clientSecretHelper": "Leave empty for public clients using PKCE",
+			"authorizeUrlOptional": "Authorization URL (optional, auto-discovered)",
+			"tokenUrlOptional": "Token URL (optional, auto-discovered)",
+			"registrationUrlOptional": "Registration URL (optional, auto-discovered)"
+		},
+		"errors": {
+			"connectionUrlRequired": "Connection URL is required",
+			"connectionUrlFormat": "Connection URL must start with http:// or https://",
+			"commandRequired": "Command is required for STDIO connections",
+			"commandSpecialChars": "Command cannot contain special shell characters",
+			"authorizeUrlFormat": "Authorize URL must start with http:// or https://",
+			"tokenUrlFormat": "Token URL must start with http:// or https://",
+			"registrationUrlFormat": "Registration URL must start with http:// or https://",
+			"audienceRequired": "Audience is required for token exchange",
+			"exchangeClientIdRequired": "Exchange client ID is required for token exchange",
+			"headerValueRequired": "Header \"{{key}}\" must have a value"
+		},
+		"toasts": {
+			"invalidResourceTitle": "Invalid resource URI",
+			"invalidResourceDescription": "OAuth resource must be an absolute URI without a fragment.",
+			"headerKeysRequiredTitle": "Header keys required",
+			"headerKeysRequiredDescription": "Declare at least one header name users must supply.",
+			"created": "Server created",
+			"oauthConnected": "MCP server connected with OAuth",
+			"oauthErrorTitle": "OAuth Error",
+			"perUserHeadersConnected": "MCP server connected with per-user headers"
+		}
+	},
+	"usageGuide": {
+		"trigger": "Connect agent",
+		"title": "Install Bifrost MCP",
+		"description": "Build a copy-ready command or config for your agent harness.",
+		"harness": "Harness",
+		"virtualKey": "Virtual key",
+		"searchVirtualKeys": "Search virtual keys",
+		"noVirtualKeys": "No active virtual keys found.",
+		"serverAccess": "Server access",
+		"allServers": "All servers",
+		"selectedServers": "Selected servers",
+		"loadingServers": "Loading allowed servers...",
+		"selectServers": "Select allowed MCP servers",
+		"noServers": "No allowed MCP servers found.",
+		"platform": "Platform",
+		"scope": {
+			"local": "Local",
+			"project": "Project",
+			"user": "User",
+			"global": "Global",
+			"workspace": "Workspace"
+		},
+		"commandCopied": "Command copied",
+		"configCopied": "Config copied",
+		"install": "Install",
+		"command": "Command",
+		"config": "Config",
+		"copied": "Copied",
+		"copy": "Copy",
+		"copiedAria": "{{label}} copied",
+		"copyAria": "Copy {{label}}",
+		"finishSelections": "Finish the selections first",
+		"emptyServers": "Select servers or use Gateway root.",
+		"emptyCommand": "Select a virtual key to generate the command.",
+		"emptyConfig": "Select a virtual key to generate the config.",
+		"registrationServers_one": "{{count}} server",
+		"registrationServers_other": "{{count}} servers"
 	}
 }

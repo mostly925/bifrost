@@ -18,13 +18,58 @@
 		"success": "成功",
 		"throughput": "吞吐量",
 		"total": "总计",
-		"unnamedModel": "未命名模型"
+		"unnamedModel": "未命名模型",
+		"avgShort": "平均",
+		"tokens": "Token",
+		"tokensPerSec": "Token/秒",
+		"successRate": "成功率",
+		"avgLatency": "平均延迟"
 	},
 	"meter": {
 		"cached": "{{value}} 已缓存",
 		"externalCacheCaption": "外部缓存 Token",
 		"externalCacheInfoAria": "关于外部缓存 Token",
 		"externalCacheInfoTip": "从外部缓存读取的 Token。",
-		"input": "{{value}} 输入"
-	}
+		"input": "{{value}} 输入",
+		"localCacheServed": "的请求由本地缓存提供服务",
+		"directHits": "Direct：{{count}}",
+		"semanticHits": "Semantic：{{count}}"
+	},
+	"section": {
+		"requestVolume": "请求量",
+		"tokenUsage": "Token 用量",
+		"externalCacheHitRate": "外部缓存命中率",
+		"localCacheHitRate": "本地缓存命中率",
+		"cost": "成本",
+		"modelUsage": "模型使用情况",
+		"latency": "延迟",
+		"throughput": "吞吐量"
+	},
+	"rankings": {
+		"title": "模型排行",
+		"model": "模型",
+		"topModels": "热门模型",
+		"requestsSentDescription": "实际发送的请求数",
+		"newBadge": "新",
+		"attributedDescription": "按归属统计 - 请求会计入其所属的每个{{dimension}}，因此总数可能超过实际请求数。",
+		"emptyPeriod": "该时间段内暂无模型使用数据。",
+		"attributedRequests": "归属请求数"
+	},
+	"mcpTab": {
+		"toolCalls": "MCP 工具调用",
+		"cost": "MCP 成本",
+		"topTools": "Top 10 MCP 工具"
+	},
+	"providerTab": {
+		"cost": "Provider 成本",
+		"tokenUsage": "Provider Token 用量",
+		"latency": "Provider 延迟",
+		"throughput": "Provider 吞吐量"
+	},
+	"filters": {
+		"allProviders": "所有 Provider",
+		"allTools": "所有工具",
+		"allServers": "所有服务器"
+	},
+	"title": "仪表盘"
 }

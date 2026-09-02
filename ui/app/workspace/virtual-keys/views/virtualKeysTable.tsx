@@ -24,7 +24,7 @@ import { Switch } from "@/components/ui/switch";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
-import { resetDurationLabels } from "@/lib/constants/governance";
+import { localizedResetDurationLabelStandalone } from "@/lib/constants/governance";
 import { getUserPicker } from "@/lib/registries/userPicker";
 import {
 	getErrorMessage,
@@ -74,7 +74,7 @@ import VirtualKeySheet from "./virtualKeySheet";
 // where the user filter stays hidden because no picker is registered.
 import "@enterprise/lib/registrations/userPicker";
 
-const formatResetDuration = (duration: string) => resetDurationLabels[duration] || duration;
+const formatResetDuration = (duration: string) => localizedResetDurationLabelStandalone(duration);
 
 type ExportScope = "current_page" | "all";
 

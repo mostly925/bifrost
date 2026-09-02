@@ -11,6 +11,7 @@ import { RbacOperation, RbacResource, useRbac } from "@enterprise/lib";
 import { Link } from "@tanstack/react-router";
 import { GitBranch, Plus } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { RoutingRuleInfoSheet } from "./routingRuleInfoSheet";
 import { RoutingRuleSheet } from "./routingRuleSheet";
 import { RoutingRulesEmptyState } from "./routingRulesEmptyState";
@@ -20,6 +21,7 @@ const POLLING_INTERVAL = 5000;
 const PAGE_SIZE = 25;
 
 export function RoutingRulesView() {
+	const { t } = useTranslation("routingRules");
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [editingRule, setEditingRule] = useState<RoutingRule | null>(null);
 	const [infoSheetOpen, setInfoSheetOpen] = useState(false);
@@ -117,20 +119,20 @@ export function RoutingRulesView() {
 			{/* Header */}
 			<div className="mb-4 flex items-center justify-between">
 				<div>
-					<h1 className="text-foreground text-lg font-semibold">Routing Rules</h1>
-					<p className="text-muted-foreground text-sm">Manage CEL-based routing rules for intelligent request routing across providers</p>
+					<h1 className="text-foreground text-lg font-semibold">{t("view.title")}</h1>
+					<p className="text-muted-foreground text-sm">{t("view.subtitle")}</p>
 				</div>
 				<div className="flex items-center gap-2">
 					<Button variant="outline" size="sm" asChild className="gap-2">
 						<Link to="/workspace/routing-rules/tree">
 							<GitBranch className="h-4 w-4" />
-							<span className="hidden sm:inline">View Tree</span>
+							<span className="hidden sm:inline">{t("view.viewTree")}</span>
 						</Link>
 					</Button>
 					{canCreate && (
 						<Button data-testid="create-routing-rule-btn" onClick={handleCreateNew} disabled={isLoading} className="gap-2">
 							<Plus className="h-4 w-4" />
-							<span className="hidden sm:inline">New Rule</span>
+							<span className="hidden sm:inline">{t("view.newRule")}</span>
 						</Button>
 					)}
 				</div>

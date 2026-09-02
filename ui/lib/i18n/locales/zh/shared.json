@@ -103,5 +103,142 @@
 		"reqLabel": "次请求",
 		"overrideLabel": "加额",
 		"basePlusOverride": "基础 {{base}} + {{amount}} 加额"
+	},
+	"resetPeriods": {
+		"everyMinute": "每分钟",
+		"every5Minutes": "每 5 分钟",
+		"every15Minutes": "每 15 分钟",
+		"every30Minutes": "每 30 分钟",
+		"hourly": "每小时",
+		"every6Hours": "每 6 小时",
+		"daily": "每天",
+		"weekly": "每周",
+		"monthly": "每月",
+		"quarterly": "每季度"
+	},
+	"fiscalYear": {
+		"starts": "财年始于 {{month}}"
+	},
+	"budgetLines": {
+		"label": "预算配置",
+		"reset": "重置",
+		"addBudget": "添加预算",
+		"empty": "尚未配置预算限额。",
+		"maxSpend": "最高消费（USD）",
+		"removeAria": "移除预算 {{index}}",
+		"duplicate": "重置周期重复；每条预算必须使用不同的周期。"
+	},
+	"ui": {
+		"more": "更多",
+		"toggleSidebar": "收起/展开侧边栏",
+		"clearSelection": "清除选择",
+		"searchPlaceholder": "搜索...",
+		"selectPlaceholder": "请选择",
+		"close": "关闭",
+		"collapse": "收起",
+		"expand": "展开",
+		"cancel": "取消",
+		"dismiss": "忽略",
+		"headersTable": {
+			"name": "名称",
+			"value": "值",
+			"actions": "操作",
+			"duplicateKey": "键名重复"
+		},
+		"datePicker": {
+			"pickADate": "选择日期",
+			"fromTime": "开始时间",
+			"toTime": "结束时间",
+			"time": "时间",
+			"timezone": "时区",
+			"selectTimezone": "请选择时区",
+			"pickADateTime": "选择日期和时间"
+		},
+		"celBuilder": {
+			"loading": "正在加载 CEL 构建器...",
+			"leaveEmptyToMatchAll": "留空以匹配所有请求。",
+			"switchToVisualBuilder": "切换到可视化构建器？",
+			"confirmSwitchBody": "可视化构建器无法导入手写的 CEL 表达式，当前的 CEL 将被丢弃，构建器将从空白开始。如需保留请先复制。",
+			"confirmSwitchAction": "丢弃 CEL 并切换",
+			"noRulesDefined": "尚未定义规则",
+			"hasKey": "包含键",
+			"selectField": "请选择字段...",
+			"selectOperator": "请选择操作符...",
+			"selectModels": "请选择模型...",
+			"searchModel": "搜索模型...",
+			"selectProviders": "请选择 Provider...",
+			"value": "值"
+		},
+		"mcpToolSelector": {
+			"tool": "工具",
+			"server": "服务器",
+			"parametersSchema": "参数 Schema",
+			"noParametersDefined": "未定义参数"
+		},
+		"multiSelect": {
+			"availableOptions": "可选项",
+			"searchOptions": "搜索选项...",
+			"searchThroughOptions": "搜索可用选项"
+		},
+		"secretVarInput": {
+			"resolvedValueNote": "解析后的值将在保存后显示"
+		},
+		"entitySelect": {
+			"selected": "已选择"
+		},
+		"budgetUsageReset": {
+			"title": "重置预算用量？",
+			"description": "您更改了此{{owner}}的预算金额或重置频率。是将当前用量重置为 0，还是保留现有计数？无论哪种方式，重置窗口的起止时间均保持不变。",
+			"preserveUsage": "保留用量",
+			"resetUsage": "重置用量"
+		},
+		"providerConfig": {
+			"providerBudget": "Provider 预算",
+			"providerBudgetAria": "Provider 预算",
+			"modelBudgets": "模型预算",
+			"modelBudgetAria": "模型预算",
+			"accessRateLimits": "访问与速率限制",
+			"providerKeys": "Provider 密钥",
+			"allowedModels": "允许的模型",
+			"weight": "权重",
+			"blockedModels": "屏蔽的模型",
+			"excludeFromRouting": "从路由中排除",
+			"maximumTokens": "最大 Token 数",
+			"noLimit": "无限制",
+			"maximumRequests": "最大请求数",
+			"addModel": "添加模型…",
+			"globalProviderCap": "全局 Provider 上限 {{limit}}",
+			"skipModelBudgetsNote": "若跳过，各模型将自由共享该 Provider 的预算",
+			"modelBudgetCount_one": "{{count}} 个模型预算",
+			"modelBudgetCount_other": "{{count}} 个模型预算",
+			"selectModelPlaceholder": "请选择模型…",
+			"noCap": "无上限",
+			"removeModelBudgetAria": "移除模型预算 {{model}}",
+			"removeProviderAria": "移除 Provider {{label}}",
+			"removeKeyAria": "移除 {{label}}",
+			"allowAllKeys": "允许所有密钥",
+			"allowAllKeysDescription": "允许此 Provider 当前及未来的所有密钥",
+			"allModels": "所有模型",
+			"noModelsDenyAll": "无模型（全部拒绝）",
+			"allKeysAllowed": "允许所有密钥",
+			"noKeysSelected": "未选择密钥",
+			"selectKeys": "请选择密钥...",
+			"allModelsAllowed": "允许所有模型",
+			"allModelsBlocked": "屏蔽所有模型",
+			"noBlockedModels": "无屏蔽模型",
+			"searchModels": "搜索模型...",
+			"allKeys": "所有密钥",
+			"keyCount_one": "{{count}} 个密钥",
+			"keyCount_other": "{{count}} 个密钥",
+			"noKeys": "无密钥",
+			"modelsCount": "{{count}} 个模型",
+			"denyAll": "全部拒绝",
+			"rateLimitsSet": "已设置速率限制",
+			"noRateLimits": "无速率限制",
+			"noBudget": "无预算"
+		},
+		"mcpServerSelector": {
+			"openDetailsInNewTab": "在新标签页打开服务器详情"
+		}
 	}
 }

@@ -1,0 +1,168 @@
+{
+	"common": {
+		"viewLogs": "View logs",
+		"deleting": "Deleting...",
+		"noPermission": "You don't have permission to perform this action",
+		"fixValidationErrors": "Please fix validation errors",
+		"noChanges": "No changes to save"
+	},
+	"pagination": {
+		"entries": "{{from}}-{{to}} of {{total}} entries",
+		"page": "Page",
+		"of": "of {{total}}",
+		"prevAria": "Previous page",
+		"nextAria": "Next page"
+	},
+	"rateLimit": {
+		"tokens": "{{value}} tokens",
+		"tokensUsed": "{{current}} / {{max}} tokens",
+		"requests": "{{value}} req",
+		"requestsUsed": "{{current}} / {{max}} requests"
+	},
+	"errors": {
+		"load": {
+			"governance": "Failed to load governance data.",
+			"teams": "Failed to load teams: {{error}}",
+			"customers": "Failed to load customers: {{error}}"
+		},
+		"limits": {
+			"tokenMin": "Token max limit must be at least 1",
+			"tokenDurationRequired": "Token reset duration is required",
+			"requestMin": "Request max limit must be at least 1",
+			"requestDurationRequired": "Request reset duration is required"
+		}
+	},
+	"calendar": {
+		"title": "Align to calendar cycle",
+		"description": "Reset budgets and rate limits at the start of each period (e.g. 1st of month) instead of rolling from creation date. Quarterly budgets always align to fiscal quarter starts. Applies to durations of a day or longer.",
+		"warningTitle": "Reset budget and rate-limit usage?",
+		"warningDescription": "Enabling calendar alignment will reset budget usage to <1>$0.00</1> and token/request rate-limit counters to <3>0</3> for this {{owner}}, then snap each reset date to the start of its current period (e.g. start of day, week, month, or year). The usage reset cannot be undone, but calendar alignment can be turned off later. This will take effect when you save.",
+		"warningConfirm": "Enable Calendar Alignment"
+	},
+	"teams": {
+		"owner": "team",
+		"title": "Teams",
+		"description": "Organize users into teams with shared budgets and access controls.",
+		"add": "Add Team",
+		"searchAria": "Search teams by name",
+		"searchPlaceholder": "Search by name...",
+		"table": {
+			"name": "Name",
+			"customer": "Customer",
+			"budget": "Budget",
+			"rateLimit": "Rate Limit",
+			"virtualKeys": "Virtual Keys"
+		},
+		"noMatches": "No matching teams found.",
+		"limitReached": "Limit Reached",
+		"unknownCustomer": "Unknown Customer",
+		"keysCount_one": "{{count}} key",
+		"keysCount_other": "{{count}} keys",
+		"actionsAria": "Team actions for {{name}}",
+		"empty": {
+			"title": "Teams organize users with shared budgets and access",
+			"description": "Create teams to group users, assign customer accounts, and set budgets and rate limits at the team level.",
+			"readMoreAria": "Read more about teams (opens in new tab)",
+			"readMore": "Read more",
+			"addAria": "Add your first team",
+			"add": "Add Team"
+		},
+		"deleteDialog": {
+			"title": "Delete Team",
+			"description": "Are you sure you want to delete \"{{name}}\"? This will also unassign any virtual keys from this team. This action cannot be undone."
+		},
+		"toasts": {
+			"deleted": "Team deleted successfully",
+			"updated": "Team updated successfully",
+			"created": "Team created successfully"
+		},
+		"sheet": {
+			"titleEdit": "Edit Team",
+			"titleCreate": "Create Team",
+			"descriptionEdit": "Update the team information and settings.",
+			"descriptionCreate": "Create a new team to organize users and manage shared resources.",
+			"nameLabel": "Team Name *",
+			"namePlaceholder": "e.g., Engineering Team",
+			"customerLabel": "Customer (optional)",
+			"customerPlaceholder": "Select a customer...",
+			"customerHint": "Assign to a customer or leave independent.",
+			"budgets": "Budgets",
+			"addBudget": "+ Add budget",
+			"noBudgets": "No budgets. Click \"Add budget\" to enforce a spend limit.",
+			"budgetRowLabel": "Budget #{{index}}: Maximum Spend (USD)",
+			"maximumTokens": "Maximum Tokens",
+			"maximumRequests": "Maximum Requests",
+			"currentUsage": "Current Usage",
+			"budgetWithDuration": "Budget ({{duration}})",
+			"tokens": "Tokens",
+			"requests": "Requests",
+			"lastReset": "Last Reset: {{time}}",
+			"saveEdit": "Update Team",
+			"saveCreate": "Create Team",
+			"errors": {
+				"nameRequired": "Team name is required",
+				"budgetMin": "Budget #{{index}} max limit must be greater than $0.01",
+				"budgetDurationRequired": "Budget #{{index}} reset duration is required",
+				"budgetDistinctDurations": "Each budget must have a distinct reset duration"
+			}
+		}
+	},
+	"customers": {
+		"owner": "customer",
+		"title": "Customers",
+		"description": "Manage customer accounts with their own teams, budgets, and access controls.",
+		"add": "Add Customer",
+		"searchAria": "Search customers by name",
+		"searchPlaceholder": "Search by name...",
+		"table": {
+			"name": "Name",
+			"teams": "Teams",
+			"budget": "Budget",
+			"rateLimit": "Rate Limit",
+			"virtualKeys": "Virtual Keys"
+		},
+		"noMatches": "No matching customers found.",
+		"limitReached": "Limit Reached",
+		"teamsCount_one": "{{count}} team",
+		"teamsCount_other": "{{count}} teams",
+		"keysCount_one": "{{count}} key",
+		"keysCount_other": "{{count}} keys",
+		"actionsAria": "Customer actions {{name}}",
+		"empty": {
+			"title": "Customers have their own teams, budgets, and access controls",
+			"description": "Create customer accounts to manage multi-tenant usage, assign teams, and set spending and rate limits per customer.",
+			"readMoreAria": "Read more about customers (opens in new tab)",
+			"readMore": "Read more",
+			"addAria": "Add your first customer",
+			"add": "Add Customer"
+		},
+		"deleteDialog": {
+			"title": "Delete Customer",
+			"description": "Are you sure you want to delete \"{{name}}\"? This will also delete all associated teams and unassign any virtual keys. This action cannot be undone."
+		},
+		"toasts": {
+			"deleted": "Customer deleted successfully",
+			"updated": "Customer updated successfully",
+			"created": "Customer created successfully"
+		},
+		"sheet": {
+			"titleEdit": "Edit Customer",
+			"titleCreate": "Create Customer",
+			"descriptionEdit": "Update the customer information and settings.",
+			"descriptionCreate": "Create a new customer account to organize teams and manage resources.",
+			"nameLabel": "Customer Name *",
+			"namePlaceholder": "e.g., Acme Corporation",
+			"nameHint": "This name will be used to identify the customer account.",
+			"budgetLimits": "Budget Limits",
+			"maximumTokens": "Maximum Tokens",
+			"maximumRequests": "Maximum Requests",
+			"saveEdit": "Update Customer",
+			"saveCreate": "Create Customer",
+			"errors": {
+				"nameRequired": "Customer name is required",
+				"budgetMin": "Budget max limit must be greater than $0.01",
+				"budgetUniquePeriods": "Each budget must have a unique reset period"
+			}
+		}
+	}
+}

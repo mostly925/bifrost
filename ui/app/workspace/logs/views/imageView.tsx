@@ -4,6 +4,8 @@ import { Image, ChevronLeft, ChevronRight } from "lucide-react";
 import { ImageMessage } from "@/components/chat/ImageMessage";
 import { Button } from "@/components/ui/button";
 import { RequestTypeLabels } from "@/lib/constants/logs";
+import { useTranslation } from "react-i18next";
+import type { TFunction } from "i18next";
 
 interface ImageGenerationInput {
 	prompt: string;
@@ -27,20 +29,21 @@ function getImageSrc(b64: string): string {
 }
 
 // Helper function to get method type label from request type
-function getMethodTypeLabel(requestType?: string): string {
-	if (!requestType) return "Image Generation";
+function getMethodTypeLabel(requestType: string | undefined, t: TFunction<"logs">): string {
+	if (!requestType) return t("image.fallbackGeneration");
 
 	const normalizedType = requestType.toLowerCase();
 	if (normalizedType.includes("image_edit")) {
-		return RequestTypeLabels[normalizedType as keyof typeof RequestTypeLabels] || "Image Edit";
+		return RequestTypeLabels[normalizedType as keyof typeof RequestTypeLabels] || t("image.fallbackEdit");
 	}
 	if (normalizedType.includes("image_variation")) {
-		return RequestTypeLabels[normalizedType as keyof typeof RequestTypeLabels] || "Image Variation";
+		return RequestTypeLabels[normalizedType as keyof typeof RequestTypeLabels] || t("image.fallbackVariation");
 	}
-	return RequestTypeLabels[normalizedType as keyof typeof RequestTypeLabels] || "Image Generation";
+	return RequestTypeLabels[normalizedType as keyof typeof RequestTypeLabels] || t("image.fallbackGeneration");
 }
 
 export default function ImageView({ imageInput, imageEditInput, imageVariationInput, imageOutput, requestType }: ImageViewProps) {
+	const { t } = useTranslation("logs");
 	const [currentIndex, setCurrentIndex] = useState(0);
 
 	// Get all valid images
@@ -49,7 +52,7 @@ export default function ImageView({ imageInput, imageEditInput, imageVariationIn
 	const currentImage = images[currentIndex] ?? null;
 
 	// Get method type label
-	const methodTypeLabel = getMethodTypeLabel(requestType);
+	const methodTypeLabel = getMethodTypeLabel(requestType, t);
 
 	// Clamp currentIndex when images array changes to ensure it's always valid
 	useEffect(() => {
@@ -71,10 +74,10 @@ export default function ImageView({ imageInput, imageEditInput, imageVariationIn
 				<div className="w-full rounded-sm border">
 					<div className="flex items-center gap-2 border-b px-6 py-2 text-sm font-medium">
 						<Image className="h-4 w-4" />
-						{methodTypeLabel} Input
+						{t("image.input", { type: methodTypeLabel })}
 					</div>
 					<div className="space-y-4 p-6">
-						<div className="text-muted-foreground mb-2 text-xs font-medium">PROMPT</div>
+						<div className="text-muted-foreground mb-2 text-xs font-medium">{t("image.prompt")}</div>
 						<div className="font-mono text-xs">{imageInput.prompt}</div>
 					</div>
 				</div>
@@ -85,19 +88,19 @@ export default function ImageView({ imageInput, imageEditInput, imageVariationIn
 				<div className="w-full rounded-sm border">
 					<div className="flex items-center gap-2 border-b px-6 py-2 text-sm font-medium">
 						<Image className="h-4 w-4" />
-						{methodTypeLabel} Input
+						{t("image.input", { type: methodTypeLabel })}
 					</div>
 					<div className="space-y-4 p-6">
 						{imageEditInput.images && imageEditInput.images.length > 0 && (
 							<div>
-								<div className="text-muted-foreground mb-2 text-xs font-medium">INPUT IMAGES</div>
+								<div className="text-muted-foreground mb-2 text-xs font-medium">{t("image.inputImages")}</div>
 								<div className="flex flex-wrap gap-2">
 									{imageEditInput.images.map((img, i) =>
 										img.image ? (
 											<img
 												key={i}
 												src={getImageSrc(img.image)}
-												alt={`Input image ${i + 1}`}
+												alt={t("image.inputImageAlt", { index: i + 1 })}
 												className="max-h-48 max-w-48 rounded border object-contain"
 											/>
 										) : null,
@@ -106,7 +109,7 @@ export default function ImageView({ imageInput, imageEditInput, imageVariationIn
 							</div>
 						)}
 						<div>
-							<div className="text-muted-foreground mb-2 text-xs font-medium">PROMPT</div>
+							<div className="text-muted-foreground mb-2 text-xs font-medium">{t("image.prompt")}</div>
 							<div className="font-mono text-xs">{imageEditInput.prompt}</div>
 						</div>
 					</div>
@@ -118,13 +121,13 @@ export default function ImageView({ imageInput, imageEditInput, imageVariationIn
 				<div className="w-full rounded-sm border">
 					<div className="flex items-center gap-2 border-b px-6 py-2 text-sm font-medium">
 						<Image className="h-4 w-4" />
-						{methodTypeLabel} Input
+						{t("image.input", { type: methodTypeLabel })}
 					</div>
 					<div className="space-y-4 p-6">
-						<div className="text-muted-foreground mb-2 text-xs font-medium">INPUT IMAGE</div>
+						<div className="text-muted-foreground mb-2 text-xs font-medium">{t("image.inputImage")}</div>
 						<img
 							src={getImageSrc(imageVariationInput.image.image)}
-							alt="Input image"
+							alt={t("image.inputImageAltSingle")}
 							className="max-h-48 max-w-48 rounded border object-contain"
 						/>
 					</div>
@@ -136,14 +139,14 @@ export default function ImageView({ imageInput, imageEditInput, imageVariationIn
 				<div className="w-full rounded-sm border">
 					<div className="flex items-center gap-2 border-b px-6 py-2 text-sm font-medium">
 						<Image className="h-4 w-4" />
-						{methodTypeLabel} Output
+						{t("image.output", { type: methodTypeLabel })}
 					</div>
 					<div className="space-y-4 p-6">
 						{currentImage && (
 							<>
 								{currentImage.revised_prompt && (
 									<div className="mb-4">
-										<div className="text-muted-foreground mb-2 text-xs font-medium">REVISED PROMPT</div>
+										<div className="text-muted-foreground mb-2 text-xs font-medium">{t("image.revisedPrompt")}</div>
 										<div className="font-mono text-xs">{currentImage.revised_prompt}</div>
 									</div>
 								)}
@@ -156,13 +159,19 @@ export default function ImageView({ imageInput, imageEditInput, imageVariationIn
 
 								{totalImages > 1 && (
 									<div className="mt-3 flex items-center justify-center gap-4">
-										<Button variant="outline" size="sm" onClick={goToPrevious} aria-label="Previous image" title="Previous image">
+										<Button
+											variant="outline"
+											size="sm"
+											onClick={goToPrevious}
+											aria-label={t("image.previousAria")}
+											title={t("image.previousAria")}
+										>
 											<ChevronLeft className="h-4 w-4" />
 										</Button>
 										<span className="text-muted-foreground text-sm">
 											{currentIndex + 1} / {totalImages}
 										</span>
-										<Button variant="outline" size="sm" onClick={goToNext} aria-label="Next image" title="Next image">
+										<Button variant="outline" size="sm" onClick={goToNext} aria-label={t("image.nextAria")} title={t("image.nextAria")}>
 											<ChevronRight className="h-4 w-4" />
 										</Button>
 									</div>

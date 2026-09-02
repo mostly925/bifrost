@@ -1,22 +1,21 @@
 import { Badge } from "@/components/ui/badge";
 import { CardHeader, CardTitle } from "@/components/ui/card";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { resetDurationLabels } from "@/lib/constants/governance";
+import { localizedResetDurationLabelStandalone } from "@/lib/constants/governance";
 import { useGetProviderGovernanceQuery } from "@/lib/store";
 import { ModelProvider } from "@/lib/types/config";
 import { cn } from "@/lib/utils";
 import { formatCurrency } from "@/lib/utils/governance";
 import { RbacOperation, RbacResource, useRbac } from "@enterprise/lib";
+import { useTranslation } from "react-i18next";
 
 interface Props {
 	className?: string;
 	provider: ModelProvider;
 }
 
-// Helper to format reset duration for display
-const formatResetDuration = (duration: string) => {
-	return resetDurationLabels[duration] || duration;
-};
+// Helper to format reset duration for display (labels live in the shared namespace)
+const formatResetDuration = (duration: string) => localizedResetDurationLabelStandalone(duration);
 
 // Circular progress component
 function CircularProgress({
@@ -94,6 +93,7 @@ function MetricCard({
 	resetDuration: string;
 	isExhausted: boolean;
 }) {
+	const { t } = useTranslation("providers");
 	// Compute safe percentage to avoid division by zero
 	const percentage = max > 0 ? Math.round((value / max) * 100) : 0;
 	const clampedPercentage = Math.max(0, Math.min(100, percentage));
@@ -115,7 +115,7 @@ function MetricCard({
 						<span className="text-muted-foreground text-sm font-medium whitespace-nowrap">{title}</span>
 						{isExhausted && (
 							<Badge variant="destructive" className="text-xs whitespace-nowrap">
-								Exhausted
+								{t("governance.exhausted")}
 							</Badge>
 						)}
 					</div>
@@ -133,14 +133,12 @@ function MetricCard({
 										</span>
 									</div>
 									<div className="text-xs">
-										<span className="text-muted-foreground">Resets {formatResetDuration(resetDuration)}</span>
+										<span className="text-muted-foreground">{t("governance.resets", { period: formatResetDuration(resetDuration) })}</span>
 									</div>
 								</div>
 							</TooltipTrigger>
 							<TooltipContent side="bottom">
-								<p className="font-medium">
-									{clampedPercentage}% of {title.toLowerCase()} used
-								</p>
+								<p className="font-medium">{t("governance.usageTooltip", { percentage: clampedPercentage, title: title.toLowerCase() })}</p>
 							</TooltipContent>
 						</Tooltip>
 					</TooltipProvider>
@@ -153,6 +151,7 @@ function MetricCard({
 }
 
 export default function ProviderGovernanceTable({ provider, className }: Props) {
+	const { t } = useTranslation("providers");
 	const hasViewAccess = useRbac(RbacResource.Governance, RbacOperation.View);
 	const { data: providerGovernanceData, isLoading } = useGetProviderGovernanceQuery(undefined, {
 		skip: !hasViewAccess,
@@ -170,7 +169,7 @@ export default function ProviderGovernanceTable({ provider, className }: Props) 
 			<div className={cn("w-full", className)}>
 				<CardHeader className="mb-4 px-0">
 					<CardTitle className="flex items-center justify-between">
-						<div className="flex items-center gap-2">Governance</div>
+						<div className="flex items-center gap-2">{t("governance.title")}</div>
 					</CardTitle>
 				</CardHeader>
 				<div className="flex items-center justify-center py-12">
@@ -203,7 +202,7 @@ export default function ProviderGovernanceTable({ provider, className }: Props) 
 		<div className={cn("w-full", className)}>
 			<CardHeader className="mb-4 px-0">
 				<CardTitle className="flex items-center justify-between">
-					<div className="flex items-center gap-2">Governance</div>
+					<div className="flex items-center gap-2">{t("governance.title")}</div>
 				</CardTitle>
 			</CardHeader>
 
@@ -212,7 +211,7 @@ export default function ProviderGovernanceTable({ provider, className }: Props) 
 				{budgets.map((budget) => (
 					<MetricCard
 						key={budget.id}
-						title={`Budget (${formatResetDuration(budget.reset_duration)})`}
+						title={t("governance.budgetTitle", { period: formatResetDuration(budget.reset_duration) })}
 						value={budget.current_usage}
 						max={budget.max_limit}
 						unit="$"
@@ -224,10 +223,10 @@ export default function ProviderGovernanceTable({ provider, className }: Props) 
 				{/* Token Rate Limit Card */}
 				{rateLimit?.token_max_limit && (
 					<MetricCard
-						title="Token Limit"
+						title={t("governance.tokenLimitTitle")}
 						value={rateLimit.token_current_usage}
 						max={rateLimit.token_max_limit}
-						unit="tokens"
+						unit={t("governance.units.tokens")}
 						resetDuration={rateLimit.token_reset_duration || "1h"}
 						isExhausted={isTokenExhausted}
 					/>
@@ -236,10 +235,10 @@ export default function ProviderGovernanceTable({ provider, className }: Props) 
 				{/* Request Rate Limit Card */}
 				{rateLimit?.request_max_limit && (
 					<MetricCard
-						title="Request Limit"
+						title={t("governance.requestLimitTitle")}
 						value={rateLimit.request_current_usage}
 						max={rateLimit.request_max_limit}
-						unit="requests"
+						unit={t("governance.units.requests")}
 						resetDuration={rateLimit.request_reset_duration || "1h"}
 						isExhausted={isRequestExhausted}
 					/>

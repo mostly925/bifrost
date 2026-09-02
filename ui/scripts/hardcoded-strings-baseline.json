@@ -1,33 +1,420 @@
 {
-	"totalHits": 1673,
-	"perDir": {
-		"app/workspace/config": 327,
-		"app/workspace/dashboard": 69,
-		"app/workspace/governance": 65,
-		"app/workspace/logs": 217,
-		"app/workspace/mcp-logs": 5,
-		"app/workspace/mcp-registry": 282,
-		"app/workspace/observability": 97,
-		"app/workspace/plugins": 1,
-		"app/workspace/providers": 278,
-		"app/workspace/routing-rules": 94,
-		"app/workspace/skills-repo": 5,
-		"app/workspace/virtual-keys": 3,
-		"app/workspace/webhooks": 2,
-		"components/budgetOverrideDialog.tsx": 2,
-		"components/budgetOverrideManagerDialog.tsx": 2,
-		"components/headersForm.tsx": 5,
-		"components/prompts": 15,
-		"components/sidebar.tsx": 1,
-		"components/table": 2,
-		"components/ui": 164,
-		"lib/constants": 20,
-		"lib/i18n": 1,
-		"lib/schemas": 2,
-		"lib/store": 2,
-		"lib/types": 4,
-		"lib/utils": 6,
-		"hooks/useBudgetUsageResetPrompt.ts": 1,
-		"hooks/useDebounce.ts": 1
-	}
+  "totalHits": 294,
+  "totalFiles": 96,
+  "perDir": {
+    "app/workspace/config": 29,
+    "app/workspace/dashboard": 15,
+    "app/workspace/governance": 1,
+    "app/workspace/logs": 10,
+    "app/workspace/mcp-logs": 5,
+    "app/workspace/mcp-registry": 21,
+    "app/workspace/observability": 17,
+    "app/workspace/plugins": 1,
+    "app/workspace/providers": 17,
+    "app/workspace/routing-rules": 7,
+    "app/workspace/skills-repo": 5,
+    "app/workspace/virtual-keys": 3,
+    "app/workspace/webhooks": 2,
+    "components/budgetOverrideDialog.tsx": 2,
+    "components/budgetOverrideManagerDialog.tsx": 2,
+    "components/headersForm.tsx": 5,
+    "components/prompts": 15,
+    "components/sidebar.tsx": 1,
+    "components/table": 2,
+    "components/ui": 97,
+    "lib/constants": 20,
+    "lib/i18n": 1,
+    "lib/schemas": 2,
+    "lib/store": 2,
+    "lib/types": 4,
+    "lib/utils": 6,
+    "hooks/useBudgetUsageResetPrompt.ts": 1,
+    "hooks/useDebounce.ts": 1
+  },
+  "perFile": [
+    {
+      "file": "app/workspace/config/views/cachingView.tsx",
+      "hits": 1
+    },
+    {
+      "file": "app/workspace/config/views/featureFlagsView.tsx",
+      "hits": 1
+    },
+    {
+      "file": "app/workspace/config/views/loggingView.tsx",
+      "hits": 1
+    },
+    {
+      "file": "app/workspace/config/views/mcpView.tsx",
+      "hits": 15
+    },
+    {
+      "file": "app/workspace/config/views/modelSettingsView.tsx",
+      "hits": 2
+    },
+    {
+      "file": "app/workspace/config/views/observabilityView.tsx",
+      "hits": 1
+    },
+    {
+      "file": "app/workspace/config/views/pricingConfigView.tsx",
+      "hits": 2
+    },
+    {
+      "file": "app/workspace/config/views/proxyView.tsx",
+      "hits": 2
+    },
+    {
+      "file": "app/workspace/config/views/securityView.tsx",
+      "hits": 4
+    },
+    {
+      "file": "app/workspace/dashboard/components/exportPopover.tsx",
+      "hits": 2
+    },
+    {
+      "file": "app/workspace/dashboard/components/modelRankingsTab.tsx",
+      "hits": 1
+    },
+    {
+      "file": "app/workspace/dashboard/components/tabViews/dimensionRankingsTabView.tsx",
+      "hits": 2
+    },
+    {
+      "file": "app/workspace/dashboard/components/tabViews/mcpTabView.tsx",
+      "hits": 2
+    },
+    {
+      "file": "app/workspace/dashboard/components/tabViews/modelRankingsTabView.tsx",
+      "hits": 2
+    },
+    {
+      "file": "app/workspace/dashboard/components/tabViews/overviewTabView.tsx",
+      "hits": 2
+    },
+    {
+      "file": "app/workspace/dashboard/components/tabViews/providerUsageTabView.tsx",
+      "hits": 2
+    },
+    {
+      "file": "app/workspace/dashboard/page.tsx",
+      "hits": 2
+    },
+    {
+      "file": "app/workspace/governance/views/customerSheet.tsx",
+      "hits": 1
+    },
+    {
+      "file": "app/workspace/logs/page.tsx",
+      "hits": 2
+    },
+    {
+      "file": "app/workspace/logs/sheets/logDetailView.tsx",
+      "hits": 2
+    },
+    {
+      "file": "app/workspace/logs/views/logsHeaderView.tsx",
+      "hits": 3
+    },
+    {
+      "file": "app/workspace/logs/views/logsTable.tsx",
+      "hits": 1
+    },
+    {
+      "file": "app/workspace/logs/views/logsVolumeChart.tsx",
+      "hits": 1
+    },
+    {
+      "file": "app/workspace/logs/views/pluginLogsView.tsx",
+      "hits": 1
+    },
+    {
+      "file": "app/workspace/mcp-logs/page.tsx",
+      "hits": 2
+    },
+    {
+      "file": "app/workspace/mcp-logs/views/columns.tsx",
+      "hits": 1
+    },
+    {
+      "file": "app/workspace/mcp-logs/views/mcpLogDetailsSheet.tsx",
+      "hits": 1
+    },
+    {
+      "file": "app/workspace/mcp-logs/views/mcpLogsTable.tsx",
+      "hits": 1
+    },
+    {
+      "file": "app/workspace/mcp-registry/views/mcpClientForm.tsx",
+      "hits": 4
+    },
+    {
+      "file": "app/workspace/mcp-registry/views/mcpClientSheet.tsx",
+      "hits": 2
+    },
+    {
+      "file": "app/workspace/mcp-registry/views/mcpClientsTable.tsx",
+      "hits": 3
+    },
+    {
+      "file": "app/workspace/mcp-registry/views/mcpHeadersAuthorizer.tsx",
+      "hits": 1
+    },
+    {
+      "file": "app/workspace/mcp-registry/views/mcpUsageGuide/harnesses/codexHarnessInstall.tsx",
+      "hits": 1
+    },
+    {
+      "file": "app/workspace/mcp-registry/views/oauthAdvancedFields.tsx",
+      "hits": 6
+    },
+    {
+      "file": "app/workspace/mcp-registry/views/tokenExchangeFields.tsx",
+      "hits": 4
+    },
+    {
+      "file": "app/workspace/observability/fragments/maximFormFragment.tsx",
+      "hits": 2
+    },
+    {
+      "file": "app/workspace/observability/fragments/otelFormFragment.tsx",
+      "hits": 6
+    },
+    {
+      "file": "app/workspace/observability/fragments/prometheusFormFragment.tsx",
+      "hits": 3
+    },
+    {
+      "file": "app/workspace/observability/views/observabilityView.tsx",
+      "hits": 6
+    },
+    {
+      "file": "app/workspace/plugins/sheets/pluginSequenceSheet.tsx",
+      "hits": 1
+    },
+    {
+      "file": "app/workspace/providers/dialogs/addNewCustomProviderSheet.tsx",
+      "hits": 7
+    },
+    {
+      "file": "app/workspace/providers/fragments/apiKeysFormFragment.tsx",
+      "hits": 4
+    },
+    {
+      "file": "app/workspace/providers/fragments/apiStructureFormFragment.tsx",
+      "hits": 6
+    },
+    {
+      "file": "app/workspace/routing-rules/tree/views/celParser.ts",
+      "hits": 2
+    },
+    {
+      "file": "app/workspace/routing-rules/tree/views/graphBuilder.ts",
+      "hits": 1
+    },
+    {
+      "file": "app/workspace/routing-rules/views/routingRuleInfoSheet.tsx",
+      "hits": 2
+    },
+    {
+      "file": "app/workspace/routing-rules/views/routingRulesView.tsx",
+      "hits": 2
+    },
+    {
+      "file": "app/workspace/skills-repo/components/fileManagerView.tsx",
+      "hits": 2
+    },
+    {
+      "file": "app/workspace/skills-repo/components/skillListView.tsx",
+      "hits": 1
+    },
+    {
+      "file": "app/workspace/skills-repo/dialogs/versionDetailsDialog.tsx",
+      "hits": 1
+    },
+    {
+      "file": "app/workspace/skills-repo/forms/skillEditFormFields.tsx",
+      "hits": 1
+    },
+    {
+      "file": "app/workspace/virtual-keys/views/virtualKeysTable.tsx",
+      "hits": 3
+    },
+    {
+      "file": "app/workspace/webhooks/dialogs/webhookSecretDialog.tsx",
+      "hits": 1
+    },
+    {
+      "file": "app/workspace/webhooks/views/webhookDetailsSheet.tsx",
+      "hits": 1
+    },
+    {
+      "file": "components/budgetOverrideDialog.tsx",
+      "hits": 2
+    },
+    {
+      "file": "components/budgetOverrideManagerDialog.tsx",
+      "hits": 2
+    },
+    {
+      "file": "components/headersForm.tsx",
+      "hits": 5
+    },
+    {
+      "file": "components/prompts/components/messagesView/toolCallView.tsx",
+      "hits": 4
+    },
+    {
+      "file": "components/prompts/context.tsx",
+      "hits": 9
+    },
+    {
+      "file": "components/prompts/utils/executor.ts",
+      "hits": 2
+    },
+    {
+      "file": "components/sidebar.tsx",
+      "hits": 1
+    },
+    {
+      "file": "components/table/columnPinning.ts",
+      "hits": 2
+    },
+    {
+      "file": "components/ui/alert.tsx",
+      "hits": 1
+    },
+    {
+      "file": "components/ui/asyncMultiselect.tsx",
+      "hits": 40
+    },
+    {
+      "file": "components/ui/badge.tsx",
+      "hits": 1
+    },
+    {
+      "file": "components/ui/breadcrumb.tsx",
+      "hits": 2
+    },
+    {
+      "file": "components/ui/configSyncAlert.tsx",
+      "hits": 1
+    },
+    {
+      "file": "components/ui/custom/dropdown/dropdown.tsx",
+      "hits": 2
+    },
+    {
+      "file": "components/ui/custom/dropdown/searchableDropdown.tsx",
+      "hits": 1
+    },
+    {
+      "file": "components/ui/custom/dropdown/types.ts",
+      "hits": 4
+    },
+    {
+      "file": "components/ui/custom/number.tsx",
+      "hits": 1
+    },
+    {
+      "file": "components/ui/custom/richTextarea.tsx",
+      "hits": 2
+    },
+    {
+      "file": "components/ui/datePickerWithRange.tsx",
+      "hits": 2
+    },
+    {
+      "file": "components/ui/form.tsx",
+      "hits": 2
+    },
+    {
+      "file": "components/ui/icons.tsx",
+      "hits": 21
+    },
+    {
+      "file": "components/ui/inputGroup.tsx",
+      "hits": 2
+    },
+    {
+      "file": "components/ui/modelMultiselect.tsx",
+      "hits": 1
+    },
+    {
+      "file": "components/ui/multiSelect.tsx",
+      "hits": 1
+    },
+    {
+      "file": "components/ui/multiselectUtils.ts",
+      "hits": 1
+    },
+    {
+      "file": "components/ui/searchSelect.tsx",
+      "hits": 5
+    },
+    {
+      "file": "components/ui/splitButton.tsx",
+      "hits": 3
+    },
+    {
+      "file": "components/ui/switch.tsx",
+      "hits": 1
+    },
+    {
+      "file": "components/ui/treeView.tsx",
+      "hits": 3
+    },
+    {
+      "file": "lib/constants/governance.ts",
+      "hits": 1
+    },
+    {
+      "file": "lib/constants/icons.tsx",
+      "hits": 19
+    },
+    {
+      "file": "lib/i18n/index.ts",
+      "hits": 1
+    },
+    {
+      "file": "lib/schemas/providerForm.ts",
+      "hits": 2
+    },
+    {
+      "file": "lib/store/apis/configApi.ts",
+      "hits": 2
+    },
+    {
+      "file": "lib/types/schemas.ts",
+      "hits": 4
+    },
+    {
+      "file": "lib/utils/date.ts",
+      "hits": 1
+    },
+    {
+      "file": "lib/utils/redaction.ts",
+      "hits": 1
+    },
+    {
+      "file": "lib/utils/secretVarForm.ts",
+      "hits": 2
+    },
+    {
+      "file": "lib/utils/strings.ts",
+      "hits": 1
+    },
+    {
+      "file": "lib/utils/validation.ts",
+      "hits": 1
+    },
+    {
+      "file": "hooks/useBudgetUsageResetPrompt.ts",
+      "hits": 1
+    },
+    {
+      "file": "hooks/useDebounce.ts",
+      "hits": 1
+    }
+  ]
 }

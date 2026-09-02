@@ -32,7 +32,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Textarea } from "@/components/ui/textarea";
 import Toggle from "@/components/ui/toggle";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { resetDurationOptions, supportsCalendarAlignment } from "@/lib/constants/governance";
+import { localizedResetDurationOptions, supportsCalendarAlignment } from "@/lib/constants/governance";
 import { ProviderIconType, RenderProviderIcon } from "@/lib/constants/icons";
 import { ProviderLabels, ProviderName } from "@/lib/constants/logs";
 import { getUserPicker } from "@/lib/registries/userPicker";
@@ -242,6 +242,7 @@ interface ExpiryFieldProps {
 
 function ExpiryPickerField({ value, onChange }: ExpiryFieldProps) {
 	const { t } = useTranslation("virtualKeys");
+	const { t: tShared } = useTranslation("shared");
 	// Preset timestamps are computed from Date.now() at click time, so the picked
 	// preset can't be derived back from the value; track it for highlighting.
 	const [selectedPreset, setSelectedPreset] = useState<string | null>(null);
@@ -306,6 +307,7 @@ function ExpiryPickerField({ value, onChange }: ExpiryFieldProps) {
 
 export default function VirtualKeySheet({ virtualKey, defaultTeamId, onSave, onCancel }: VirtualKeySheetProps) {
 	const { t } = useTranslation("virtualKeys");
+	const { t: tShared } = useTranslation("shared");
 	const [isOpen, setIsOpen] = useState(true);
 	const navigate = useNavigate();
 	const isEditing = !!virtualKey;
@@ -1665,7 +1667,7 @@ export default function VirtualKeySheet({ virtualKey, defaultTeamId, onSave, onC
 															shouldDirty: true,
 														})
 													}
-													options={resetDurationOptions}
+													options={localizedResetDurationOptions(tShared)}
 												/>
 												<FormMessage />
 											</FormItem>
@@ -1691,7 +1693,7 @@ export default function VirtualKeySheet({ virtualKey, defaultTeamId, onSave, onC
 															shouldDirty: true,
 														})
 													}
-													options={resetDurationOptions}
+													options={localizedResetDurationOptions(tShared)}
 												/>
 												<FormMessage />
 											</FormItem>

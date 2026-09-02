@@ -1,0 +1,827 @@
+{
+	"common": {
+		"cancel": "Cancel",
+		"delete": "Delete",
+		"continue": "Continue",
+		"edit": "Edit",
+		"add": "Add",
+		"reset": "Reset",
+		"fixErrors": "Please fix validation errors"
+	},
+	"page": {
+		"configuredProviders": "Configured Providers",
+		"customBadge": "CUSTOM",
+		"selectProvider": "Select a provider",
+		"toasts": {
+			"errorTitle": "Something went wrong",
+			"loadConfigFailed": "We encountered an error while getting provider config: {{error}}",
+			"addFailed": "Failed to add provider"
+		},
+		"status": {
+			"error": "Provider could not be initialized",
+			"deleted": "Provider is deleted",
+			"discoveryFailed": "Provider model discovery failed."
+		}
+	},
+	"emptyState": {
+		"title": "Add a provider to start routing requests",
+		"description": "Configure API keys for OpenAI, Anthropic, Bedrock, and other supported providers. Bifrost unifies them behind a single API.",
+		"readMore": "Read more",
+		"readMoreAria": "Read more about providers (opens in new tab)"
+	},
+	"addProvider": {
+		"trigger": "Add New Provider",
+		"triggerEmpty": "Add provider",
+		"triggerAria": "Add new provider",
+		"customProvider": "Custom provider..."
+	},
+	"providerConfig": {
+		"deleteAria": "Delete provider",
+		"edit": "Edit Provider Config",
+		"view": "View Provider Config"
+	},
+	"keysTable": {
+		"entity": {
+			"key": "key",
+			"keys": "keys",
+			"model": "model",
+			"models": "models",
+			"server": "server",
+			"servers": "servers"
+		},
+		"columnName": {
+			"apiKey": "API Key",
+			"model": "Model",
+			"server": "Server"
+		},
+		"columns": {
+			"weight": "Weight",
+			"enabled": "Enabled"
+		},
+		"configuredTitle": "Configured {{entity}}",
+		"addNew": "Add new {{entity}}",
+		"empty": "No {{entity}} found.",
+		"delete": {
+			"title": "Delete {{entity}}",
+			"description": "Are you sure you want to delete this {{entity}}. This action cannot be undone.",
+			"success": "Deleted {{entity}} successfully",
+			"failed": "Failed to delete {{entity}}"
+		},
+		"toggle": {
+			"enabled": "{{entity}} enabled successfully",
+			"disabled": "{{entity}} disabled successfully",
+			"failed": "Failed to update {{entity}}"
+		},
+		"refresh": {
+			"allButton": "Refresh model list",
+			"refreshing": "Refreshing...",
+			"allSuccessTitle": "Model list refreshed",
+			"allSuccessDescription": "Re-checked every enabled {{entity}} for {{provider}}.",
+			"keySuccessDescription": "Re-checked {{name}}.",
+			"failedTitle": "Failed to refresh model list",
+			"tooltip": "Re-check what models this provider serves. Otherwise this runs on the interval set in Model Settings.",
+			"keyAria": "Refresh model list for {{name}}",
+			"keyTooltip": "Refresh model list for this {{entity}}",
+			"keyDisabledTooltip": "Enable this {{entity}} to refresh its model list"
+		},
+		"status": {
+			"working": "List models working",
+			"workingAria": "Key status: list models working",
+			"secretRefAria": "Key status: secret reference may not be resolved",
+			"secretRefHint": "{{description}}; verify the secret reference is configured on the server",
+			"failedAria": "Key status: list models failed",
+			"discoveryFailed": "Model discovery failed for this key"
+		},
+		"keyless": {
+			"note": "This is a keyless provider - no API keys are required.",
+			"editHint": "You can edit the provider configuration using the button above."
+		}
+	},
+	"governance": {
+		"title": "Governance",
+		"budgetTitle": "Budget ({{period}})",
+		"tokenLimitTitle": "Token Limit",
+		"requestLimitTitle": "Request Limit",
+		"units": {
+			"tokens": "tokens",
+			"requests": "requests"
+		},
+		"exhausted": "Exhausted",
+		"resets": "Resets {{period}}",
+		"usageTooltip": "{{percentage}}% of {{title}} used"
+	},
+	"governanceForm": {
+		"validation": {
+			"limitMustBeNumber": "Budget limit must be a number",
+			"limitCannotBeNegative": "Budget limit cannot be negative",
+			"resetDurationRequired": "Reset duration is required"
+		},
+		"toasts": {
+			"saved": "Governance configuration saved successfully",
+			"updateFailed": "Failed to update provider governance",
+			"removed": "Governance removed successfully",
+			"removeFailed": "Failed to remove governance"
+		},
+		"calendarAligned": {
+			"label": "Align to calendar cycle",
+			"description": "Reset budgets at the start of each period (e.g. 1st of month) instead of rolling from creation date. Quarterly budgets always align to fiscal quarter starts."
+		},
+		"rateLimiting": {
+			"title": "Rate Limiting Configuration",
+			"maxTokens": "Maximum Tokens",
+			"maxRequests": "Maximum Requests"
+		},
+		"usage": {
+			"title": "Current Usage",
+			"budget": "Budget ({{duration}})",
+			"tokens": "Token Usage",
+			"requests": "Request Usage"
+		},
+		"removeConfig": "Remove configuration",
+		"save": "Save Governance Configuration"
+	},
+	"network": {
+		"toasts": {
+			"cannotRemoveConfig": "You can't remove network configuration for this provider.",
+			"baseUrlRequired": "Base URL is required for this provider.",
+			"updated": "Provider configuration updated successfully",
+			"updateFailed": "Failed to update provider configuration"
+		},
+		"baseUrl": {
+			"required": "Base URL (Required)",
+			"optional": "Base URL (Optional)"
+		},
+		"timeout": {
+			"label": "Timeout (seconds)"
+		},
+		"streamIdleTimeout": {
+			"label": "Stream Idle Timeout (seconds)",
+			"description": "{{time}} Max time to wait for next chunk before closing a stalled stream"
+		},
+		"maxRetries": {
+			"label": "Max Retries"
+		},
+		"initialBackoff": {
+			"label": "Initial Backoff (ms)"
+		},
+		"maxBackoff": {
+			"label": "Max Backoff (ms)"
+		},
+		"maxConnsPerHost": {
+			"label": "Max Connections Per Host",
+			"description": "Max TCP connections per provider host. For HTTP/2 providers (e.g. Bedrock), each connection supports ~100 concurrent streams."
+		},
+		"keepAliveTimeout": {
+			"label": "Keep-Alive Timeout (seconds)",
+			"description": "{{time}} Idle keep-alive for pooled connections. Set below the upstream server's keep-alive to avoid reusing connections it has already closed."
+		},
+		"enforceHttp2": {
+			"label": "Enforce HTTP/2",
+			"description": "Force HTTP/2 on provider connections. Relevant for net/http-based providers (e.g. Bedrock) where each HTTP/2 connection supports ~100 concurrent streams."
+		},
+		"allowPrivateNetwork": {
+			"label": "Allow Private Network",
+			"description": "Allow connections to private IPs (e.g. <code>10.x</code>, <code>192.168.x</code>). Required for providers on a LAN, k8s pod network, or private VPC. Cloud metadata addresses (169.254.x.x) are always blocked."
+		},
+		"headers": {
+			"label": "Extra Headers",
+			"keyPlaceholder": "Header name",
+			"valuePlaceholder": "Header value"
+		},
+		"tls": {
+			"title": "TLS / Certificate",
+			"skipVerification": {
+				"label": "Skip TLS verification",
+				"description": "Disable TLS certificate verification for provider connections. This bypasses server certificate validation and should be used only as a last resort when a trusted CA chain cannot be configured. Prefer ca_cert_pem for self-signed or private CA deployments."
+			},
+			"caCert": {
+				"label": "CA Certificate (PEM) (Optional)",
+				"placeholder": "-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE----- or env.OPENAI_CA_CERT_PEM",
+				"description": "PEM-encoded CA certificate to trust for provider endpoint connections (e.g. self-signed or internal CA)."
+			}
+		},
+		"time": {
+			"zero": "0 seconds",
+			"second": "second",
+			"seconds": "seconds",
+			"minute": "minute",
+			"minutes": "minutes",
+			"hour": "hour",
+			"hours": "hours",
+			"day": "day",
+			"days": "days"
+		},
+		"state": {
+			"noChanges": "No changes made",
+			"noChangesWithErrors": "No changes made and validation errors present",
+			"fixErrors": "Please fix validation errors"
+		},
+		"removeConfig": "Remove configuration",
+		"save": "Save Network Configuration"
+	},
+	"proxy": {
+		"scopeNote": "Applies to HTTP requests and WebSocket-based Realtime/Responses connections. WebRTC-based Realtime sessions use a separate media path not covered by this proxy.",
+		"type": {
+			"label": "Proxy Type",
+			"placeholder": "Select type",
+			"environment": "Environment"
+		},
+		"url": {
+			"label": "Proxy URL",
+			"placeholder": "http://proxy.example.com or env.OPENAI_PROXY_URL"
+		},
+		"username": {
+			"label": "Username",
+			"placeholder": "Proxy username or env.OPENAI_PROXY_USERNAME"
+		},
+		"password": {
+			"label": "Password",
+			"placeholder": "Proxy password or env.OPENAI_PROXY_PASSWORD"
+		},
+		"caCert": {
+			"label": "CA Certificate (PEM) (Optional)",
+			"placeholder": "-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE----- or env.OPENAI_PROXY_CA_CERT_PEM",
+			"description": "PEM-encoded CA certificate to trust for TLS connections through SSL-intercepting proxies. You can also use <code>env.YOUR_PROXY_CA_CERT_VAR</code>."
+		},
+		"toasts": {
+			"updated": "Provider configuration updated successfully",
+			"updateFailed": "Failed to update provider configuration"
+		},
+		"removeConfig": "Remove configuration",
+		"save": "Save Proxy Configuration"
+	},
+	"performance": {
+		"concurrency": {
+			"label": "Concurrency"
+		},
+		"bufferSize": {
+			"label": "Buffer Size"
+		},
+		"toasts": {
+			"updated": "Provider configuration updated successfully",
+			"updateFailed": "Failed to update provider configuration"
+		},
+		"save": "Save Performance Configuration"
+	},
+	"debugging": {
+		"rawRequest": {
+			"label": "Send Back Raw Request",
+			"description": "Include the raw provider request alongside the parsed request in the API response."
+		},
+		"rawResponse": {
+			"label": "Send Back Raw Response",
+			"description": "Include the raw provider response alongside the parsed response in the API response."
+		},
+		"storeRaw": {
+			"label": "Store Raw Request/Response",
+			"description": "Persist raw request and response payloads in log records."
+		},
+		"overrideNote": "Override per-request with header:",
+		"toasts": {
+			"updated": "Debugging configuration updated successfully",
+			"updateFailed": "Failed to update debugging configuration"
+		},
+		"save": "Save Debugging Configuration"
+	},
+	"apiStructure": {
+		"baseProviderType": {
+			"label": "Base Provider Type",
+			"placeholder": "Select base provider",
+			"description": "The underlying provider this custom provider will use"
+		},
+		"isKeyless": {
+			"label": "Is Keyless?",
+			"description": "Whether the custom provider requires a key"
+		},
+		"toasts": {
+			"updated": "Provider configuration updated successfully",
+			"updateFailed": "Failed to update provider configuration"
+		},
+		"save": "Save API Structure Configuration"
+	},
+	"openaiConfig": {
+		"disableStore": {
+			"label": "Disable Store",
+			"description": "With the Responses API, store defaults to true, and when it is on, the generated response is stored for later retrieval via API. OpenAI exposes endpoints to retrieve and delete stored responses, so your response IDs become durable server-side objects instead of one-shot IDs."
+		},
+		"toasts": {
+			"updated": "OpenAI configuration updated successfully",
+			"updateFailed": "Failed to update OpenAI configuration"
+		},
+		"save": "Save OpenAI Configuration"
+	},
+	"betaHeaders": {
+		"intro": "Configure which Anthropic beta headers are allowed for this provider. Override the defaults when a provider adds or removes support for a beta feature.",
+		"columns": {
+			"header": "Beta Header",
+			"default": "Default",
+			"override": "Override"
+		},
+		"supported": "Supported",
+		"unsupported": "Unsupported",
+		"default": "Default",
+		"custom": "Custom",
+		"customHeader": "Custom header",
+		"removePrefixAria": "Remove custom prefix {{prefix}}",
+		"addPrefixPlaceholder": "Add custom beta header prefix (e.g. new-feature-)",
+		"addPrefixAria": "Custom beta header prefix",
+		"add": "Add",
+		"save": "Save Beta Header Configuration",
+		"errors": {
+			"knownHeader": "This is a known header; use the override dropdown above instead",
+			"alreadyExists": "This prefix already exists",
+			"invalidCharacters": "Prefix must contain only lowercase letters, numbers, and hyphens"
+		},
+		"toasts": {
+			"updated": "Beta header configuration updated successfully",
+			"updateFailed": "Failed to update beta header configuration"
+		},
+		"headers": {
+			"computerUse": {
+				"label": "Computer Use",
+				"description": "Computer use client tool"
+			},
+			"structuredOutputs": {
+				"label": "Structured Outputs",
+				"description": "Strict tool validation and output_format"
+			},
+			"advancedToolUse": {
+				"label": "Advanced Tool Use",
+				"description": "defer_loading, input_examples, allowed_callers"
+			},
+			"mcpClient": {
+				"label": "MCP Client",
+				"description": "MCP connector support"
+			},
+			"promptCachingScope": {
+				"label": "Prompt Caching Scope",
+				"description": "Prompt caching scope control"
+			},
+			"compaction": {
+				"label": "Compaction",
+				"description": "Server-side context compaction"
+			},
+			"contextManagement": {
+				"label": "Context Management",
+				"description": "Context editing (clear_tool_uses, clear_thinking)"
+			},
+			"filesApi": {
+				"label": "Files API",
+				"description": "Files API support"
+			},
+			"interleavedThinking": {
+				"label": "Interleaved Thinking",
+				"description": "Interleaved thinking between tool calls"
+			},
+			"skills": {
+				"label": "Skills",
+				"description": "Agent Skills"
+			},
+			"context1m": {
+				"label": "Context 1M",
+				"description": "1M context window (beta for Sonnet 4.5/4)"
+			},
+			"fastMode": {
+				"label": "Fast Mode",
+				"description": "Fast mode (Opus 4.6 research preview)"
+			},
+			"redactThinking": {
+				"label": "Redact Thinking",
+				"description": "Redact thinking blocks in responses"
+			}
+		}
+	},
+	"allowedRequests": {
+		"title": "Allowed Request Types",
+		"description": "Select which request types this custom provider can handle.",
+		"descriptionHint": "Click the settings icon to customize endpoint paths or use full URLs.",
+		"customizePathAria": "Customize endpoint path",
+		"customPath": {
+			"title": "Custom Path or URL",
+			"description": "Override with a path (e.g., /v1/chat) or a full URL (e.g., https://api.example.com/chat) to bypass base_url"
+		},
+		"notSupported": "Not supported by {{provider}}",
+		"types": {
+			"list_models": "List Models",
+			"text_completion": "Text Completion",
+			"text_completion_stream": "Text Completion Stream",
+			"chat_completion": "Chat Completion",
+			"chat_completion_stream": "Chat Completion Stream",
+			"responses": "Responses",
+			"responses_stream": "Responses Stream",
+			"responses_retrieve": "Responses Retrieve",
+			"responses_delete": "Responses Delete",
+			"responses_cancel": "Responses Cancel",
+			"responses_input_items": "Responses Input Items",
+			"embedding": "Embedding",
+			"speech": "Speech",
+			"speech_stream": "Speech Stream",
+			"transcription": "Transcription",
+			"transcription_stream": "Transcription Stream",
+			"image_generation": "Image Generation",
+			"image_generation_stream": "Image Generation Stream",
+			"image_edit": "Image Edit",
+			"image_edit_stream": "Image Edit Stream",
+			"image_variation": "Image Variation",
+			"count_tokens": "Count Tokens"
+		}
+	},
+	"customProvider": {
+		"title": "Add Custom Provider",
+		"description": "Enter the details of your custom provider.",
+		"name": {
+			"label": "Name",
+			"placeholder": "Name"
+		},
+		"baseFormat": {
+			"label": "Base Format",
+			"placeholder": "Select base format"
+		},
+		"baseUrl": {
+			"label": "Base URL"
+		},
+		"allowPrivateNetwork": {
+			"label": "Allow Private Network",
+			"description": "Allow connecting to private network IPs (e.g. 192.168.x.x, 10.x.x.x). Link-local addresses remain blocked."
+		},
+		"isKeyless": {
+			"label": "Is Keyless?",
+			"description": "Whether the custom provider requires a key"
+		},
+		"validation": {
+			"baseUrlRequired": "Base URL is required",
+			"urlInvalid": "Must be a valid URL"
+		},
+		"toasts": {
+			"addFailed": "Failed to add provider"
+		}
+	},
+	"dialogs": {
+		"deleteProvider": {
+			"title": "Delete Provider",
+			"description": "Are you sure you want to delete this provider? This action cannot be undone.",
+			"deleting": "Deleting...",
+			"toasts": {
+				"deleteFailed": "Failed to delete provider"
+			}
+		},
+		"confirmRedirection": {
+			"title": "Confirm Redirection",
+			"description": "You have unsaved data. Are you sure you want to continue?"
+		}
+	},
+	"providerConfigSheet": {
+		"title": "Provider configuration",
+		"tabs": {
+			"apiStructure": "API Structure",
+			"network": "Network",
+			"proxy": "Proxy",
+			"performance": "Performance",
+			"governance": "Governance",
+			"betaHeaders": "Beta Headers",
+			"debugging": "Debugging",
+			"openaiConfig": "OpenAI Config"
+		}
+	},
+	"addKeySheet": {
+		"edit": "Edit {{entity}}",
+		"add": "Add new {{entity}}",
+		"updatedSuccessfully": "{{entity}} updated successfully",
+		"addedSuccessfully": "{{entity}} added successfully",
+		"entity": {
+			"key": "key",
+			"model": "model",
+			"server": "server"
+		}
+	},
+	"keyForm": {
+		"save": "Save",
+		"cancel": "Cancel",
+		"permissionDenied": "You do not have permission to modify provider keys",
+		"noChanges": "No changes made",
+		"toasts": {
+			"updateFailed": "Error updating key",
+			"createFailed": "Error creating key"
+		}
+	},
+	"apiKeys": {
+		"name": {
+			"label": "Name",
+			"placeholder": "Production Key"
+		},
+		"weight": {
+			"label": "Weight",
+			"tooltip": "Determines traffic distribution between keys. Higher weights receive more requests. Not used when adaptive load balancing is enabled - key selection is then based on live performance."
+		},
+		"apiKey": {
+			"label": "API Key",
+			"optional": "API Key (Optional)",
+			"placeholder": "API Key or env.MY_KEY",
+			"geminiOnly": "API Key (Supported only for gemini and fine-tuned models)"
+		},
+		"allowedModels": {
+			"label": "Allowed Models",
+			"tooltip": "Select specific models this key applies to, or choose \"Allow All Models\" to allow all. Leave empty to deny all. Aliases must be added by their alias name - listing only the underlying model does not allow the alias (an alias best-model → gpt-4o requires \"best-model\" here, not just \"gpt-4o\").",
+			"placeholderAll": "All models allowed",
+			"placeholderNone": "No models (deny all)",
+			"placeholderSearch": "Search models..."
+		},
+		"blockedModels": {
+			"label": "Blocked Models",
+			"tooltip": "Models this key must never serve. The denylist always wins - if a model appears in both Allowed Models and here, it is blocked. Select \"All Models\" to block every model on this key. Aliases are matched by their alias name - blocking only the underlying model does not block aliases that point to it.",
+			"placeholderAll": "All models blocked",
+			"placeholderNone": "No models blocked",
+			"placeholderSearch": "Search models..."
+		},
+		"deployments": {
+			"label": "Deployments (Optional)",
+			"description": "Map a request model name to the provider's identifier (deployment name, inference profile ID, fine-tuned endpoint ID, etc.). Expand a row to set the canonical model name, model family, and provider-specific overrides - these power cost/pricing logs and family-based routing."
+		},
+		"auth": {
+			"method": "Authentication Method",
+			"tabs": {
+				"defaultCredential": "Default Credential",
+				"apiKey": "API Key",
+				"entraId": "Entra ID (Service Principal)",
+				"serviceAccountAttached": "Service Account (Attached)",
+				"serviceAccountJson": "Service Account (JSON)",
+				"iamRole": "IAM Role (Inherited)",
+				"explicit": "Explicit Credentials"
+			}
+		},
+		"azure": {
+			"defaultCredentialNote": "Uses DefaultAzureCredential - automatically detects managed identity on Azure VMs and containers, workload identity in AKS, environment variables, and Azure CLI. No credentials required.",
+			"endpoint": {
+				"label": "Endpoint (Required)"
+			},
+			"clientId": {
+				"label": "Client ID (Required)"
+			},
+			"clientSecret": {
+				"label": "Client Secret (Required)"
+			},
+			"tenantId": {
+				"label": "Tenant ID (Required)"
+			},
+			"scopes": {
+				"label": "Scopes (Optional)",
+				"tooltip": "Optional OAuth scopes for token requests. By default we use https://cognitiveservices.azure.com/.default - add additional scopes here if your setup requires extra permissions.",
+				"placeholder": "Add scope (Enter or comma)"
+			}
+		},
+		"vertex": {
+			"attachedNote": "Uses the service account attached to your environment (GCE, GKE, Cloud Run). No credentials required.",
+			"projectId": {
+				"label": "Project ID (Required)"
+			},
+			"projectNumber": {
+				"label": "Project Number (Required only for fine-tuned models)"
+			},
+			"region": {
+				"label": "Region (Required)",
+				"description": "Multi-region-only models are automatically routed to Google's matching multi-region endpoint. Turn on <1>Force single region</1> below to always use exactly this region."
+			},
+			"authCredentials": {
+				"label": "Auth Credentials (Required)",
+				"description": "Service account JSON object or env.VAR_NAME",
+				"storedSecurely": "Credentials are stored securely. Edit to update."
+			},
+			"forceSingleRegion": {
+				"label": "Force single region",
+				"description": "Always call the region set above and skip automatic promotion of multi-region-only models to a multi-region endpoint. Enable when serving these models from a single region via provisioned throughput."
+			}
+		},
+		"replicate": {
+			"useDeploymentsEndpoint": {
+				"label": "Use Deployments Endpoint",
+				"description": "Route requests through the Replicate deployments endpoint instead of the models endpoint."
+			}
+		},
+		"serverUrl": {
+			"label": "Server URL (Required)"
+		},
+		"vllm": {
+			"serverUrl": {
+				"description": "Base URL of the vLLM server (e.g. http://vllm-server:8000 or env.VLLM_URL)"
+			},
+			"modelName": {
+				"label": "Model Name (Required)",
+				"description": "Exact model name served on this vLLM instance"
+			}
+		},
+		"keyless": {
+			"serverUrl": {
+				"description": "Base URL of the {{provider}} server (e.g. {{url}} or {{envVar}})"
+			}
+		},
+		"anthropicEndpoints": {
+			"label": "Use Anthropic Endpoints",
+			"description": "Routes chat completions and responses requests through Anthropic-compatible endpoints."
+		},
+		"credentials": {
+			"iamNote": "Uses IAM roles attached to your environment (EC2, Lambda, ECS, EKS).",
+			"apiKeyNote": "Uses a Bearer token for API key authentication.",
+			"mantleApiKeyNote": "Uses a Bedrock Mantle API key sent as a Bearer token.",
+			"accessKey": {
+				"label": "Access Key (Required)"
+			},
+			"secretKey": {
+				"label": "Secret Key (Required)"
+			},
+			"sessionToken": {
+				"label": "Session Token (Optional)"
+			},
+			"region": {
+				"label": "Region (Required)"
+			},
+			"mantleProjectId": {
+				"label": "Mantle Project ID (Optional)",
+				"description": "Scopes Bedrock Mantle-routed models (OpenAI-family / Gemma) to a specific project via the OpenAI-Project header. Leave empty to use the account's default project."
+			},
+			"projectId": {
+				"label": "Project ID (Optional)",
+				"description": "Scopes inference and model listing to a specific Bedrock project (sent as the OpenAI-Project / anthropic-workspace-id header). Leave empty to use the account's default project."
+			},
+			"roleArn": {
+				"label": "Assume Role ARN (Optional)",
+				"description": "Assume an IAM role before requests. Works with both explicit credentials and inherited IAM (EC2, ECS, EKS)."
+			},
+			"externalId": {
+				"label": "External ID (Optional)",
+				"description": "Required by the role's trust policy when using cross-account access"
+			},
+			"sessionName": {
+				"label": "Session Name (Optional)",
+				"description": "AssumeRole session name (defaults to bifrost-session)"
+			},
+			"arn": {
+				"label": "ARN (Optional)"
+			},
+			"batchRoleArn": {
+				"label": "Batch Role ARN (Optional)",
+				"description": "Service role Bedrock assumes for batch S3 access. When set, it takes priority over the role_arn sent in requests."
+			}
+		},
+		"vpcEndpoints": {
+			"title": "VPC Endpoints (Optional)",
+			"description": "Route traffic through interface VPC endpoints instead of the public regional endpoints. Use each endpoint's DNS name from the VPC console, not its ID. Region is still required — it sets the request signing scope.",
+			"services": {
+				"runtime": {
+					"label": "Runtime",
+					"description": "Serves all inference."
+				},
+				"controlPlane": {
+					"label": "Control Plane",
+					"description": "Serves model listing and batch jobs."
+				},
+				"mantle": {
+					"label": "Mantle",
+					"description": "Serves mantle-routed models."
+				},
+				"agentRuntime": {
+					"label": "Agent Runtime",
+					"description": "Serves rerank."
+				},
+				"s3": {
+					"label": "S3",
+					"description": "Serves batch file I/O. Requires the bucket-prefixed endpoint name. A Gateway endpoint needs no value here."
+				}
+			}
+		},
+		"batch": {
+			"label": "Use for Batch APIs",
+			"description": "Enable this key for batch API operations. Only keys with this enabled will be used for batch requests."
+		},
+		"placeholders": {
+			"azureEndpoint": "https://your-resource.openai.azure.com or env.AZURE_ENDPOINT",
+			"azureClientId": "your-client-id or env.AZURE_CLIENT_ID",
+			"azureClientSecret": "your-client-secret or env.AZURE_CLIENT_SECRET",
+			"azureTenantId": "your-tenant-id or env.AZURE_TENANT_ID",
+			"gcpProjectId": "your-gcp-project-id or env.VERTEX_PROJECT_ID",
+			"gcpProjectNumber": "your-gcp-project-number or env.VERTEX_PROJECT_NUMBER",
+			"vertexRegion": "us-central1 or env.VERTEX_REGION",
+			"bedrockApiKey": "API Key or env.BEDROCK_API_KEY",
+			"bedrockMantleApiKey": "API Key or env.BEDROCK_MANTLE_API_KEY",
+			"awsRegion": "us-east-1 or env.AWS_REGION",
+			"bedrockProjectId": "proj_xxxxxxxx or env.BEDROCK_PROJECT_ID",
+			"roleArn": "arn:aws:iam::123456789:role/MyRole or env.AWS_ROLE_ARN",
+			"externalId": "external-id or env.AWS_EXTERNAL_ID",
+			"sessionName": "bifrost-session or env.AWS_SESSION_NAME",
+			"inferenceProfileArn": "arn:aws:bedrock:us-east-1:123:inference-profile or env.AWS_ARN",
+			"batchRoleArn": "arn:aws:iam::123456789:role/BatchRole or env.AWS_BATCH_ROLE_ARN",
+			"awsAccessKey": "your-aws-access-key or env.AWS_ACCESS_KEY_ID",
+			"awsSecretKey": "your-aws-secret-key or env.AWS_SECRET_ACCESS_KEY",
+			"awsSessionToken": "your-aws-session-token or env.AWS_SESSION_TOKEN"
+		}
+	},
+	"deployments": {
+		"table": {
+			"deploymentName": "Deployment name",
+			"modelId": "Model ID",
+			"actions": "Actions",
+			"requestModelName": "Request model name",
+			"nameEmpty": "Name cannot be empty.",
+			"nameExists": "A deployment with this name already exists.",
+			"resourceId": "Deployment / profile / resource ID",
+			"draftIncomplete": "Both deployment name and model ID are required; this row will not be saved until both are filled."
+		},
+		"overrides": {
+			"useKeySetting": "Use key setting",
+			"on": "On",
+			"off": "Off",
+			"sectionTitle": "{{provider}} overrides",
+			"sectionDescription": "Override key-level {{provider}} defaults for this deployment. Leave blank to use the key's settings.",
+			"sectionDescriptionShort": "Override key-level {{provider}} defaults for this deployment."
+		},
+		"azure": {
+			"apiVersion": {
+				"label": "API version",
+				"hint": "Override the Azure OpenAI api-version query parameter."
+			},
+			"anthropicVersion": {
+				"label": "Anthropic version",
+				"hint": "Override the anthropic-version header for Claude-on-Azure deployments."
+			},
+			"endpoint": {
+				"label": "Endpoint",
+				"hint": "Point this deployment at a different Azure resource than the key default."
+			}
+		},
+		"vertex": {
+			"projectId": {
+				"label": "Project ID"
+			},
+			"projectNumber": {
+				"label": "Project number",
+				"hint": "Required for fine-tuned models."
+			},
+			"region": {
+				"label": "Region",
+				"hint": "Multi-region-only models are auto-routed to a multi-region endpoint unless Force single region is on."
+			},
+			"forceSingleRegion": {
+				"label": "Force single region",
+				"description": "Call the region above as-is and skip multi-region promotion of multi-region-only models. Use for provisioned throughput."
+			}
+		},
+		"bedrock": {
+			"region": {
+				"label": "Region"
+			},
+			"inferenceProfileArn": {
+				"label": "Inference profile ARN",
+				"hint": "Cross-region inference profile ARN to invoke instead of the model ID."
+			},
+			"projectId": {
+				"label": "Project ID",
+				"hint": "Scope this deployment's Bedrock Mantle (gpt-*/Gemma) calls to a specific project via the OpenAI-Project header. Leave blank to use the key's project."
+			}
+		},
+		"bedrockMantle": {
+			"region": {
+				"label": "Region"
+			},
+			"projectId": {
+				"label": "Project ID",
+				"hint": "Scope this deployment to a specific project via the OpenAI-Project / anthropic-workspace-id header. Leave blank to use the key's project."
+			}
+		},
+		"replicate": {
+			"useDeploymentsEndpoint": {
+				"label": "Use deployments endpoint",
+				"hint": "Route through Replicate's deployments endpoint instead of the models endpoint."
+			}
+		},
+		"anthropicEndpoints": {
+			"label": "Use Anthropic endpoints",
+			"hint": "Route chat completions and responses requests through Anthropic-compatible endpoints."
+		},
+		"config": {
+			"canonicalModelName": {
+				"label": "Canonical model name",
+				"hint": "The canonical name used for routing and pricing. Defaults to the model ID when blank."
+			},
+			"modelFamily": {
+				"label": "Model family",
+				"hint": "Forces the family used for routing decisions. Derived from model name when left blank.",
+				"placeholder": "Select a model family",
+				"none": "None"
+			},
+			"description": {
+				"label": "Description",
+				"hint": "Note for users. Not used by Bifrost.",
+				"placeholder": "What is this deployment used for?"
+			}
+		},
+		"placeholders": {
+			"azureEndpoint": "https://your-resource.openai.azure.com or env.AZURE_ENDPOINT",
+			"gcpProjectId": "gcp-project-id or env.VERTEX_PROJECT_ID",
+			"gcpProjectNumber": "123456789 or env.VERTEX_PROJECT_NUMBER",
+			"vertexRegion": "us-central1 or env.VERTEX_REGION",
+			"bedrockRegion": "us-east-1 or env.BEDROCK_REGION",
+			"inferenceProfileArn": "arn:aws:bedrock:us-east-1:123:inference-profile/... or env.BEDROCK_PROFILE_ARN",
+			"bedrockProjectId": "proj_xxxxxxxx or env.BEDROCK_PROJECT_ID",
+			"canonicalModelName": "e.g. claude-sonnet-4-5"
+		}
+	}
+}

@@ -9,6 +9,7 @@ declare module "i18next" {
 		fallbackLng: "en";
 		resources: {
 			common: typeof import("./locales/en/common.json");
+			components: typeof import("./locales/en/components.json");
 			complexityRouter: typeof import("./locales/en/complexityRouter.json");
 			config: typeof import("./locales/en/config.json");
 			customPricing: typeof import("./locales/en/customPricing.json");
@@ -16,6 +17,9 @@ declare module "i18next" {
 			devProfiler: typeof import("./locales/en/devProfiler.json");
 			docs: typeof import("./locales/en/docs.json");
 			filters: typeof import("./locales/en/filters.json");
+			governance: typeof import("./locales/en/governance.json");
+			logs: typeof import("./locales/en/logs.json");
+			mcpLibrary: typeof import("./locales/en/mcpLibrary.json");
 			mcpLogs: typeof import("./locales/en/mcpLogs.json");
 			mcpSessions: typeof import("./locales/en/mcpSessions.json");
 			mcpRegistry: typeof import("./locales/en/mcpRegistry.json");
@@ -23,9 +27,12 @@ declare module "i18next" {
 			modelCatalog: typeof import("./locales/en/modelCatalog.json");
 			oauth: typeof import("./locales/en/oauth.json");
 			oauthGrants: typeof import("./locales/en/oauthGrants.json");
+			observability: typeof import("./locales/en/observability.json");
 			plugins: typeof import("./locales/en/plugins.json");
 			pprof: typeof import("./locales/en/pprof.json");
 			prompts: typeof import("./locales/en/prompts.json");
+			providers: typeof import("./locales/en/providers.json");
+			routingRules: typeof import("./locales/en/routingRules.json");
 			shared: typeof import("./locales/en/shared.json");
 			skillsRepo: typeof import("./locales/en/skillsRepo.json");
 			virtualKeys: typeof import("./locales/en/virtualKeys.json");

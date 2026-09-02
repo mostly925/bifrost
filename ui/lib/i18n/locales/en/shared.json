@@ -103,5 +103,142 @@
 		"reqLabel": "req",
 		"overrideLabel": "override",
 		"basePlusOverride": "Base {{base}} + {{amount}} override"
+	},
+	"resetPeriods": {
+		"everyMinute": "Every Minute",
+		"every5Minutes": "Every 5 Minutes",
+		"every15Minutes": "Every 15 Minutes",
+		"every30Minutes": "Every 30 Minutes",
+		"hourly": "Hourly",
+		"every6Hours": "Every 6 Hours",
+		"daily": "Daily",
+		"weekly": "Weekly",
+		"monthly": "Monthly",
+		"quarterly": "Quarterly"
+	},
+	"fiscalYear": {
+		"starts": "FY starts {{month}}"
+	},
+	"budgetLines": {
+		"label": "Budget Configuration",
+		"reset": "Reset",
+		"addBudget": "Add Budget",
+		"empty": "No budget limits configured.",
+		"maxSpend": "Maximum Spend (USD)",
+		"removeAria": "Remove budget {{index}}",
+		"duplicate": "Duplicate reset period; each budget line must use a different interval."
+	},
+	"ui": {
+		"more": "More",
+		"toggleSidebar": "Toggle Sidebar",
+		"clearSelection": "Clear selection",
+		"searchPlaceholder": "Search...",
+		"selectPlaceholder": "Select",
+		"close": "Close",
+		"collapse": "Collapse",
+		"expand": "Expand",
+		"cancel": "Cancel",
+		"dismiss": "Dismiss",
+		"headersTable": {
+			"name": "Name",
+			"value": "Value",
+			"actions": "Actions",
+			"duplicateKey": "Duplicate key"
+		},
+		"datePicker": {
+			"pickADate": "Pick a date",
+			"fromTime": "From Time",
+			"toTime": "To Time",
+			"time": "Time",
+			"timezone": "Timezone",
+			"selectTimezone": "Select timezone",
+			"pickADateTime": "Pick a date and time"
+		},
+		"celBuilder": {
+			"loading": "Loading CEL builder...",
+			"leaveEmptyToMatchAll": "Leave empty to match all requests.",
+			"switchToVisualBuilder": "Switch to the visual builder?",
+			"confirmSwitchBody": "The visual builder can't import a hand-written CEL expression, so your current CEL will be discarded and the builder will start empty. Copy it first if you want to keep it.",
+			"confirmSwitchAction": "Discard CEL & switch",
+			"noRulesDefined": "No rules defined yet",
+			"hasKey": "has key",
+			"selectField": "Select field...",
+			"selectOperator": "Select operator...",
+			"selectModels": "Select models...",
+			"searchModel": "Search for a model...",
+			"selectProviders": "Select providers...",
+			"value": "Value"
+		},
+		"mcpToolSelector": {
+			"tool": "Tool",
+			"server": "Server",
+			"parametersSchema": "Parameters Schema",
+			"noParametersDefined": "No parameters defined"
+		},
+		"multiSelect": {
+			"availableOptions": "Available options",
+			"searchOptions": "Search options...",
+			"searchThroughOptions": "Search through available options"
+		},
+		"secretVarInput": {
+			"resolvedValueNote": "The resolved value will appear after saving"
+		},
+		"entitySelect": {
+			"selected": "Selected"
+		},
+		"budgetUsageReset": {
+			"title": "Reset budget usage?",
+			"description": "You changed a budget amount or reset frequency on this {{owner}}. Reset current usage to 0, or preserve the existing counters. The reset window keeps its current start and end either way.",
+			"preserveUsage": "Preserve Usage",
+			"resetUsage": "Reset Usage"
+		},
+		"providerConfig": {
+			"providerBudget": "Provider budget",
+			"providerBudgetAria": "Provider Budget",
+			"modelBudgets": "Model budgets",
+			"modelBudgetAria": "Model Budget",
+			"accessRateLimits": "Access & rate limits",
+			"providerKeys": "Provider keys",
+			"allowedModels": "Allowed models",
+			"weight": "Weight",
+			"blockedModels": "Blocked models",
+			"excludeFromRouting": "Exclude from routing",
+			"maximumTokens": "Maximum tokens",
+			"noLimit": "No limit",
+			"maximumRequests": "Maximum requests",
+			"addModel": "Add model…",
+			"globalProviderCap": "Global provider cap {{limit}}",
+			"skipModelBudgetsNote": "If you skip this, models share the provider budget freely",
+			"modelBudgetCount_one": "{{count}} model budget",
+			"modelBudgetCount_other": "{{count}} model budgets",
+			"selectModelPlaceholder": "Select a model…",
+			"noCap": "No cap",
+			"removeModelBudgetAria": "Remove model budget {{model}}",
+			"removeProviderAria": "Remove provider {{label}}",
+			"removeKeyAria": "Remove {{label}}",
+			"allowAllKeys": "Allow All Keys",
+			"allowAllKeysDescription": "Allow all current and future keys for this provider",
+			"allModels": "All models",
+			"noModelsDenyAll": "No models (deny all)",
+			"allKeysAllowed": "All keys allowed",
+			"noKeysSelected": "No keys selected",
+			"selectKeys": "Select keys...",
+			"allModelsAllowed": "All models allowed",
+			"allModelsBlocked": "All models blocked",
+			"noBlockedModels": "No blocked models",
+			"searchModels": "Search models...",
+			"allKeys": "All keys",
+			"keyCount_one": "{{count}} key",
+			"keyCount_other": "{{count}} keys",
+			"noKeys": "No keys",
+			"modelsCount": "{{count}} models",
+			"denyAll": "Deny all",
+			"rateLimitsSet": "Rate limits set",
+			"noRateLimits": "No rate limits",
+			"noBudget": "No budget"
+		},
+		"mcpServerSelector": {
+			"openDetailsInNewTab": "Open server details in new tab"
+		}
 	}
 }

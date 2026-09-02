@@ -1,5 +1,6 @@
 import { ExternalLink, X } from "lucide-react";
 import { useCallback, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { AsyncMultiSelect } from "./asyncMultiselect";
 import { Badge } from "./badge";
 import { Button } from "./button";
@@ -45,6 +46,7 @@ export function MCPServerSelector({
 	className,
 	registryPath = "/workspace/mcp-registry",
 }: MCPServerSelectorProps) {
+	const { t } = useTranslation("shared");
 	// Create options from MCP clients using meta for complex data
 	const allServerOptions = useMemo((): Option<ServerOptionMeta>[] => {
 		return mcpClients.map((client) => ({
@@ -205,7 +207,7 @@ export function MCPServerSelector({
 										href={`${registryPath}?server=${server.clientId}`}
 										target="_blank"
 										rel="noopener noreferrer"
-										title="Open server details in new tab"
+										title={t("ui.mcpServerSelector.openDetailsInNewTab")}
 									>
 										<ExternalLink className="h-4 w-4" />
 									</a>

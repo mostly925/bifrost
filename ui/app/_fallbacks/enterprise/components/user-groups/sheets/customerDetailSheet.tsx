@@ -1,20 +1,16 @@
 import { CopyableId } from "@/components/copyableId";
 import { Label } from "@/components/ui/label";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { fiscalQuarterNote, resetDurationLabels } from "@/lib/constants/governance";
+import { fiscalQuarterNote, localizedResetDurationLabel } from "@/lib/constants/governance";
 import { Customer } from "@/lib/types/governance";
 import { cn } from "@/lib/utils";
 import { formatCompactNumber } from "@/lib/utils/numbers";
+import { useTranslation } from "react-i18next";
 
 interface Props {
 	customer: Customer | null;
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
-}
-
-function formatResetDuration(duration: string | null | undefined): string {
-	if (!duration) return "";
-	return resetDurationLabels[duration] || duration;
 }
 
 function formatCurrency(value: number): string {
@@ -43,6 +39,7 @@ function BudgetLineBar({
 	resetDuration?: string;
 	resetConfig?: { quarter_start_month?: number };
 }) {
+	const { t: tShared } = useTranslation("shared");
 	const pct = max > 0 ? Math.min((current / max) * 100, 100) : 0;
 	const isOver80 = pct >= 80;
 	const isOver100 = pct >= 100;
@@ -51,7 +48,7 @@ function BudgetLineBar({
 			<div className="flex items-center justify-between text-xs">
 				<span className="font-medium" />
 				<span className="text-muted-foreground">
-					{formatResetDuration(resetDuration)}
+					{resetDuration ? localizedResetDurationLabel(tShared, resetDuration) : ""}
 					{fiscalQuarterNote(resetDuration, resetConfig)}
 				</span>
 			</div>
@@ -72,6 +69,7 @@ function BudgetLineBar({
 }
 
 function RateLimitBar({ label, current, max, resetDuration }: { label: string; current: number; max: number; resetDuration?: string }) {
+	const { t: tShared } = useTranslation("shared");
 	const pct = max > 0 ? Math.min((current / max) * 100, 100) : 0;
 	const isOver80 = pct >= 80;
 	const isOver100 = pct >= 100;
@@ -79,7 +77,7 @@ function RateLimitBar({ label, current, max, resetDuration }: { label: string; c
 		<div className="space-y-1.5">
 			<div className="flex items-center justify-between text-xs">
 				<span>{label}</span>
-				<span className="text-muted-foreground">{formatResetDuration(resetDuration)}</span>
+				<span className="text-muted-foreground">{resetDuration ? localizedResetDurationLabel(tShared, resetDuration) : ""}</span>
 			</div>
 			<div className="bg-muted h-1.5 w-full overflow-hidden rounded-full">
 				<div

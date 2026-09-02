@@ -18,8 +18,10 @@ import { ModelProvider } from "@/lib/types/config";
 import { CreateBudgetRequest, ProviderGovernance } from "@/lib/types/governance";
 import { RbacOperation, RbacResource, useRbac } from "@enterprise/lib";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
+import type { TFunction } from "i18next";
+import { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -27,22 +29,28 @@ interface GovernanceFormFragmentProps {
 	provider: ModelProvider;
 }
 
-const budgetLineSchema = z.object({
-	id: z.string().optional(),
-	max_limit: z.number({ error: "Budget limit must be a number" }).nonnegative("Budget limit cannot be negative").optional(),
-	reset_duration: z.string().min(1, "Reset duration is required"),
-});
+// Built with t at render time so validation messages follow the UI language.
+function createGovernanceFormSchema(t: TFunction<"providers">) {
+	const budgetLineSchema = z.object({
+		id: z.string().optional(),
+		max_limit: z
+			.number({ error: t("governanceForm.validation.limitMustBeNumber") })
+			.nonnegative(t("governanceForm.validation.limitCannotBeNegative"))
+			.optional(),
+		reset_duration: z.string().min(1, t("governanceForm.validation.resetDurationRequired")),
+	});
 
-const formSchema = z.object({
-	budgets: z.array(budgetLineSchema),
-	calendarAligned: z.boolean(),
-	tokenMaxLimit: z.number().int().nonnegative().optional(),
-	tokenResetDuration: z.string().optional(),
-	requestMaxLimit: z.number().int().nonnegative().optional(),
-	requestResetDuration: z.string().optional(),
-});
+	return z.object({
+		budgets: z.array(budgetLineSchema),
+		calendarAligned: z.boolean(),
+		tokenMaxLimit: z.number().int().nonnegative().optional(),
+		tokenResetDuration: z.string().optional(),
+		requestMaxLimit: z.number().int().nonnegative().optional(),
+		requestResetDuration: z.string().optional(),
+	});
+}
 
-type FormData = z.infer<typeof formSchema>;
+type FormData = z.infer<ReturnType<typeof createGovernanceFormSchema>>;
 
 const DEFAULT_GOVERNANCE_FORM_VALUES: FormData = {
 	budgets: [],
@@ -70,6 +78,7 @@ function governanceToFormValues(provGov: ProviderGovernance | undefined): FormDa
 }
 
 export function GovernanceFormFragment({ provider }: GovernanceFormFragmentProps) {
+	const { t } = useTranslation("providers");
 	const hasUpdateProviderAccess = useRbac(RbacResource.ModelProvider, RbacOperation.Update);
 	// Defers the save until the operator says whether to clear accumulated spend.
 	const resetPrompt = useBudgetUsageResetPrompt<FormData>();
@@ -84,6 +93,9 @@ export function GovernanceFormFragment({ provider }: GovernanceFormFragmentProps
 
 	const providerGovernance = providerGovernanceData?.providers?.find((p) => p.provider === provider.name);
 	const hasExistingGovernance = !!((providerGovernance?.budgets?.length ?? 0) > 0 || providerGovernance?.rate_limit);
+
+	// Rebuild the schema when the language changes so validation messages stay localized.
+	const formSchema = useMemo(() => createGovernanceFormSchema(t), [t]);
 
 	const form = useForm<FormData>({
 		resolver: zodResolver(formSchema),
@@ -186,10 +198,10 @@ export function GovernanceFormFragment({ provider }: GovernanceFormFragmentProps
 				},
 			}).unwrap();
 
-			toast.success("Governance configuration saved successfully");
+			toast.success(t("governanceForm.toasts.saved"));
 			form.reset(data);
 		} catch (error) {
-			toast.error("Failed to update provider governance", {
+			toast.error(t("governanceForm.toasts.updateFailed"), {
 				description: getErrorMessage(error),
 			});
 		}
@@ -198,10 +210,10 @@ export function GovernanceFormFragment({ provider }: GovernanceFormFragmentProps
 	const handleDelete = async () => {
 		try {
 			await deleteProviderGovernance(provider.name).unwrap();
-			toast.success("Governance removed successfully");
+			toast.success(t("governanceForm.toasts.removed"));
 			form.reset(DEFAULT_GOVERNANCE_FORM_VALUES);
 		} catch (error) {
-			toast.error("Failed to remove governance", {
+			toast.error(t("governanceForm.toasts.removeFailed"), {
 				description: getErrorMessage(error),
 			});
 		}
@@ -222,12 +234,9 @@ export function GovernanceFormFragment({ provider }: GovernanceFormFragmentProps
 					<div className="flex items-center justify-between gap-4">
 						<div className="space-y-1">
 							<Label className="text-sm" htmlFor="provider-calendar-aligned">
-								Align to calendar cycle
+								{t("governanceForm.calendarAligned.label")}
 							</Label>
-							<p className="text-muted-foreground text-xs">
-								Reset budgets at the start of each period (e.g. 1st of month) instead of rolling from creation date. Quarterly budgets
-								always align to fiscal quarter starts.
-							</p>
+							<p className="text-muted-foreground text-xs">{t("governanceForm.calendarAligned.description")}</p>
 						</div>
 						<Switch
 							id="provider-calendar-aligned"
@@ -242,11 +251,11 @@ export function GovernanceFormFragment({ provider }: GovernanceFormFragmentProps
 
 				{/* Rate Limiting Configuration */}
 				<div className="space-y-4">
-					<Label className="text-sm font-medium">Rate Limiting Configuration</Label>
+					<Label className="text-sm font-medium">{t("governanceForm.rateLimiting.title")}</Label>
 					<NumberAndSelect
 						id="providerTokenMaxLimit"
 						labelClassName="font-normal"
-						label="Maximum Tokens"
+						label={t("governanceForm.rateLimiting.maxTokens")}
 						value={form.watch("tokenMaxLimit")}
 						selectValue={form.watch("tokenResetDuration") || "1h"}
 						onChangeNumber={(value) => form.setValue("tokenMaxLimit", value, { shouldDirty: true })}
@@ -255,7 +264,7 @@ export function GovernanceFormFragment({ provider }: GovernanceFormFragmentProps
 					<NumberAndSelect
 						id="providerRequestMaxLimit"
 						labelClassName="font-normal"
-						label="Maximum Requests"
+						label={t("governanceForm.rateLimiting.maxRequests")}
 						value={form.watch("requestMaxLimit")}
 						selectValue={form.watch("requestResetDuration") || "1h"}
 						onChangeNumber={(value) => form.setValue("requestMaxLimit", value, { shouldDirty: true })}
@@ -268,11 +277,11 @@ export function GovernanceFormFragment({ provider }: GovernanceFormFragmentProps
 					<>
 						<DottedSeparator />
 						<div className="space-y-4">
-							<Label className="text-sm font-medium">Current Usage</Label>
+							<Label className="text-sm font-medium">{t("governanceForm.usage.title")}</Label>
 							<div className="bg-muted/50 grid grid-cols-2 gap-4 rounded-lg p-4">
 								{providerGovernance?.budgets?.map((b) => (
 									<div key={b.id} className="space-y-1">
-										<p className="text-muted-foreground text-xs">Budget ({b.reset_duration})</p>
+										<p className="text-muted-foreground text-xs">{t("governanceForm.usage.budget", { duration: b.reset_duration })}</p>
 										<p className="text-sm font-medium">
 											${b.current_usage.toFixed(2)} / ${b.max_limit.toFixed(2)}
 										</p>
@@ -280,7 +289,7 @@ export function GovernanceFormFragment({ provider }: GovernanceFormFragmentProps
 								))}
 								{providerGovernance?.rate_limit?.token_max_limit && (
 									<div className="space-y-1">
-										<p className="text-muted-foreground text-xs">Token Usage</p>
+										<p className="text-muted-foreground text-xs">{t("governanceForm.usage.tokens")}</p>
 										<p className="text-sm font-medium">
 											{providerGovernance.rate_limit.token_current_usage.toLocaleString()} /{" "}
 											{providerGovernance.rate_limit.token_max_limit.toLocaleString()}
@@ -289,7 +298,7 @@ export function GovernanceFormFragment({ provider }: GovernanceFormFragmentProps
 								)}
 								{providerGovernance?.rate_limit?.request_max_limit && (
 									<div className="space-y-1">
-										<p className="text-muted-foreground text-xs">Request Usage</p>
+										<p className="text-muted-foreground text-xs">{t("governanceForm.usage.requests")}</p>
 										<p className="text-sm font-medium">
 											{providerGovernance.rate_limit.request_current_usage.toLocaleString()} /{" "}
 											{providerGovernance.rate_limit.request_max_limit.toLocaleString()}
@@ -309,10 +318,10 @@ export function GovernanceFormFragment({ provider }: GovernanceFormFragmentProps
 						onClick={handleDelete}
 						disabled={!hasUpdateProviderAccess || isDeleting || !hasExistingGovernance}
 					>
-						Remove configuration
+						{t("governanceForm.removeConfig")}
 					</Button>
 					<Button type="submit" disabled={!form.formState.isDirty || !hasUpdateProviderAccess || isUpdating} isLoading={isUpdating}>
-						Save Governance Configuration
+						{t("governanceForm.save")}
 					</Button>
 				</div>
 			</form>

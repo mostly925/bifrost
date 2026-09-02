@@ -190,7 +190,7 @@ function OverviewTabImpl({
 			<div className="grid grid-cols-1 gap-2 lg:grid-cols-2 2xl:grid-cols-3">
 				{/* Log Volume Chart */}
 				<ChartCard
-					title="Request Volume"
+					title={t("section.requestVolume")}
 					loading={loadingHistogram}
 					testId="chart-log-volume"
 					totalLabel="Total"
@@ -200,15 +200,15 @@ function OverviewTabImpl({
 						<div className={CHART_HEADER_LEGEND_CLASS}>
 							<span className="flex items-center gap-1">
 								<span className="h-2 w-2 rounded-full" style={{ backgroundColor: CHART_COLORS.success }} />
-								<span className="text-muted-foreground">Success</span>
+								<span className="text-muted-foreground">{t("chart.success")}</span>
 							</span>
 							<span className="flex items-center gap-1">
 								<span className="h-2 w-2 rounded-full" style={{ backgroundColor: CHART_COLORS.error }} />
-								<span className="text-muted-foreground">Error</span>
+								<span className="text-muted-foreground">{t("chart.error")}</span>
 							</span>
 							<span className="flex items-center gap-1">
 								<span className="h-2 w-2 rounded-full" style={{ backgroundColor: CHART_COLORS.cancelled }} />
-								<span className="text-muted-foreground">Cancelled</span>
+								<span className="text-muted-foreground">{t("chart.cancelled")}</span>
 							</span>
 						</div>
 					}
@@ -221,7 +221,7 @@ function OverviewTabImpl({
 
 				{/* Token Usage Chart */}
 				<ChartCard
-					title="Token Usage"
+					title={t("section.tokenUsage")}
 					loading={loadingTokens}
 					testId="chart-token-usage"
 					totalLabel="Total"
@@ -231,15 +231,15 @@ function OverviewTabImpl({
 						<div className={CHART_HEADER_LEGEND_CLASS}>
 							<span className="flex items-center gap-1">
 								<span className="h-2 w-2 rounded-full" style={{ backgroundColor: CHART_COLORS.promptTokens }} />
-								<span className="text-muted-foreground">Input</span>
+								<span className="text-muted-foreground">{t("chart.input")}</span>
 							</span>
 							<span className="flex items-center gap-1">
 								<span className="h-2 w-2 rounded-full" style={{ backgroundColor: CHART_COLORS.completionTokens }} />
-								<span className="text-muted-foreground">Output</span>
+								<span className="text-muted-foreground">{t("chart.output")}</span>
 							</span>
 							<span className="flex items-center gap-1">
 								<span className="h-2 w-2 rounded-full" style={{ backgroundColor: CHART_COLORS.cachedReadTokens }} />
-								<span className="text-muted-foreground">Cached</span>
+								<span className="text-muted-foreground">{t("chart.cached")}</span>
 							</span>
 						</div>
 					}
@@ -249,18 +249,18 @@ function OverviewTabImpl({
 				</ChartCard>
 
 				{/* External Cache Hit Rate Meter */}
-				<ChartCard title="External Cache Hit Rate" loading={loadingTokens} testId="chart-cache-external">
+				<ChartCard title={t("section.externalCacheHitRate")} loading={loadingTokens} testId="chart-cache-external">
 					<ExternalCacheTokenMeterChart data={tokenData} />
 				</ChartCard>
 
 				{/* Local Cache Hit Rate Meter */}
-				<ChartCard title="Local Cache Hit Rate" loading={loadingStats} testId="chart-cache-local">
+				<ChartCard title={t("section.localCacheHitRate")} loading={loadingStats} testId="chart-cache-local">
 					<LocalCacheTokenMeterChart data={logsStats} />
 				</ChartCard>
 
 				{/* Cost Chart */}
 				<ChartCard
-					title="Cost"
+					title={t("section.cost")}
 					loading={loadingCost}
 					testId="chart-cost-total"
 					totalLabel="Total"
@@ -344,7 +344,7 @@ function OverviewTabImpl({
 
 				{/* Model Usage Chart */}
 				<ChartCard
-					title="Model Usage"
+					title={t("section.modelUsage")}
 					loading={loadingModels}
 					testId="chart-model-usage"
 					totalLabel="Total"
@@ -394,15 +394,15 @@ function OverviewTabImpl({
 								<>
 									<span className="flex items-center gap-1">
 										<span className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: CHART_COLORS.success }} />
-										<span className="text-muted-foreground">Success</span>
+										<span className="text-muted-foreground">{t("chart.success")}</span>
 									</span>
 									<span className="flex items-center gap-1">
 										<span className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: CHART_COLORS.error }} />
-										<span className="text-muted-foreground">Error</span>
+										<span className="text-muted-foreground">{t("chart.error")}</span>
 									</span>
 									<span className="flex items-center gap-1">
 										<span className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: CHART_COLORS.cancelled }} />
-										<span className="text-muted-foreground">Cancelled</span>
+										<span className="text-muted-foreground">{t("chart.cancelled")}</span>
 									</span>
 								</>
 							)}
@@ -425,10 +425,10 @@ function OverviewTabImpl({
 
 				{/* Latency Chart */}
 				<ChartCard
-					title="Latency"
+					title={t("section.latency")}
 					loading={loadingLatency}
 					testId="chart-latency"
-					totalLabel="Avg"
+					totalLabel={t("chart.avgShort")}
 					total={
 						latencyAvg !== null ? (
 							<NumberFlow value={latencyAvg} format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} suffix="ms" />
@@ -439,7 +439,7 @@ function OverviewTabImpl({
 						<div className={CHART_HEADER_LEGEND_CLASS}>
 							<span className="flex items-center gap-1">
 								<span className="h-2 w-2 rounded-full" style={{ backgroundColor: LATENCY_COLORS.avg }} />
-								<span className="text-muted-foreground">Avg</span>
+								<span className="text-muted-foreground">{t("chart.avgShort")}</span>
 							</span>
 							<span className="flex items-center gap-1">
 								<span className="h-2 w-2 rounded-full" style={{ backgroundColor: LATENCY_COLORS.p90 }} />
@@ -464,10 +464,10 @@ function OverviewTabImpl({
 
 				{/* Throughput (tokens/sec) Chart */}
 				<ChartCard
-					title="Throughput"
+					title={t("section.throughput")}
 					loading={loadingThroughput}
 					testId="chart-throughput"
-					totalLabel="Avg"
+					totalLabel={t("chart.avgShort")}
 					total={
 						throughputAvg !== null ? <span className="truncate whitespace-nowrap">{formatTokensPerSecond(throughputAvg)}</span> : undefined
 					}
@@ -478,7 +478,7 @@ function OverviewTabImpl({
 						<div className={CHART_HEADER_LEGEND_CLASS}>
 							<span className="flex items-center gap-1">
 								<span className="h-2 w-2 rounded-full" style={{ backgroundColor: THROUGHPUT_COLOR }} />
-								<span className="text-muted-foreground">Tokens/sec</span>
+								<span className="text-muted-foreground">{t("chart.tokensPerSec")}</span>
 							</span>
 						</div>
 					}

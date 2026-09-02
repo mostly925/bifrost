@@ -18,13 +18,58 @@
 		"success": "Success",
 		"throughput": "Throughput",
 		"total": "Total",
-		"unnamedModel": "Unnamed model"
+		"unnamedModel": "Unnamed model",
+		"avgShort": "Avg",
+		"tokens": "Tokens",
+		"tokensPerSec": "Tokens/sec",
+		"successRate": "Success Rate",
+		"avgLatency": "Avg Latency"
 	},
 	"meter": {
 		"cached": "{{value}} cached",
 		"externalCacheCaption": "External cache tokens",
 		"externalCacheInfoAria": "About external cache tokens",
 		"externalCacheInfoTip": "Tokens read from an external cache.",
-		"input": "{{value}} input"
-	}
+		"input": "{{value}} input",
+		"localCacheServed": "of requests served from local cache",
+		"directHits": "Direct: {{count}}",
+		"semanticHits": "Semantic: {{count}}"
+	},
+	"section": {
+		"requestVolume": "Request Volume",
+		"tokenUsage": "Token Usage",
+		"externalCacheHitRate": "External Cache Hit Rate",
+		"localCacheHitRate": "Local Cache Hit Rate",
+		"cost": "Cost",
+		"modelUsage": "Model Usage",
+		"latency": "Latency",
+		"throughput": "Throughput"
+	},
+	"rankings": {
+		"title": "Model Rankings",
+		"model": "Model",
+		"topModels": "Top Models",
+		"requestsSentDescription": "Actual number of requests sent",
+		"newBadge": "new",
+		"attributedDescription": "Attributed - a request counts toward each {{dimension}} it belongs to, so this can exceed the actual request count.",
+		"emptyPeriod": "No model usage data available for this time period.",
+		"attributedRequests": "Attributed Requests"
+	},
+	"mcpTab": {
+		"toolCalls": "MCP Tool Calls",
+		"cost": "MCP Cost",
+		"topTools": "Top 10 MCP Tools"
+	},
+	"providerTab": {
+		"cost": "Provider Cost",
+		"tokenUsage": "Provider Token Usage",
+		"latency": "Provider Latency",
+		"throughput": "Provider Throughput"
+	},
+	"filters": {
+		"allProviders": "All Providers",
+		"allTools": "All Tools",
+		"allServers": "All Servers"
+	},
+	"title": "Dashboard"
 }

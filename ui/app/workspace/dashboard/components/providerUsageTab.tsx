@@ -170,7 +170,7 @@ function ProviderUsageTabImpl({
 		<div className="grid grid-cols-1 gap-2 lg:grid-cols-2 2xl:grid-cols-3">
 			{/* Provider Cost Chart */}
 			<ChartCard
-				title="Provider Cost"
+				title={t("providerTab.cost")}
 				loading={loadingProviderCost}
 				testId="chart-provider-cost"
 				totalLabel="Total"
@@ -266,7 +266,7 @@ function ProviderUsageTabImpl({
 
 			{/* Provider Token Usage Chart */}
 			<ChartCard
-				title="Provider Token Usage"
+				title={t("providerTab.tokenUsage")}
 				loading={loadingProviderTokens}
 				testId="chart-provider-tokens"
 				totalLabel="Total"
@@ -318,11 +318,11 @@ function ProviderUsageTabImpl({
 							<>
 								<span className="flex items-center gap-1">
 									<span className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: CHART_COLORS.promptTokens }} />
-									<span className="text-muted-foreground">Input</span>
+									<span className="text-muted-foreground">{t("chart.input")}</span>
 								</span>
 								<span className="flex items-center gap-1">
 									<span className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: CHART_COLORS.completionTokens }} />
-									<span className="text-muted-foreground">Output</span>
+									<span className="text-muted-foreground">{t("chart.output")}</span>
 								</span>
 							</>
 						)}
@@ -355,10 +355,10 @@ function ProviderUsageTabImpl({
 
 			{/* Provider Latency Chart */}
 			<ChartCard
-				title="Provider Latency"
+				title={t("providerTab.latency")}
 				loading={loadingProviderLatency}
 				testId="chart-provider-latency"
-				totalLabel="Avg"
+				totalLabel={t("chart.avgShort")}
 				total={
 					providerLatencyAvg !== null ? (
 						<NumberFlow value={providerLatencyAvg} format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} suffix="ms" />
@@ -410,7 +410,7 @@ function ProviderUsageTabImpl({
 							<>
 								<span className="flex items-center gap-1">
 									<span className="h-2 w-2 rounded-full" style={{ backgroundColor: LATENCY_COLORS.avg }} />
-									<span className="text-muted-foreground">Avg</span>
+									<span className="text-muted-foreground">{t("chart.avgShort")}</span>
 								</span>
 								<span className="flex items-center gap-1">
 									<span className="h-2 w-2 rounded-full" style={{ backgroundColor: LATENCY_COLORS.p90 }} />
@@ -455,7 +455,7 @@ function ProviderUsageTabImpl({
 
 			{/* Provider Throughput (tokens/sec) Chart */}
 			<ChartCard
-				title="Provider Throughput"
+				title={t("providerTab.throughput")}
 				loading={loadingProviderThroughput}
 				testId="chart-provider-throughput"
 				totalLabel="Avg"

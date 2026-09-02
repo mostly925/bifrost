@@ -93,6 +93,7 @@ function MCPClientActionsMenu({
 	onVerifyExchange: (client: MCPClient) => void;
 	onDelete: (client: MCPClient) => void;
 }) {
+	const { t } = useTranslation("mcpRegistry");
 	const [isOpen, setIsOpen] = useState(false);
 
 	return (
@@ -102,7 +103,7 @@ function MCPClientActionsMenu({
 					variant="ghost"
 					size="icon"
 					className="h-8 w-8"
-					aria-label="MCP server actions"
+					aria-label={t("table.actionsMenuAria")}
 					data-testid={`mcp-client-actions-${client.config.client_id}-btn`}
 					disabled={isReconnecting || isReauthorizing || isVerifyingExchange}
 				>
@@ -134,7 +135,7 @@ function MCPClientActionsMenu({
 						}}
 					>
 						<PencilIcon className="h-4 w-4" />
-						Edit
+						{t("table.menu.edit")}
 					</DropdownMenuItem>
 				)}
 				{hasUpdateAccess && client.state === "pending_verification" && (
@@ -149,7 +150,7 @@ function MCPClientActionsMenu({
 						}}
 					>
 						<KeyRound className="h-4 w-4" />
-						Authorize
+						{t("table.menu.authorize")}
 					</DropdownMenuItem>
 				)}
 				{hasUpdateAccess && canReconnect && (
@@ -165,7 +166,7 @@ function MCPClientActionsMenu({
 						}}
 					>
 						<RefreshCcw className="h-4 w-4" />
-						Reconnect
+						{t("table.menu.reconnect")}
 					</DropdownMenuItem>
 				)}
 				{hasUpdateAccess &&
@@ -183,7 +184,7 @@ function MCPClientActionsMenu({
 							}}
 						>
 							<KeyRound className="h-4 w-4" />
-							{client.config.auth_type === "per_user_oauth" ? "Refresh admin credential" : "Reauthorize"}
+							{client.config.auth_type === "per_user_oauth" ? t("table.menu.refreshAdminCredential") : t("table.menu.reauthorize")}
 						</DropdownMenuItem>
 					)}
 				{hasUpdateAccess &&
@@ -200,7 +201,7 @@ function MCPClientActionsMenu({
 							}}
 						>
 							<KeyRound className="h-4 w-4" />
-							Refresh admin credential
+							{t("table.menu.refreshAdminCredential")}
 						</DropdownMenuItem>
 					)}
 				{hasUpdateAccess &&
@@ -218,7 +219,7 @@ function MCPClientActionsMenu({
 							}}
 						>
 							<KeyRound className="h-4 w-4" />
-							Re-verify as me
+							{t("table.menu.reverifyAsMe")}
 						</DropdownMenuItem>
 					)}
 				{hasDeleteAccess && (
@@ -232,7 +233,7 @@ function MCPClientActionsMenu({
 						}}
 					>
 						<Trash2 className="h-4 w-4" />
-						Delete
+						{t("common.delete")}
 					</DropdownMenuItem>
 				)}
 			</DropdownMenuContent>
@@ -270,6 +271,7 @@ export default function MCPClientsTable({
 	limit,
 	onOffsetChange,
 }: MCPClientsTableProps) {
+	const { t } = useTranslation("mcpRegistry");
 	const [formOpen, setFormOpen] = useState(false);
 	const hasCreateMCPClientAccess = useRbac(RbacResource.MCPGateway, RbacOperation.Create);
 	const hasUpdateMCPClientAccess = useRbac(RbacResource.MCPGateway, RbacOperation.Update);
@@ -337,13 +339,16 @@ export default function MCPClientsTable({
 			setReconnectingClients((prev) => [...prev, client.config.client_id]);
 			await reconnectMCPClient(client.config.client_id).unwrap();
 			setReconnectingClients((prev) => prev.filter((id) => id !== client.config.client_id));
-			toast({ title: "Reconnected", description: `Client ${client.config.name} reconnected successfully.` });
+			toast({
+				title: t("table.toasts.reconnectedTitle"),
+				description: t("table.toasts.reconnectedDescription", { name: client.config.name }),
+			});
 			if (refetch) {
 				await refetch();
 			}
 		} catch (error) {
 			setReconnectingClients((prev) => prev.filter((id) => id !== client.config.client_id));
-			toast({ title: "Error", description: getErrorMessage(error), variant: "destructive" });
+			toast({ title: t("common.error"), description: getErrorMessage(error), variant: "destructive" });
 		}
 	};
 
@@ -379,13 +384,13 @@ export default function MCPClientsTable({
 				});
 			} else {
 				toast({
-					title: "Authorization failed",
-					description: "Unexpected response from server. Please try again.",
+					title: t("table.toasts.authorizationFailedTitle"),
+					description: t("table.toasts.unexpectedResponse"),
 					variant: "destructive",
 				});
 			}
 		} catch (error) {
-			toast({ title: "Authorization failed", description: getErrorMessage(error), variant: "destructive" });
+			toast({ title: t("table.toasts.authorizationFailedTitle"), description: getErrorMessage(error), variant: "destructive" });
 		} finally {
 			setAuthorizingClients((prev) => prev.filter((id) => id !== client.config.client_id));
 		}
@@ -404,13 +409,13 @@ export default function MCPClientsTable({
 				});
 			} else {
 				toast({
-					title: "Reauthorization failed",
-					description: "Unexpected response from server. Please try again.",
+					title: t("table.toasts.reauthorizationFailedTitle"),
+					description: t("table.toasts.unexpectedResponse"),
 					variant: "destructive",
 				});
 			}
 		} catch (error) {
-			toast({ title: "Reauthorization failed", description: getErrorMessage(error), variant: "destructive" });
+			toast({ title: t("table.toasts.reauthorizationFailedTitle"), description: getErrorMessage(error), variant: "destructive" });
 		} finally {
 			setReauthorizingClients((prev) => prev.filter((id) => id !== client.config.client_id));
 		}
@@ -441,12 +446,12 @@ export default function MCPClientsTable({
 		try {
 			setVerifyingExchangeClients((prev) => [...prev, client.config.client_id]);
 			const response = await verifyMCPClientExchange(client.config.client_id).unwrap();
-			toast({ title: "Verified", description: response.message });
+			toast({ title: t("table.toasts.verifiedTitle"), description: response.message });
 			if (refetch) {
 				await refetch();
 			}
 		} catch (error) {
-			toast({ title: "Verification failed", description: getErrorMessage(error), variant: "destructive" });
+			toast({ title: t("table.toasts.verificationFailedTitle"), description: getErrorMessage(error), variant: "destructive" });
 		} finally {
 			setVerifyingExchangeClients((prev) => prev.filter((id) => id !== client.config.client_id));
 		}
@@ -455,12 +460,12 @@ export default function MCPClientsTable({
 	const handleDelete = async (client: MCPClient) => {
 		try {
 			await deleteMCPClient(client.config.client_id).unwrap();
-			toast({ title: "Deleted", description: `Client ${client.config.name} removed successfully.` });
+			toast({ title: t("table.toasts.deletedTitle"), description: t("table.toasts.deletedDescription", { name: client.config.name }) });
 			if (refetch) {
 				await refetch();
 			}
 		} catch (error) {
-			toast({ title: "Error", description: getErrorMessage(error), variant: "destructive" });
+			toast({ title: t("common.error"), description: getErrorMessage(error), variant: "destructive" });
 		}
 	};
 
@@ -489,15 +494,15 @@ export default function MCPClientsTable({
 			case "none":
 			case undefined:
 			case "":
-				return "None";
+				return t("clients.filters.authType.none");
 			case "headers":
 			case "per_user_headers":
-				return "Headers";
+				return t("clients.filters.authType.headers");
 			case "oauth":
 			case "per_user_oauth":
-				return "OAuth";
+				return t("clients.filters.authType.oauth");
 			case "token_exchange":
-				return "Token Exchange";
+				return t("clients.filters.authType.tokenExchange");
 			default:
 				return type;
 		}
@@ -508,10 +513,10 @@ export default function MCPClientsTable({
 			case "per_user_oauth":
 			case "per_user_headers":
 			case "token_exchange":
-				return "Per-User";
+				return t("table.authScope.perUser");
 			case "oauth":
 			case "headers":
-				return "Shared";
+				return t("table.authScope.shared");
 			default:
 				return "-";
 		}
@@ -590,21 +595,18 @@ export default function MCPClientsTable({
 			<AlertDialog open={!!clientToDelete} onOpenChange={(open) => !open && setClientToDelete(null)}>
 				<AlertDialogContent>
 					<AlertDialogHeader>
-						<AlertDialogTitle>Remove MCP Server</AlertDialogTitle>
-						<AlertDialogDescription>
-							Are you sure you want to remove MCP server {clientToDelete?.config.name}? You will need to reconnect the server to continue
-							using it.
-						</AlertDialogDescription>
+						<AlertDialogTitle>{t("table.deleteDialog.title")}</AlertDialogTitle>
+						<AlertDialogDescription>{t("table.deleteDialog.description", { name: clientToDelete?.config.name })}</AlertDialogDescription>
 					</AlertDialogHeader>
 					<AlertDialogFooter>
-						<AlertDialogCancel>Cancel</AlertDialogCancel>
+						<AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
 						<AlertDialogAction
 							onClick={() => {
 								if (clientToDelete) void handleDelete(clientToDelete);
 							}}
 							className="bg-destructive hover:bg-destructive/90"
 						>
-							Delete
+							{t("common.delete")}
 						</AlertDialogAction>
 					</AlertDialogFooter>
 				</AlertDialogContent>
@@ -615,10 +617,10 @@ export default function MCPClientsTable({
 					onClose={() => setBootstrapAuthorize(null)}
 					onSuccess={async () => {
 						toast({
-							title: "Success",
+							title: t("common.success"),
 							description: bootstrapAuthorize.isPerUserOauth
-								? "OAuth setup verified successfully. Each user will authenticate individually."
-								: "MCP client connected successfully",
+								? t("table.toasts.oauthVerifiedPerUser")
+								: t("table.toasts.oauthVerifiedShared"),
 						});
 						setBootstrapAuthorize(null);
 						if (refetch) {
@@ -626,11 +628,11 @@ export default function MCPClientsTable({
 						}
 					}}
 					onError={(error) => {
-						toast({ title: "Authorization failed", description: error, variant: "destructive" });
+						toast({ title: t("table.toasts.authorizationFailedTitle"), description: error, variant: "destructive" });
 					}}
 					onConflict={(error) => {
 						setBootstrapAuthorize(null);
-						toast({ title: "Authorization failed", description: error, variant: "destructive" });
+						toast({ title: t("table.toasts.authorizationFailedTitle"), description: error, variant: "destructive" });
 					}}
 					authorizeUrl={bootstrapAuthorize.authorizeUrl}
 					oauthConfigId={bootstrapAuthorize.oauthConfigId}
@@ -644,8 +646,8 @@ export default function MCPClientsTable({
 					onClose={() => setBootstrapHeadersClient(null)}
 					onSuccess={async () => {
 						toast({
-							title: "Success",
-							description: "Headers verified successfully. Each user will submit their own values when using this MCP server.",
+							title: t("common.success"),
+							description: t("table.toasts.headersVerified"),
 						});
 						setBootstrapHeadersClient(null);
 						if (refetch) {
@@ -658,7 +660,7 @@ export default function MCPClientsTable({
 					onConflict={async (error) => {
 						// 409: tools were already discovered (e.g. double submit or a
 						// concurrent verification) — the client is verified; refresh.
-						toast({ title: "Already verified", description: error });
+						toast({ title: t("table.toasts.alreadyVerifiedTitle"), description: error });
 						setBootstrapHeadersClient(null);
 						if (refetch) {
 							await refetch();
@@ -708,12 +710,14 @@ export default function MCPClientsTable({
 							/>
 							<div className="min-w-0 space-y-0.5">
 								<DialogTitle className="text-sm leading-snug font-medium">
-									{exchangeVerifyClient?.state === "pending_verification" ? "Verify as me" : "Re-verify as me"}
+									{exchangeVerifyClient?.state === "pending_verification"
+										? t("table.exchange.verifyTitle")
+										: t("table.exchange.reverifyTitle")}
 								</DialogTitle>
 								<DialogDescription className="text-xs leading-relaxed">
 									{exchangeVerifyClient?.state === "pending_verification"
-										? "Establish Bifrost's discovery credential using your identity."
-										: "Renew Bifrost's own discovery credential using your identity."}
+										? t("table.exchange.verifyDescription")
+										: t("table.exchange.reverifyDescription")}
 								</DialogDescription>
 							</div>
 						</div>
@@ -721,21 +725,19 @@ export default function MCPClientsTable({
 					<div className="space-y-3 px-5 py-4">
 						<InfoBox icon={<KeyRound className="size-4" />}>
 							<p>
-								This exchanges your own signed-in identity to{" "}
-								{exchangeVerifyClient?.state === "pending_verification" ? "establish" : "renew"} Bifrost&apos;s discovery credential for{" "}
-								<strong>{exchangeVerifyClient?.config.name}</strong>.
+								<Trans
+									ns="mcpRegistry"
+									i18nKey={
+										exchangeVerifyClient?.state === "pending_verification" ? "table.exchange.infoEstablish" : "table.exchange.infoRenew"
+									}
+									values={{ name: exchangeVerifyClient?.config.name }}
+									components={{ strong: <strong /> }}
+								/>
 							</p>
 							{exchangeVerifyClient?.state === "pending_verification" ? (
-								<p className="text-muted-foreground/80 text-xs">
-									That credential is only used to periodically fetch this server&apos;s tool list, not for real user requests, whose tokens
-									are exchanged automatically on every request.
-								</p>
+								<p className="text-muted-foreground/80 text-xs">{t("table.exchange.infoDetail")}</p>
 							) : (
-								<p className="text-muted-foreground/80 text-xs">
-									That credential is only used to periodically fetch this server&apos;s tool list, not for real user requests, whose tokens
-									are exchanged automatically on every request. You only need this if the credential badge shows it&apos;s expired, but
-									running it any time is safe.
-								</p>
+								<p className="text-muted-foreground/80 text-xs">{t("table.exchange.infoDetailReverify")}</p>
 							)}
 						</InfoBox>
 						<div className="flex justify-end gap-2">
@@ -746,7 +748,7 @@ export default function MCPClientsTable({
 								onClick={() => setExchangeVerifyClient(null)}
 								data-testid="verify-exchange-cancel-btn"
 							>
-								Cancel
+								{t("common.cancel")}
 							</Button>
 							<Button
 								size="sm"
@@ -762,7 +764,7 @@ export default function MCPClientsTable({
 								{exchangeVerifyClient && verifyingExchangeClients.includes(exchangeVerifyClient.config.client_id) ? (
 									<Loader2 className="size-3.5 animate-spin" />
 								) : null}
-								Continue
+								{t("common.continue")}
 							</Button>
 						</div>
 					</div>
@@ -771,26 +773,26 @@ export default function MCPClientsTable({
 
 			<div className="mb-4 flex items-center justify-between gap-4">
 				<div>
-					<h2 className="text-lg font-semibold tracking-tight">MCP Server Catalog</h2>
-					<p className="text-muted-foreground text-sm">Manage servers that can connect to the MCP Tools endpoint.</p>
+					<h2 className="text-lg font-semibold tracking-tight">{t("table.title")}</h2>
+					<p className="text-muted-foreground text-sm">{t("table.subtitle")}</p>
 				</div>
 				<div className="flex gap-2">
 					<MCPUsageGuideSheet />
 					<Button asChild variant="outline" data-testid="mcp-library-link-btn" className="h-8">
 						<Link to="/workspace/mcp-registry/library">
 							<Box />
-							<span className="hidden sm:inline">Library</span>
+							<span className="hidden sm:inline">{t("table.libraryBtn")}</span>
 						</Link>
 					</Button>
 					<Button
 						onClick={handleCreate}
 						disabled={!hasCreateMCPClientAccess}
 						data-testid="create-mcp-client-btn"
-						aria-label="New MCP Server"
+						aria-label={t("table.newServerAria")}
 						className="h-8 gap-2"
 					>
 						<Plus />
-						<span className="hidden sm:inline">New MCP Server</span>
+						<span className="hidden sm:inline">{t("table.newServer")}</span>
 					</Button>
 				</div>
 			</div>
@@ -800,8 +802,8 @@ export default function MCPClientsTable({
 				<div className="relative max-w-sm flex-1">
 					<Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
 					<Input
-						aria-label="Search MCP servers by name"
-						placeholder="Search by name..."
+						aria-label={t("table.searchAria")}
+						placeholder={t("table.searchPlaceholder")}
 						value={search}
 						onChange={(e) => onSearchChange(e.target.value)}
 						className="pl-9"
@@ -816,7 +818,7 @@ export default function MCPClientsTable({
 						onClick={onServerFilterClear}
 						data-testid="mcp-client-server-filter-clear-btn"
 					>
-						Server filter
+						{t("table.serverFilter")}
 						<X className="size-3" />
 					</Button>
 				)}
@@ -827,26 +829,20 @@ export default function MCPClientsTable({
 					<Table data-testid="mcp-clients-table" containerClassName="h-full overflow-auto" className="w-full min-w-[1516px] table-fixed">
 						<TableHeader className="bg-muted sticky top-0 z-20">
 							<TableRow>
-								<TableHead className="w-[260px] font-semibold">Name</TableHead>
-								<TableHead className="w-[150px] font-semibold">Connection Type</TableHead>
-								<TableHead className="w-[150px] font-semibold">Auth Type</TableHead>
-								<TableHead className="w-[140px] font-semibold">Auth Scope</TableHead>
-								<TableHead className="w-[120px] font-semibold">Code Mode</TableHead>
-								<TableHead className="w-[120px] font-semibold">VK Access</TableHead>
-								<TableHead className="w-[130px] font-semibold">Enabled Tools</TableHead>
-								<TableHead className="w-[160px] font-semibold">Auto-execute Tools</TableHead>
+								<TableHead className="w-[260px] font-semibold">{t("table.columns.name")}</TableHead>
+								<TableHead className="w-[150px] font-semibold">{t("table.columns.connectionType")}</TableHead>
+								<TableHead className="w-[150px] font-semibold">{t("table.columns.authType")}</TableHead>
+								<TableHead className="w-[140px] font-semibold">{t("table.columns.authScope")}</TableHead>
+								<TableHead className="w-[120px] font-semibold">{t("table.columns.codeMode")}</TableHead>
+								<TableHead className="w-[120px] font-semibold">{t("table.columns.vkAccess")}</TableHead>
+								<TableHead className="w-[130px] font-semibold">{t("table.columns.enabledTools")}</TableHead>
+								<TableHead className="w-[160px] font-semibold">{t("table.columns.autoExecuteTools")}</TableHead>
 								<TableHead className="w-[140px] font-semibold">
 									<HeaderWithTooltip
-										label="State"
+										label={t("table.columns.state")}
 										tooltip={
 											<>
-												<p>
-													The client's connection state (healthy, unstable, needs re-authorization, and so on). "Unstable" reflects
-													Bifrost's own connection checks to the server, not the results of tool calls made through it: it self-heals and
-													never blocks tool calls. For per-user clients (OAuth, headers, token exchange), this reflects Bifrost's own
-													retained admin credential (used only to periodically refresh the tool list), not any individual user's own
-													session, which is unaffected either way.
-												</p>
+												<p>{t("table.stateTooltip.description")}</p>
 												<a
 													data-testid="mcp-client-state-link"
 													href="https://docs.getbifrost.ai/mcp/connections"
@@ -854,13 +850,13 @@ export default function MCPClientsTable({
 													rel="noreferrer"
 													className="text-primary mt-2 inline-block underline"
 												>
-													See all connection states
+													{t("table.stateTooltip.seeAll")}
 												</a>
 											</>
 										}
 									/>
 								</TableHead>
-								<TableHead className="w-[90px] font-semibold">Status</TableHead>
+								<TableHead className="w-[90px] font-semibold">{t("table.columns.status")}</TableHead>
 								<TableHead className={`bg-muted sticky right-0 z-10 w-14 text-right ${PIN_SHADOW_RIGHT}`}></TableHead>
 							</TableRow>
 						</TableHeader>
@@ -868,7 +864,7 @@ export default function MCPClientsTable({
 							{mcpClients.length === 0 ? (
 								<TableRow>
 									<TableCell colSpan={11} className="h-24 text-center">
-										<span className="text-muted-foreground text-sm">No matching MCP servers found.</span>
+										<span className="text-muted-foreground text-sm">{t("table.emptyRow")}</span>
 									</TableCell>
 								</TableRow>
 							) : (
@@ -910,15 +906,19 @@ export default function MCPClientsTable({
 															: ""
 													}
 												>
-													{c.state == "healthy" ? <>{c.config.is_code_mode_client ? "Enabled" : "Disabled"}</> : "-"}
+													{c.state == "healthy" ? (
+														<>{c.config.is_code_mode_client ? t("clients.filters.enabled") : t("clients.filters.disabled")}</>
+													) : (
+														"-"
+													)}
 												</Badge>
 											</TableCell>
 											<TableCell data-testid="mcp-client-vk-access">
 												{c.config.allow_on_all_virtual_keys
-													? "All"
+													? t("table.vkAccess.all")
 													: c.vk_configs?.length
-														? `${c.vk_configs.length} ${c.vk_configs.length === 1 ? "VK" : "VKs"}`
-														: "None"}
+														? t("table.vkAccess.count", { count: c.vk_configs.length })
+														: t("table.vkAccess.none")}
 											</TableCell>
 											<TableCell>
 												{c.state == "healthy" ? (
@@ -969,11 +969,11 @@ export default function MCPClientsTable({
 														})
 															.unwrap()
 															.then(() => {
-																toast({ title: `Server ${checked ? "enabled" : "disabled"} successfully` });
+																toast({ title: checked ? t("table.toasts.serverEnabled") : t("table.toasts.serverDisabled") });
 																if (refetch) refetch();
 															})
 															.catch((err) => {
-																toast({ title: "Error", description: getErrorMessage(err), variant: "destructive" });
+																toast({ title: t("common.error"), description: getErrorMessage(err), variant: "destructive" });
 															})
 															.finally(() => {
 																setTogglingClientIds((prev) => {
@@ -1019,8 +1019,11 @@ export default function MCPClientsTable({
 				{totalCount > 0 && (
 					<div className="flex shrink-0 items-center justify-between text-xs" data-testid="pagination">
 						<div className="text-muted-foreground flex items-center gap-2">
-							{(offset + 1).toLocaleString()}-{Math.min(offset + limit, totalCount).toLocaleString()} of {totalCount.toLocaleString()}{" "}
-							entries
+							{t("table.pagination.range", {
+								from: (offset + 1).toLocaleString(),
+								to: Math.min(offset + limit, totalCount).toLocaleString(),
+								total: totalCount.toLocaleString(),
+							})}
 						</div>
 
 						<div className="flex items-center gap-2">
@@ -1030,15 +1033,15 @@ export default function MCPClientsTable({
 								onClick={() => onOffsetChange(Math.max(0, offset - limit))}
 								disabled={offset === 0}
 								data-testid="mcp-clients-pagination-prev-btn"
-								aria-label="Previous page"
+								aria-label={t("table.pagination.prevAria")}
 							>
 								<ChevronLeft className="size-3" />
 							</Button>
 
 							<div className="flex items-center gap-1">
-								<span>Page</span>
-								<span>{Math.floor(offset / limit) + 1}</span>
-								<span>of {Math.ceil(totalCount / limit)}</span>
+								<span>
+									{t("table.pagination.pageOf", { current: Math.floor(offset / limit) + 1, total: Math.ceil(totalCount / limit) })}
+								</span>
 							</div>
 
 							<Button
@@ -1047,7 +1050,7 @@ export default function MCPClientsTable({
 								onClick={() => onOffsetChange(offset + limit)}
 								disabled={offset + limit >= totalCount}
 								data-testid="mcp-clients-pagination-next-btn"
-								aria-label="Next page"
+								aria-label={t("table.pagination.nextAria")}
 							>
 								<ChevronRight className="size-3" />
 							</Button>
@@ -1063,16 +1066,16 @@ export default function MCPClientsTable({
 					onClose={() => setReauthorizeFlow(null)}
 					onSuccess={() => {
 						toast({
-							title: "Success",
+							title: t("common.success"),
 							description: reauthorizeFlow.isPerUserOauth
-								? "Admin discovery credential refreshed successfully."
-								: "MCP client re-authorized successfully",
+								? t("table.toasts.adminCredentialRefreshed")
+								: t("table.toasts.reauthorizedShared"),
 						});
 						setReauthorizeFlow(null);
 						if (refetch) void refetch();
 					}}
 					onError={(error) => {
-						toast({ title: "Reauthorization failed", description: error, variant: "destructive" });
+						toast({ title: t("table.toasts.reauthorizationFailedTitle"), description: error, variant: "destructive" });
 					}}
 					onConflict={() => {
 						// 409: the flow's completion raced (popup postMessage vs.
@@ -1080,10 +1083,10 @@ export default function MCPClientsTable({
 						// double submit. Either way the credential is already live
 						// server-side, so treat it as success rather than an error.
 						toast({
-							title: "Success",
+							title: t("common.success"),
 							description: reauthorizeFlow.isPerUserOauth
-								? "Admin discovery credential refreshed successfully."
-								: "MCP client re-authorized successfully",
+								? t("table.toasts.adminCredentialRefreshed")
+								: t("table.toasts.reauthorizedShared"),
 						});
 						setReauthorizeFlow(null);
 						if (refetch) void refetch();
@@ -1100,7 +1103,7 @@ export default function MCPClientsTable({
 					open={!!headersRefreshFlow}
 					onClose={() => setHeadersRefreshFlow(null)}
 					onSuccess={() => {
-						toast({ title: "Success", description: "Admin discovery credential refreshed successfully." });
+						toast({ title: t("common.success"), description: t("table.toasts.adminCredentialRefreshed") });
 						setHeadersRefreshFlow(null);
 						if (refetch) void refetch();
 					}}
@@ -1111,7 +1114,7 @@ export default function MCPClientsTable({
 						// 409: the flow's completion raced (double submit / concurrent
 						// verification) or the credential no longer needed a refresh;
 						// either way the client is fine, so treat it as success.
-						toast({ title: "Already verified", description: error });
+						toast({ title: t("table.toasts.alreadyVerifiedTitle"), description: error });
 						setHeadersRefreshFlow(null);
 						if (refetch) void refetch();
 					}}
@@ -1134,17 +1137,18 @@ export default function MCPClientsTable({
 // per-instance breakdown behind the aggregate. summarizeNodeStates groups
 // instance IDs by their reported state so the drill-down reads as counts
 // ("2 instances: Healthy, 1 instance: Unstable") rather than a raw ID list.
-function summarizeNodeStates(nodeStates: Record<string, string>): string[] {
+function summarizeNodeStates(nodeStates: Record<string, string>, t: TFunction<"mcpRegistry">): string[] {
 	const countByState = new Map<string, number>();
 	for (const state of Object.values(nodeStates)) {
 		countByState.set(state, (countByState.get(state) ?? 0) + 1);
 	}
-	return Array.from(countByState.entries()).map(
-		([state, count]) => `${count} ${count === 1 ? "instance" : "instances"}: ${titleCaseFromSnakeCase(state)}`,
+	return Array.from(countByState.entries()).map(([state, count]) =>
+		t("table.nodeStates.line", { count, state: titleCaseFromSnakeCase(state) }),
 	);
 }
 
 function StateBadge({ state, nodeStates }: { state: string; nodeStates?: Record<string, string> }) {
+	const { t } = useTranslation("mcpRegistry");
 	const badge = <Badge className={MCP_STATUS_COLORS[state]}>{titleCaseFromSnakeCase(state)}</Badge>;
 	if (state !== "degraded" || !nodeStates || Object.keys(nodeStates).length === 0) {
 		return badge;
@@ -1157,9 +1161,9 @@ function StateBadge({ state, nodeStates }: { state: string; nodeStates?: Record<
 				</button>
 			</PopoverTrigger>
 			<PopoverContent className="w-xs text-xs" align="start">
-				<p className="text-muted-foreground mb-1.5">Instances disagree about this client&apos;s state:</p>
+				<p className="text-muted-foreground mb-1.5">{t("table.nodeStates.disagree")}</p>
 				<ul className="space-y-0.5">
-					{summarizeNodeStates(nodeStates).map((line) => (
+					{summarizeNodeStates(nodeStates, t).map((line) => (
 						<li key={line}>{line}</li>
 					))}
 				</ul>
@@ -1169,12 +1173,13 @@ function StateBadge({ state, nodeStates }: { state: string; nodeStates?: Record<
 }
 
 function HeaderWithTooltip({ label, tooltip }: { label: string; tooltip: ReactNode }) {
+	const { t } = useTranslation("mcpRegistry");
 	return (
 		<Popover>
 			<PopoverTrigger asChild>
 				<button
 					type="button"
-					aria-label={`${label} column guidance`}
+					aria-label={t("table.columnAria", { label })}
 					data-testid="mcp-client-state-info-trigger"
 					className="inline-flex cursor-help items-center gap-2"
 				>

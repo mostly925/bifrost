@@ -1,9 +1,10 @@
 import { Progress } from "@/components/ui/progress";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { resetDurationLabels, supportsCalendarAlignment } from "@/lib/constants/governance";
+import { localizedResetDurationLabel, supportsCalendarAlignment } from "@/lib/constants/governance";
 import { cn } from "@/lib/utils";
 import { formatCompactNumber } from "@/lib/utils/numbers";
 import { useTranslation } from "react-i18next";
+import type { TFunction } from "i18next";
 
 interface RateLimitShape {
 	token_max_limit?: number | null;
@@ -25,9 +26,9 @@ interface RateLimitDisplayProps {
 	calendarAligned?: boolean;
 }
 
-const formatResetDuration = (duration?: string | null, calendarAligned?: boolean, calendarSuffix = "") => {
+const formatResetDuration = (t: TFunction<"shared">, duration?: string | null, calendarAligned?: boolean, calendarSuffix = "") => {
 	if (!duration) return "";
-	const label = resetDurationLabels[duration] || duration;
+	const label = localizedResetDurationLabel(t, duration);
 	return calendarAligned && supportsCalendarAlignment(duration) ? `${label}${calendarSuffix}` : label;
 };
 
@@ -49,7 +50,9 @@ function LimitText({
 			<span className="font-mono">
 				{formatCompactNumber(max)} {label}
 			</span>
-			<span className="text-muted-foreground">{formatResetDuration(resetDuration, calendarAligned, t("usageDisplay.calendarSuffix"))}</span>
+			<span className="text-muted-foreground">
+				{formatResetDuration(t, resetDuration, calendarAligned, t("usageDisplay.calendarSuffix"))}
+			</span>
 		</div>
 	);
 }
@@ -83,7 +86,7 @@ function Bar({
 							{formatCompactNumber(max)} {label}
 						</span>
 						<span className="text-muted-foreground">
-							{formatResetDuration(resetDuration, calendarAligned, t("usageDisplay.calendarSuffix"))}
+							{formatResetDuration(t, resetDuration, calendarAligned, t("usageDisplay.calendarSuffix"))}
 						</span>
 					</div>
 					<Progress value={pct} className={cn("bg-muted/70 dark:bg-muted/30 h-1", barClass)} />
@@ -96,7 +99,7 @@ function Bar({
 				{resetDuration ? (
 					<p className="text-primary-foreground/80 text-xs">
 						{t("usageDisplay.resets", {
-							duration: formatResetDuration(resetDuration, calendarAligned, t("usageDisplay.calendarSuffix")),
+							duration: formatResetDuration(t, resetDuration, calendarAligned, t("usageDisplay.calendarSuffix")),
 						})}
 					</p>
 				) : null}

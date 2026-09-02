@@ -11,6 +11,7 @@ import { getRangeForPeriod, TIME_PERIODS } from "@/lib/utils/timeRange";
 import { useLocation } from "@tanstack/react-router";
 import { parseAsBoolean, parseAsInteger, parseAsString, useQueryStates } from "nuqs";
 import { type RefObject, useCallback, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { type ChartType } from "./components/charts/chartTypeToggle";
 import { ModelFilterSelect } from "./components/charts/modelFilterSelect";
 import { ExportPopover } from "./components/exportPopover";
@@ -32,6 +33,7 @@ const nextFrames = () =>
 	});
 
 export default function DashboardPage() {
+	const { t } = useTranslation("dashboard");
 	// MCP filter data
 	const { data: mcpFilterData } = useGetMCPAvailableFilterDataQuery();
 
@@ -476,7 +478,7 @@ export default function DashboardPage() {
 				{/* Header */}
 				<div className="flex items-center justify-between p-4">
 					<div className="flex items-center gap-2">
-						<h1 className="text-lg font-semibold">Dashboard</h1>
+						<h1 className="text-lg font-semibold">{t("title")}</h1>
 					</div>
 					<div className="flex items-center gap-2">
 						<ExportPopover
@@ -499,7 +501,7 @@ export default function DashboardPage() {
 												setUrlState({ mcp_tool_names: value });
 											}
 										}}
-										placeholder="All Tools"
+										placeholder={t("filters.allTools")}
 										data-testid="dashboard-mcp-tool-filter"
 									/>
 								)}
@@ -514,7 +516,7 @@ export default function DashboardPage() {
 												setUrlState({ mcp_server_labels: value });
 											}
 										}}
-										placeholder="All Servers"
+										placeholder={t("filters.allServers")}
 										data-testid="dashboard-mcp-server-filter"
 									/>
 								)}

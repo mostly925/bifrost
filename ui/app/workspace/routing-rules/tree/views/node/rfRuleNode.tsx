@@ -7,8 +7,10 @@ import { Link2 } from "lucide-react";
 import { useState } from "react";
 import { RULE_W, SCOPE_CONFIG, type ScopeKey } from "../constants";
 import { RFEdgeHandle } from "./rfEdgeHandle";
+import { useTranslation } from "react-i18next";
 
 export function RFRuleNode({ data }: { data: any }) {
+	const { t: tTree } = useTranslation("routingRules");
 	const rule = data.rule as RoutingRule;
 	const scopeColor = data.scopeColor as string;
 	const cfg = SCOPE_CONFIG[rule.scope as ScopeKey];
@@ -123,10 +125,10 @@ export function RFRuleNode({ data }: { data: any }) {
 									)}
 									<div className="min-w-0 flex-1">
 										<p className="text-foreground truncate text-xs font-medium">
-											{isPassthrough ? "Passthrough" : t.provider ? getProviderLabel(t.provider) : t.model}
+											{isPassthrough ? tTree("tree.passthrough") : t.provider ? getProviderLabel(t.provider) : t.model}
 										</p>
 										{t.model && t.provider && <p className="text-muted-foreground truncate font-mono text-[10px]">{t.model}</p>}
-										{isPassthrough && <p className="text-muted-foreground/60 text-[10px] italic">original provider &amp; model</p>}
+										{isPassthrough && <p className="text-muted-foreground/60 text-[10px] italic">{tTree("tree.passthroughHint")}</p>}
 									</div>
 									{multi && (
 										<span className="ml-1 shrink-0 text-[11px] font-semibold" style={{ color: scopeColor }}>

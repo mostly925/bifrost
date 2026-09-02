@@ -1,10 +1,11 @@
 import { Progress } from "@/components/ui/progress";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { fiscalQuarterNote, resetDurationLabels, supportsCalendarAlignment } from "@/lib/constants/governance";
+import { fiscalQuarterNote, localizedResetDurationLabel, supportsCalendarAlignment } from "@/lib/constants/governance";
 import { Budget } from "@/lib/types/governance";
 import { cn } from "@/lib/utils";
 import { formatCurrency, getEffectiveBudgetLimit, hasActiveBudgetOverride } from "@/lib/utils/governance";
 import { useTranslation } from "react-i18next";
+import type { TFunction } from "i18next";
 
 interface BudgetDisplayProps {
 	budgets: Budget[] | null | undefined;
@@ -12,9 +13,9 @@ interface BudgetDisplayProps {
 	calendarAligned?: boolean;
 }
 
-const formatResetDuration = (duration?: string | null, calendarAligned?: boolean, calendarSuffix = "") => {
+const formatResetDuration = (t: TFunction<"shared">, duration?: string | null, calendarAligned?: boolean, calendarSuffix = "") => {
 	if (!duration) return "";
-	const label = resetDurationLabels[duration] || duration;
+	const label = localizedResetDurationLabel(t, duration);
 	return calendarAligned && supportsCalendarAlignment(duration) ? `${label}${calendarSuffix}` : label;
 };
 
@@ -38,7 +39,7 @@ export function BudgetDisplay({ budgets, calendarAligned }: BudgetDisplayProps) 
 				const pct = effectiveMaxLimit > 0 ? Math.min((b.current_usage / effectiveMaxLimit) * 100, 100) : 0;
 				const isExhausted = effectiveMaxLimit > 0 && b.current_usage >= effectiveMaxLimit;
 				const barClass = isExhausted ? "[&>div]:bg-red-500/70" : pct > 80 ? "[&>div]:bg-amber-500/70" : "[&>div]:bg-emerald-500/70";
-				const resetLabel = formatResetDuration(b.reset_duration, calendarAligned, t("usageDisplay.calendarSuffix"));
+				const resetLabel = formatResetDuration(t, b.reset_duration, calendarAligned, t("usageDisplay.calendarSuffix"));
 
 				return (
 					<Tooltip key={b.id ?? idx}>

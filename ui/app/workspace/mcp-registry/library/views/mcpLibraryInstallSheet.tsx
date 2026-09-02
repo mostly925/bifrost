@@ -19,8 +19,10 @@ import { RbacOperation, RbacResource, useRbac } from "@enterprise/lib";
 import { Globe, Info, KeyRound, Radio, ShieldCheck, Terminal } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
+import { Trans, useTranslation } from "react-i18next";
 import { MCPHeadersAuthorizer } from "../../views/mcpHeadersAuthorizer";
 import { OAuth2Authorizer } from "../../views/oauth2Authorizer";
+import { authLabel, categoryLabel, transportLabel } from "./mcpLibraryTaxonomy";
 
 const MCP_ICON_FALLBACK = "/images/mcp.svg";
 
@@ -81,17 +83,6 @@ function buildInitialValues(server: MCPLibraryEntry): CreateMCPClientRequest {
 	};
 }
 
-function transportLabel(connectionType?: string): string {
-	switch (connectionType) {
-		case "stdio":
-			return "stdio";
-		case "sse":
-			return "SSE";
-		default:
-			return "HTTP";
-	}
-}
-
 function TransportIcon({ connectionType }: { connectionType?: string }) {
 	switch (connectionType) {
 		case "stdio":
@@ -103,41 +94,8 @@ function TransportIcon({ connectionType }: { connectionType?: string }) {
 	}
 }
 
-function authLabel(authType?: MCPAuthType | string): string {
-	switch (authType) {
-		case "headers":
-			return "Headers";
-		case "oauth":
-			return "OAuth 2.0";
-		case "per_user_oauth":
-			return "Per-user OAuth";
-		case "per_user_headers":
-			return "User headers";
-		case "token_exchange":
-			return "Token exchange";
-		default:
-			return "No auth";
-	}
-}
-
-function authHelpText(authType?: MCPAuthType | string): string {
-	switch (authType) {
-		case "headers":
-			return "Add the request headers Bifrost should send with each tool call.";
-		case "oauth":
-			return "Create the MCP client, then complete the OAuth authorization flow.";
-		case "per_user_oauth":
-			return "Create the MCP client, then authorize the first user OAuth connection.";
-		case "per_user_headers":
-			return "Declare the header names each caller must supply, then verify a sample set on install.";
-		case "token_exchange":
-			return "Set the identity-provider audience for this server; each caller's identity token is exchanged automatically.";
-		default:
-			return "No credentials are required for this catalog entry.";
-	}
-}
-
 export function MCPLibraryInstallSheet({ server, open, onClose, onInstalled }: MCPLibraryInstallSheetProps) {
+	const { t } = useTranslation("mcpLibrary");
 	const hasCreateMCPClientAccess = useRbac(RbacResource.MCPGateway, RbacOperation.Create);
 	const { toast } = useToast();
 	const [createMCPClient] = useCreateMCPClientMutation();
@@ -171,6 +129,23 @@ export function MCPLibraryInstallSheet({ server, open, onClose, onInstalled }: M
 	const { control, handleSubmit, reset, setValue, watch, setError, clearErrors } = form;
 	const authType = watch("auth_type") || "none";
 	const headers = watch("headers");
+
+	const authHelpText = (type: string): string => {
+		switch (type) {
+			case "headers":
+				return t("installSheet.authHelp.headers");
+			case "oauth":
+				return t("installSheet.authHelp.oauth");
+			case "per_user_oauth":
+				return t("installSheet.authHelp.per_user_oauth");
+			case "per_user_headers":
+				return t("installSheet.authHelp.per_user_headers");
+			case "token_exchange":
+				return t("installSheet.authHelp.token_exchange");
+			default:
+				return t("installSheet.authHelp.none");
+		}
+	};
 
 	const authKind: "none" | "headers" | "oauth" =
 		authType === "oauth" || authType === "per_user_oauth"
@@ -234,21 +209,21 @@ export function MCPLibraryInstallSheet({ server, open, onClose, onInstalled }: M
 		if ((authType !== "headers" && authType !== "per_user_headers") || !headers) return null;
 		for (const [key, secretVar] of Object.entries(headers)) {
 			if (!secretVar.value && !secretVar.ref) {
-				return `Header "${key}" must have a value`;
+				return t("installSheet.headerValueRequired", { key });
 			}
 		}
 		return null;
-	}, [authType, headers]);
+	}, [authType, headers, t]);
 
 	const onSubmit = async (data: CreateMCPClientRequest) => {
 		let hasErrors = false;
 
 		if (!data.name.trim()) {
-			setError("name", { message: "Server name is required" });
+			setError("name", { message: t("installSheet.validation.nameRequired") });
 			hasErrors = true;
 		} else if (!/^[a-zA-Z0-9_]+$/.test(data.name)) {
 			setError("name", {
-				message: "Server name can only contain letters, numbers, and underscores",
+				message: t("installSheet.validation.nameInvalidFormat"),
 			});
 			hasErrors = true;
 		}
@@ -256,26 +231,26 @@ export function MCPLibraryInstallSheet({ server, open, onClose, onInstalled }: M
 		if (authType === "oauth" || authType === "per_user_oauth") {
 			if (data.oauth_config?.authorize_url && !/^https?:\/\/.+$/.test(data.oauth_config.authorize_url)) {
 				setError("oauth_config.authorize_url", {
-					message: "Authorize URL must start with http:// or https://",
+					message: t("installSheet.validation.authorizeUrlInvalid"),
 				});
 				hasErrors = true;
 			}
 			if (data.oauth_config?.token_url && !/^https?:\/\/.+$/.test(data.oauth_config.token_url)) {
 				setError("oauth_config.token_url", {
-					message: "Token URL must start with http:// or https://",
+					message: t("installSheet.validation.tokenUrlInvalid"),
 				});
 				hasErrors = true;
 			}
 			if (data.oauth_config?.registration_url && !/^https?:\/\/.+$/.test(data.oauth_config.registration_url)) {
 				setError("oauth_config.registration_url", {
-					message: "Registration URL must start with http:// or https://",
+					message: t("installSheet.validation.registrationUrlInvalid"),
 				});
 				hasErrors = true;
 			}
 			if (resourceText.trim() && !isValidOAuthResourceURI(resourceText.trim())) {
 				toast({
-					title: "Invalid resource URI",
-					description: "OAuth resource must be an absolute URI without a fragment.",
+					title: t("installSheet.validation.resourceTitle"),
+					description: t("installSheet.validation.resourceDescription"),
 					variant: "destructive",
 				});
 				hasErrors = true;
@@ -285,8 +260,8 @@ export function MCPLibraryInstallSheet({ server, open, onClose, onInstalled }: M
 		if (authType === "per_user_headers") {
 			if (perUserHeaderKeys.length === 0) {
 				toast({
-					title: "Header keys required",
-					description: "Declare at least one header name users must supply.",
+					title: t("installSheet.validation.headerKeysTitle"),
+					description: t("installSheet.validation.headerKeysDescription"),
 					variant: "destructive",
 				});
 				hasErrors = true;
@@ -362,8 +337,8 @@ export function MCPLibraryInstallSheet({ server, open, onClose, onInstalled }: M
 			}
 
 			toast({
-				title: "Installed",
-				description: `${server.name} MCP server installed.`,
+				title: t("installSheet.toasts.installedTitle"),
+				description: t("installSheet.toasts.installedDescription", { name: server.name }),
 			});
 			onInstalled();
 			onClose();
@@ -374,7 +349,7 @@ export function MCPLibraryInstallSheet({ server, open, onClose, onInstalled }: M
 				return;
 			}
 			toast({
-				title: "Error",
+				title: t("installSheet.toasts.errorTitle"),
 				description: getErrorMessage(error),
 				variant: "destructive",
 			});
@@ -387,14 +362,14 @@ export function MCPLibraryInstallSheet({ server, open, onClose, onInstalled }: M
 	const isPerUserHeaders = authType === "per_user_headers";
 	const displayUrl =
 		server.connection_url || (server.stdio_config ? `${server.stdio_config.command} ${(server.stdio_config.args || []).join(" ")}` : "—");
-	const installButtonLabel = isOauth || isPerUserHeaders ? "Continue" : "Install";
+	const installButtonLabel = isOauth || isPerUserHeaders ? t("installSheet.continue") : t("installSheet.install");
 
 	return (
 		<Sheet open={open} onOpenChange={(sheetOpen) => !sheetOpen && !oauthFlow && !headersFlow && onClose()}>
 			<SheetContent className="flex w-full flex-col overflow-x-hidden p-0 pt-4 sm:max-w-2xl">
 				<SheetHeader className="flex flex-col items-start px-0 py-4" headerClassName="mb-0 sticky px-8 -top-4 bg-card z-10">
-					<SheetTitle>Install MCP server</SheetTitle>
-					<SheetDescription>Confirm the catalog configuration before adding this server to Bifrost.</SheetDescription>
+					<SheetTitle>{t("installSheet.title")}</SheetTitle>
+					<SheetDescription>{t("installSheet.description")}</SheetDescription>
 				</SheetHeader>
 
 				<Form {...form}>
@@ -421,15 +396,15 @@ export function MCPLibraryInstallSheet({ server, open, onClose, onInstalled }: M
 										<div className="flex min-w-0 flex-wrap items-center gap-1.5">
 											<Badge variant="outline" className="bg-background">
 												<TransportIcon connectionType={server.connection_type} />
-												{transportLabel(server.connection_type)}
+												{transportLabel(t, server.connection_type)}
 											</Badge>
 											<Badge variant="outline" className="bg-background">
 												<ShieldCheck className="size-3.5" />
-												{authLabel(server.auth_type)}
+												{authLabel(t, server.auth_type)}
 											</Badge>
 											{server.category && (
 												<Badge variant="secondary" className="max-w-full truncate">
-													{server.category}
+													{categoryLabel(t, server.category)}
 												</Badge>
 											)}
 										</div>
@@ -439,31 +414,31 @@ export function MCPLibraryInstallSheet({ server, open, onClose, onInstalled }: M
 
 							<section className="space-y-4">
 								<div className="space-y-1">
-									<h3 className="text-sm font-medium">Client details</h3>
-									<p className="text-muted-foreground text-sm">Bifrost uses this name internally when routing MCP tool calls.</p>
+									<h3 className="text-sm font-medium">{t("installSheet.clientDetails")}</h3>
+									<p className="text-muted-foreground text-sm">{t("installSheet.clientDetailsDescription")}</p>
 								</div>
 
 								<FormField
 									control={control}
 									name="name"
 									rules={{
-										required: "Server name is required",
+										required: t("installSheet.validation.nameRequired"),
 										minLength: {
 											value: 3,
-											message: "Server name must be at least 3 characters",
+											message: t("installSheet.validation.nameMinLength"),
 										},
 										maxLength: {
 											value: 50,
-											message: "Server name cannot exceed 50 characters",
+											message: t("installSheet.validation.nameMaxLength"),
 										},
 										validate: {
-											format: (value) => /^[a-zA-Z0-9_]+$/.test(value) || "Server name can only contain letters, numbers, and underscores",
-											noLeadingDigit: (value) => !/^[0-9]/.test(value) || "Server name cannot start with a number",
+											format: (value) => /^[a-zA-Z0-9_]+$/.test(value) || t("installSheet.validation.nameInvalidFormat"),
+											noLeadingDigit: (value) => !/^[0-9]/.test(value) || t("installSheet.validation.nameNoLeadingDigit"),
 										},
 									}}
 									render={({ field }) => (
 										<FormItem>
-											<FormLabel>Server name</FormLabel>
+											<FormLabel>{t("installSheet.serverName")}</FormLabel>
 											<FormControl>
 												<Input {...field} data-testid="library-mcp-name-input" maxLength={50} />
 											</FormControl>
@@ -477,26 +452,26 @@ export function MCPLibraryInstallSheet({ server, open, onClose, onInstalled }: M
 								<section className="space-y-4 border-t pt-5">
 									<div className="space-y-1">
 										<div className="flex items-center gap-2">
-											<h3 className="text-sm font-medium">Launch environment</h3>
+											<h3 className="text-sm font-medium">{t("installSheet.launchEnvironment")}</h3>
 											<TooltipProvider>
 												<Tooltip>
 													<TooltipTrigger asChild>
 														<Info className="text-muted-foreground h-4 w-4 cursor-help" />
 													</TooltipTrigger>
 													<TooltipContent className="max-w-xs">
-														<p>Leave a value blank to read it from the environment where Bifrost runs.</p>
+														<p>{t("installSheet.launchEnvironmentTooltip")}</p>
 													</TooltipContent>
 												</Tooltip>
 											</TooltipProvider>
 										</div>
-										<p className="text-muted-foreground text-sm">Values used when Bifrost starts this stdio MCP server.</p>
+										<p className="text-muted-foreground text-sm">{t("installSheet.launchEnvironmentDescription")}</p>
 									</div>
 									<HeadersTable
 										value={envVars}
 										onChange={setEnvVars}
 										fixedKeys={server.stdio_config.envs}
-										keyPlaceholder="Variable name"
-										valuePlaceholder="Value (or host env)"
+										keyPlaceholder={t("installSheet.varNamePlaceholder")}
+										valuePlaceholder={t("installSheet.varValuePlaceholder")}
 										label=""
 									/>
 								</section>
@@ -506,29 +481,29 @@ export function MCPLibraryInstallSheet({ server, open, onClose, onInstalled }: M
 								<div className="space-y-1">
 									<div className="flex items-center gap-2">
 										<KeyRound className="text-muted-foreground size-4" />
-										<h3 className="text-sm font-medium">Authentication</h3>
+										<h3 className="text-sm font-medium">{t("installSheet.authentication")}</h3>
 									</div>
 									<p className="text-muted-foreground text-sm">{authHelpText(authType)}</p>
 								</div>
 
 								{/* Authentication Type */}
 								<FormItem className="w-full">
-									<FormLabel>Authentication type</FormLabel>
+									<FormLabel>{t("installSheet.authType")}</FormLabel>
 									<Select value={authKind} onValueChange={(value: "none" | "headers" | "oauth") => applyAuthKind(value)}>
 										<FormControl>
 											<SelectTrigger className="w-full" data-testid="library-auth-type-select">
-												<SelectValue placeholder="Select authentication type" />
+												<SelectValue placeholder={t("installSheet.authTypePlaceholder")} />
 											</SelectTrigger>
 										</FormControl>
 										<SelectContent>
 											<SelectItem value="none" data-testid="library-auth-type-none">
-												None
+												{t("installSheet.authKindNone")}
 											</SelectItem>
 											<SelectItem value="headers" data-testid="library-auth-type-headers">
-												Headers
+												{t("installSheet.authKindHeaders")}
 											</SelectItem>
 											<SelectItem value="oauth" data-testid="library-auth-type-oauth">
-												OAuth 2.0
+												{t("installSheet.authKindOauth")}
 											</SelectItem>
 										</SelectContent>
 									</Select>
@@ -537,19 +512,19 @@ export function MCPLibraryInstallSheet({ server, open, onClose, onInstalled }: M
 								{/* Auth Scope — only meaningful when there's an auth flow */}
 								{authKind !== "none" && (
 									<FormItem className="w-full">
-										<FormLabel>Auth Scope</FormLabel>
+										<FormLabel>{t("installSheet.authScope")}</FormLabel>
 										<Select value={authScope} onValueChange={(value: "shared" | "per_user") => applyAuthScope(value)}>
 											<FormControl>
 												<SelectTrigger className="w-full" data-testid="library-auth-scope-select">
-													<SelectValue placeholder="Select auth scope" />
+													<SelectValue placeholder={t("installSheet.authScopePlaceholder")} />
 												</SelectTrigger>
 											</FormControl>
 											<SelectContent>
 												<SelectItem value="shared" data-testid="library-auth-scope-shared">
-													Shared
+													{t("installSheet.authScopeShared")}
 												</SelectItem>
 												<SelectItem value="per_user" data-testid="library-auth-scope-per-user">
-													Per-User
+													{t("installSheet.authScopePerUser")}
 												</SelectItem>
 											</SelectContent>
 										</Select>
@@ -565,9 +540,9 @@ export function MCPLibraryInstallSheet({ server, open, onClose, onInstalled }: M
 												<HeadersTable
 													value={field.value || {}}
 													onChange={field.onChange}
-													keyPlaceholder="Header name"
-													valuePlaceholder="Header value"
-													label="Headers"
+													keyPlaceholder={t("installSheet.headerNamePlaceholder")}
+													valuePlaceholder={t("installSheet.headerValuePlaceholder")}
+													label={t("installSheet.headersLabel")}
 													useSecretVarInput
 												/>
 												{headersValidationError && <p className="text-destructive text-xs">{headersValidationError}</p>}
@@ -583,17 +558,16 @@ export function MCPLibraryInstallSheet({ server, open, onClose, onInstalled }: M
 										    per-user on install via the MCPHeadersAuthorizer dialog. */}
 										<div className="space-y-1">
 											<div className="space-y-0.5">
-												<div className="text-sm font-medium">Required Headers</div>
+												<div className="text-sm font-medium">{t("installSheet.requiredHeaders")}</div>
 												<p className="text-muted-foreground text-sm">
-													Comma-separated list of header names each caller must supply when they first use this server (e.g.{" "}
-													<code>X-API-Key, X-Tenant-ID</code>). Values are submitted per user - never stored on this server config.
+													<Trans ns="mcpLibrary" i18nKey="installSheet.requiredHeadersDescription" components={{ 1: <code /> }} />
 												</p>
 											</div>
 											<Textarea
 												id="library-per-user-header-keys"
 												data-testid="library-per-user-header-keys-textarea"
 												className="h-24"
-												placeholder="X-API-Key, X-Tenant-ID"
+												placeholder={t("installSheet.requiredHeadersPlaceholder")}
 												value={newHeaderKeyInput}
 												onChange={(e) => {
 													setNewHeaderKeyInput(e.target.value);
@@ -611,9 +585,9 @@ export function MCPLibraryInstallSheet({ server, open, onClose, onInstalled }: M
 													<HeadersTable
 														value={field.value || {}}
 														onChange={field.onChange}
-														keyPlaceholder="Header name"
-														valuePlaceholder="Header value"
-														label="Static Headers (optional, applied alongside user values)"
+														keyPlaceholder={t("installSheet.headerNamePlaceholder")}
+														valuePlaceholder={t("installSheet.headerValuePlaceholder")}
+														label={t("installSheet.staticHeadersLabel")}
 														useSecretVarInput
 													/>
 													{headersValidationError && <p className="text-destructive text-xs">{headersValidationError}</p>}
@@ -628,7 +602,7 @@ export function MCPLibraryInstallSheet({ server, open, onClose, onInstalled }: M
 									<Accordion type="single" collapsible className="w-full">
 										<AccordionItem value="oauth-advanced" className="border-b-0">
 											<AccordionTrigger className="py-0" data-testid="library-oauth-advanced-trigger">
-												<span className="text-sm font-medium">OAuth Client Advanced Settings</span>
+												<span className="text-sm font-medium">{t("installSheet.oauthAdvanced")}</span>
 											</AccordionTrigger>
 											<AccordionContent className="space-y-4 pt-4 pb-0">
 												<FormField
@@ -637,14 +611,14 @@ export function MCPLibraryInstallSheet({ server, open, onClose, onInstalled }: M
 													render={({ field }) => (
 														<FormItem>
 															<div className="flex items-center gap-2">
-																<FormLabel>OAuth client ID</FormLabel>
+																<FormLabel>{t("installSheet.oauthClientId")}</FormLabel>
 																<TooltipProvider>
 																	<Tooltip>
 																		<TooltipTrigger asChild>
 																			<Info className="text-muted-foreground h-4 w-4 cursor-help" />
 																		</TooltipTrigger>
 																		<TooltipContent className="max-w-xs">
-																			<p>Leave empty to use Dynamic Client Registration when the provider supports it.</p>
+																			<p>{t("installSheet.oauthClientIdTooltip")}</p>
 																		</TooltipContent>
 																	</Tooltip>
 																</TooltipProvider>
@@ -653,7 +627,7 @@ export function MCPLibraryInstallSheet({ server, open, onClose, onInstalled }: M
 																<SecretVarInput
 																	value={field.value}
 																	onChange={field.onChange}
-																	placeholder="your-client-id"
+																	placeholder={t("installSheet.oauthClientIdPlaceholder")}
 																	data-testid="library-oauth-client-id"
 																/>
 															</FormControl>
@@ -667,12 +641,12 @@ export function MCPLibraryInstallSheet({ server, open, onClose, onInstalled }: M
 													name="oauth_config.client_secret"
 													render={({ field }) => (
 														<FormItem>
-															<FormLabel>OAuth client secret</FormLabel>
+															<FormLabel>{t("installSheet.oauthClientSecret")}</FormLabel>
 															<FormControl>
 																<SecretVarInput
 																	value={field.value}
 																	onChange={field.onChange}
-																	placeholder="optional for PKCE"
+																	placeholder={t("installSheet.oauthClientSecretPlaceholder")}
 																	hideValueWhenEnv
 																	maskNonEnvValue
 																	data-testid="library-oauth-client-secret"
@@ -689,7 +663,7 @@ export function MCPLibraryInstallSheet({ server, open, onClose, onInstalled }: M
 														name="oauth_config.authorize_url"
 														render={({ field }) => (
 															<FormItem>
-																<FormLabel>Authorization URL</FormLabel>
+																<FormLabel>{t("installSheet.oauthAuthorizeUrl")}</FormLabel>
 																<FormControl>
 																	<Input
 																		{...field}
@@ -698,7 +672,7 @@ export function MCPLibraryInstallSheet({ server, open, onClose, onInstalled }: M
 																			field.onChange(event);
 																			clearErrors("oauth_config.authorize_url");
 																		}}
-																		placeholder="Auto-discovered"
+																		placeholder={t("installSheet.autoDiscoveredPlaceholder")}
 																		data-testid="library-oauth-authorize-url"
 																	/>
 																</FormControl>
@@ -712,7 +686,7 @@ export function MCPLibraryInstallSheet({ server, open, onClose, onInstalled }: M
 														name="oauth_config.token_url"
 														render={({ field }) => (
 															<FormItem>
-																<FormLabel>Token URL</FormLabel>
+																<FormLabel>{t("installSheet.oauthTokenUrl")}</FormLabel>
 																<FormControl>
 																	<Input
 																		{...field}
@@ -721,7 +695,7 @@ export function MCPLibraryInstallSheet({ server, open, onClose, onInstalled }: M
 																			field.onChange(event);
 																			clearErrors("oauth_config.token_url");
 																		}}
-																		placeholder="Auto-discovered"
+																		placeholder={t("installSheet.autoDiscoveredPlaceholder")}
 																		data-testid="library-oauth-token-url"
 																	/>
 																</FormControl>
@@ -736,7 +710,7 @@ export function MCPLibraryInstallSheet({ server, open, onClose, onInstalled }: M
 													name="oauth_config.registration_url"
 													render={({ field }) => (
 														<FormItem>
-															<FormLabel>Registration URL</FormLabel>
+															<FormLabel>{t("installSheet.oauthRegistrationUrl")}</FormLabel>
 															<FormControl>
 																<Input
 																	{...field}
@@ -745,7 +719,7 @@ export function MCPLibraryInstallSheet({ server, open, onClose, onInstalled }: M
 																		field.onChange(event);
 																		clearErrors("oauth_config.registration_url");
 																	}}
-																	placeholder="Auto-discovered"
+																	placeholder={t("installSheet.autoDiscoveredPlaceholder")}
 																	data-testid="library-oauth-registration-url"
 																/>
 															</FormControl>
@@ -755,20 +729,20 @@ export function MCPLibraryInstallSheet({ server, open, onClose, onInstalled }: M
 												/>
 
 												<div className="space-y-2">
-													<Label>Scopes</Label>
+													<Label>{t("installSheet.scopes")}</Label>
 													<Input
 														value={scopesText}
 														onChange={(event) => setScopesText(event.target.value)}
-														placeholder="read, write, admin"
+														placeholder={t("installSheet.scopesPlaceholder")}
 														data-testid="library-oauth-scopes-input"
 													/>
 												</div>
 												<div className="space-y-2">
-													<Label>Resource</Label>
+													<Label>{t("installSheet.resource")}</Label>
 													<Input
 														value={resourceText}
 														onChange={(event) => setResourceText(event.target.value)}
-														placeholder="https://provider.example.com/mcp or urn:example:mcp"
+														placeholder={t("installSheet.resourcePlaceholder")}
 														data-testid="library-oauth-resource-input"
 													/>
 												</div>
@@ -782,7 +756,7 @@ export function MCPLibraryInstallSheet({ server, open, onClose, onInstalled }: M
 									<Accordion type="single" collapsible className="w-full">
 										<AccordionItem value="tls-config" className="border-b-0">
 											<AccordionTrigger className="py-0" data-testid="library-tls-config-trigger">
-												<span className="text-sm font-medium">TLS / Certificate</span>
+												<span className="text-sm font-medium">{t("installSheet.tlsSection")}</span>
 											</AccordionTrigger>
 											<AccordionContent className="space-y-4 pt-4 pb-0">
 												<FormField
@@ -791,11 +765,8 @@ export function MCPLibraryInstallSheet({ server, open, onClose, onInstalled }: M
 													render={({ field }) => (
 														<FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
 															<div className="space-y-0.5">
-																<FormLabel>Skip TLS verification</FormLabel>
-																<p className="text-muted-foreground text-sm">
-																	Disable TLS certificate verification. Use only in trusted isolated environments. Takes priority over CA
-																	certificate.
-																</p>
+																<FormLabel>{t("installSheet.skipTlsVerification")}</FormLabel>
+																<p className="text-muted-foreground text-sm">{t("installSheet.skipTlsVerificationDescription")}</p>
 															</div>
 															<FormControl>
 																<Switch
@@ -812,11 +783,11 @@ export function MCPLibraryInstallSheet({ server, open, onClose, onInstalled }: M
 													name="tls_config.ca_cert_pem"
 													render={({ field }) => (
 														<FormItem>
-															<FormLabel>CA Certificate (PEM) (Optional)</FormLabel>
+															<FormLabel>{t("installSheet.caCertificate")}</FormLabel>
 															<FormControl>
 																<SecretVarInput
 																	variant="textarea"
-																	placeholder={`-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE----- or env.MCP_CA_CERT_PEM`}
+																	placeholder={t("installSheet.caCertificatePlaceholder")}
 																	className="font-mono text-xs"
 																	rows={6}
 																	hideValueWhenEnv
@@ -826,9 +797,7 @@ export function MCPLibraryInstallSheet({ server, open, onClose, onInstalled }: M
 																	data-testid="library-mcp-tls-ca-cert-pem"
 																/>
 															</FormControl>
-															<p className="text-muted-foreground text-sm">
-																PEM-encoded CA certificate to trust for MCP server connections (e.g. self-signed or private CA).
-															</p>
+															<p className="text-muted-foreground text-sm">{t("installSheet.caCertificateDescription")}</p>
 															<FormMessage />
 														</FormItem>
 													)}
@@ -844,14 +813,14 @@ export function MCPLibraryInstallSheet({ server, open, onClose, onInstalled }: M
 							<div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
 								<p className="text-muted-foreground text-sm">
 									{isOauth
-										? "OAuth authorization starts after this step."
+										? t("installSheet.footerOauth")
 										: isPerUserHeaders
-											? "Header verification starts after this step."
-											: "All discovered tools will be enabled after install."}
+											? t("installSheet.footerPerUserHeaders")
+											: t("installSheet.footerTools")}
 								</p>
 								<div className="flex justify-end gap-2">
 									<Button type="button" variant="outline" onClick={onClose} disabled={isLoading} data-testid="library-install-cancel-btn">
-										Cancel
+										{t("installSheet.cancel")}
 									</Button>
 									<TooltipProvider>
 										<Tooltip>
@@ -869,7 +838,7 @@ export function MCPLibraryInstallSheet({ server, open, onClose, onInstalled }: M
 											</TooltipTrigger>
 											{!hasCreateMCPClientAccess && (
 												<TooltipContent>
-													<p>You don't have permission to perform this action</p>
+													<p>{t("installSheet.noPermissionTooltip")}</p>
 												</TooltipContent>
 											)}
 										</Tooltip>
@@ -887,8 +856,8 @@ export function MCPLibraryInstallSheet({ server, open, onClose, onInstalled }: M
 					onClose={() => setOauthFlow(null)}
 					onSuccess={() => {
 						toast({
-							title: "Installed",
-							description: `${server.name} MCP server connected with OAuth.`,
+							title: t("installSheet.toasts.installedTitle"),
+							description: t("installSheet.toasts.oauthDescription", { name: server.name }),
 						});
 						setOauthFlow(null);
 						onInstalled();
@@ -896,7 +865,7 @@ export function MCPLibraryInstallSheet({ server, open, onClose, onInstalled }: M
 					}}
 					onError={(error) => {
 						toast({
-							title: "OAuth Error",
+							title: t("installSheet.toasts.oauthErrorTitle"),
 							description: error,
 							variant: "destructive",
 						});
@@ -922,8 +891,8 @@ export function MCPLibraryInstallSheet({ server, open, onClose, onInstalled }: M
 					onSuccess={() => {
 						setHeadersFlow(null);
 						toast({
-							title: "Installed",
-							description: `${server.name} MCP server connected with per-user headers.`,
+							title: t("installSheet.toasts.installedTitle"),
+							description: t("installSheet.toasts.perUserHeadersDescription", { name: server.name }),
 						});
 						onInstalled();
 						onClose();

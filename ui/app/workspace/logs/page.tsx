@@ -30,12 +30,14 @@ import { AlertCircle, BarChart, CheckCircle, Clock, DollarSign, Hash, Info } fro
 import { parseAsSafeArrayOf, parseAsSafeString } from "@/lib/queryParamsParser";
 import { parseAsBoolean, parseAsInteger, parseAsString, useQueryStates } from "nuqs";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 // A fallback chain is a handful of attempts, so one page covers every realistic
 // chain. Capped at the list endpoint's own maximum.
 const chainChildrenPageLimit = 1000;
 
 export default function LogsPage() {
+	const { t } = useTranslation("logs");
 	const [error, setError] = useState<string | null>(null);
 	const [showEmptyState, setShowEmptyState] = useState(false);
 	const hasCheckedEmptyState = useRef(false);
@@ -484,19 +486,21 @@ export default function LogsPage() {
 	const statCards = useMemo(
 		() => [
 			{
-				title: "Total Requests",
+				id: "total-requests",
+				title: t("page.stats.totalRequests"),
 				value: <NumberFlow value={stats?.total_requests ?? 0} format={COMPACT_NUMBER_FORMAT} />,
 				icon: <BarChart className="size-4" />,
 			},
 			{
-				title: "Success Rate",
+				id: "success-rate",
+				title: t("page.stats.successRate"),
 				value: <NumberFlow value={stats?.success_rate ?? 0} format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} suffix="%" />,
 				icon: <CheckCircle className="size-4" />,
-				description:
-					"Success rate as perceived by the system. Each fallback counts as a separate attempt. Retries on the same request are counted as one attempt.",
+				description: t("page.stats.successRateDescription"),
 			},
 			{
-				title: "User Success Rate",
+				id: "user-success-rate",
+				title: t("page.stats.userSuccessRate"),
 				value: (
 					<NumberFlow
 						value={stats?.user_facing_success_rate ?? 0}
@@ -505,31 +509,34 @@ export default function LogsPage() {
 					/>
 				),
 				icon: <CheckCircle className="size-4" />,
-				description: "Success rate as perceived by the end user. It includes fallback chains as one request.",
+				description: t("page.stats.userSuccessRateDescription"),
 			},
 			{
-				title: "Avg Latency",
+				id: "avg-latency",
+				title: t("page.stats.avgLatency"),
 				value: (
 					<NumberFlow value={stats?.average_latency ?? 0} format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} suffix="ms" />
 				),
 				icon: <Clock className="size-4" />,
 			},
 			{
-				title: "Total Tokens",
+				id: "total-tokens",
+				title: t("page.stats.totalTokens"),
 				value: <NumberFlow value={stats?.total_tokens ?? 0} format={COMPACT_NUMBER_FORMAT} />,
 				icon: <Hash className="size-4" />,
 				subValue: (
 					<>
 						<NumberFlow value={stats?.prompt_tokens ?? 0} format={COMPACT_NUMBER_FORMAT} />
-						<span> in / </span>
+						<span> {t("page.stats.tokensIn")} / </span>
 						<NumberFlow value={stats?.completion_tokens ?? 0} format={COMPACT_NUMBER_FORMAT} />
-						<span> out</span>
+						<span> {t("page.stats.tokensOut")}</span>
 					</>
 				),
-				description: "Total tokens used, split into input (prompt) and output (completion) tokens.",
+				description: t("page.stats.totalTokensDescription"),
 			},
 			{
-				title: "Total Cost",
+				id: "total-cost",
+				title: t("page.stats.totalCost"),
 				value: (
 					<NumberFlow
 						value={stats?.total_cost ?? 0}
@@ -543,7 +550,7 @@ export default function LogsPage() {
 				icon: <DollarSign className="size-4" />,
 			},
 		],
-		[stats],
+		[stats, t],
 	);
 
 	// Only need metadata_keys here (used to render dynamic columns even when the
@@ -568,8 +575,8 @@ export default function LogsPage() {
 	}, [userAgentMappingsData?.mappings]);
 
 	const columns = useMemo(
-		() => createColumns(handleDelete, hasDeleteAccess, metadataKeys, customAppIcons, grouped),
-		[customAppIcons, handleDelete, hasDeleteAccess, metadataKeys, grouped],
+		() => createColumns(handleDelete, hasDeleteAccess, metadataKeys, customAppIcons, grouped, t),
+		[customAppIcons, handleDelete, hasDeleteAccess, metadataKeys, grouped, t],
 	);
 
 	const columnIds = useMemo(
@@ -579,23 +586,23 @@ export default function LogsPage() {
 
 	const COLUMN_LABELS: Record<string, string> = useMemo(
 		() => ({
-			timestamp: "Time",
-			request_type: "Type",
-			input: "Message",
-			provider: "Provider",
-			model: "Model",
-			app: "App",
-			latency: "Latency",
-			tokens: "Tokens",
-			cost: "Cost",
-			virtual_key: "Virtual Key",
-			routing_rule: "Routing Rule",
-			team: "Team",
-			customer: "Customer",
-			user: "User",
-			business_unit: "Business Unit",
+			timestamp: t("page.columns.time"),
+			request_type: t("page.columns.type"),
+			input: t("page.columns.message"),
+			provider: t("page.columns.provider"),
+			model: t("page.columns.model"),
+			app: t("page.columns.app"),
+			latency: t("page.columns.latency"),
+			tokens: t("page.columns.tokens"),
+			cost: t("page.columns.cost"),
+			virtual_key: t("page.columns.virtualKey"),
+			routing_rule: t("page.columns.routingRule"),
+			team: t("page.columns.team"),
+			customer: t("page.columns.customer"),
+			user: t("page.columns.user"),
+			business_unit: t("page.columns.businessUnit"),
 		}),
-		[],
+		[t],
 	);
 
 	const DEFAULT_HIDDEN_COLUMNS = useMemo(() => ["virtual_key", "routing_rule", "team", "customer", "user", "business_unit"], []);
@@ -770,9 +777,9 @@ export default function LogsPage() {
 								onResetColumns={resetColumns}
 							/>
 						</div>
-						<div className="grid shrink-0 grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
+						<div data-testid="stats-cards" className="grid shrink-0 grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
 							{statCards.map((card) => (
-								<Card key={card.title} className="py-4 shadow-none">
+								<Card key={card.id} className="py-4 shadow-none">
 									<CardContent
 										className={`flex items-center justify-between px-4 transition-opacity duration-200 ${statsIsFetching ? "opacity-50" : "opacity-100"}`}
 									>
@@ -784,8 +791,8 @@ export default function LogsPage() {
 														<TooltipTrigger asChild>
 															<button
 																type="button"
-																aria-label={`${card.title} info`}
-																data-testid={`logs-metric-info-${card.title.toLowerCase().replace(/\s+/g, "-")}`}
+																aria-label={t("page.stats.infoAria", { title: card.title })}
+																data-testid={`logs-metric-info-${card.id}`}
 																className="inline-flex items-center"
 															>
 																<Info className="size-3 cursor-help" />

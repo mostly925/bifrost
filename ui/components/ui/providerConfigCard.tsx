@@ -4,12 +4,13 @@ import { ModelMultiselect } from "@/components/ui/modelMultiselect";
 import MultiBudgetLines, { BudgetLineEntry } from "@/components/ui/multibudgets";
 import NumberAndSelect from "@/components/ui/numberAndSelect";
 import { budgetLinesLabel, money, shortPeriod, swatchClass } from "@/lib/budgetOutline";
-import { resetDurationOptions } from "@/lib/constants/governance";
+import { localizedResetDurationOptions } from "@/lib/constants/governance";
 import { ProviderIconType, RenderProviderIcon } from "@/lib/constants/icons";
 import { cn } from "@/lib/utils";
 import { cleanNumericInput } from "@/lib/utils/strings";
 import { ChevronDown, Trash2, X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { components, MultiValueProps, OptionProps } from "react-select";
 
 // Generic, core-owned shapes so both the Access Profile (enterprise) and Virtual
@@ -110,6 +111,7 @@ function WeightInput({
 	value?: number | null;
 	onChange: (n: number | undefined) => void;
 }) {
+	const { t } = useTranslation("shared");
 	const [display, setDisplay] = useState(value != null ? String(value) : "");
 	useEffect(() => {
 		const displayNum = display === "" ? undefined : parseFloat(display);
@@ -123,7 +125,7 @@ function WeightInput({
 			inputMode="decimal"
 			data-testid={testId}
 			value={display}
-			placeholder="Exclude from routing"
+			placeholder={t("ui.providerConfig.excludeFromRouting")}
 			onChange={(e) => {
 				const cleaned = cleanNumericInput(e.target.value);
 				setDisplay(cleaned);
@@ -159,6 +161,7 @@ export function ProviderConfigCard({
 	onToggleOpen,
 	defaultOpen = false,
 }: ProviderConfigCardProps) {
+	const { t: tShared } = useTranslation("shared");
 	const [internalOpen, setInternalOpen] = useState(defaultOpen);
 	const open = controlledOpen ?? internalOpen;
 	const toggleOpen = () => (onToggleOpen ? onToggleOpen() : setInternalOpen((o) => !o));
@@ -183,10 +186,10 @@ export function ProviderConfigCard({
 	const headerSummary =
 		[
 			budgetLinesLabel(value.budgets, ""),
-			modelBudgetCount > 0 ? `${modelBudgetCount} model budget${modelBudgetCount === 1 ? "" : "s"}` : "",
+			modelBudgetCount > 0 ? tShared("ui.providerConfig.modelBudgetCount", { count: modelBudgetCount }) : "",
 		]
 			.filter(Boolean)
-			.join(" · ") || "No budget";
+			.join(" · ") || tShared("ui.providerConfig.noBudget");
 	const ws = globalProviderCap;
 
 	// Key scope handed to ModelMultiselect so model suggestions match the keys
@@ -198,17 +201,17 @@ export function ProviderConfigCard({
 
 	// Collapsed access summary.
 	const keysSummary = value.keyIds.includes("*")
-		? "All keys"
+		? tShared("ui.providerConfig.allKeys")
 		: value.keyIds.length > 0
-			? `${value.keyIds.length} key${value.keyIds.length > 1 ? "s" : ""}`
-			: "No keys";
+			? tShared("ui.providerConfig.keyCount", { count: value.keyIds.length })
+			: tShared("ui.providerConfig.noKeys");
 	const modelsSummary = value.allowedModels.includes("*")
-		? "All models"
+		? tShared("ui.providerConfig.allModels")
 		: value.allowedModels.length > 0
-			? `${value.allowedModels.length} models`
-			: "Deny all";
+			? tShared("ui.providerConfig.modelsCount", { count: value.allowedModels.length })
+			: tShared("ui.providerConfig.denyAll");
 	const hasRl = value.rateLimit?.token_max_limit != null || value.rateLimit?.request_max_limit != null;
-	const rlSummary = hasRl ? "Rate limits set" : "No rate limits";
+	const rlSummary = hasRl ? tShared("ui.providerConfig.rateLimitsSet") : tShared("ui.providerConfig.noRateLimits");
 
 	return (
 		<div className="bg-card overflow-hidden rounded-md border">
@@ -236,7 +239,7 @@ export function ProviderConfigCard({
 						e.stopPropagation();
 						onRemove();
 					}}
-					aria-label={`Remove provider ${providerLabel}`}
+					aria-label={tShared("ui.providerConfig.removeProviderAria", { label: providerLabel })}
 					data-testid={`${tid}-delete-provider-${index}`}
 					className="text-muted-foreground shrink-0 cursor-pointer rounded-sm p-1 hover:text-red-400"
 				>
@@ -266,11 +269,13 @@ export function ProviderConfigCard({
 						)}
 					>
 						<span className="text-muted-foreground/50 text-sm">└</span>
-						<span className="text-muted-foreground text-sm font-medium whitespace-nowrap">Provider budget</span>
+						<span className="text-muted-foreground text-sm font-medium whitespace-nowrap">
+							{tShared("ui.providerConfig.providerBudget")}
+						</span>
 						<span className="text-muted-foreground min-w-0 flex-1 truncate text-sm">{capLabel}</span>
 						{ws != null && (
 							<span className="text-muted-foreground/70 shrink-0 text-sm whitespace-nowrap">
-								Global provider cap {money(ws.max_limit)}
+								{tShared("ui.providerConfig.globalProviderCap", { limit: money(ws.max_limit) })}
 								{ws.reset_duration ? `/${shortPeriod(ws.reset_duration)}` : ""}
 							</span>
 						)}
@@ -282,7 +287,7 @@ export function ProviderConfigCard({
 						<div className="bg-muted/30 border-t py-3 pr-3.5 pl-16">
 							<MultiBudgetLines
 								data-testid={`${tid}-provider-budget-${index}`}
-								label="Provider Budget"
+								label={tShared("ui.providerConfig.providerBudgetAria")}
 								lines={(value.budgets || []).map((b) => ({
 									id: b.id,
 									max_limit: b.max_limit,
@@ -319,11 +324,13 @@ export function ProviderConfigCard({
 								className="hover:bg-accent/30 flex cursor-pointer items-center gap-2.5 border-t py-2.5 pr-3.5 pl-10"
 							>
 								<span className="text-muted-foreground/50 text-sm">└</span>
-								<span className="text-muted-foreground text-sm font-medium whitespace-nowrap">Model budgets</span>
+								<span className="text-muted-foreground text-sm font-medium whitespace-nowrap">
+									{tShared("ui.providerConfig.modelBudgets")}
+								</span>
 								<span className="text-muted-foreground/60 min-w-0 flex-1 truncate text-sm">
 									{modelsOpen
-										? "If you skip this, models share the provider budget freely"
-										: `${modelBudgets.length} model budget${modelBudgets.length === 1 ? "" : "s"}`}
+										? tShared("ui.providerConfig.skipModelBudgetsNote")
+										: tShared("ui.providerConfig.modelBudgetCount", { count: modelBudgets.length })}
 								</span>
 								<ChevronDown
 									className={cn(
@@ -356,10 +363,10 @@ export function ProviderConfigCard({
 												<span className="text-muted-foreground/50 shrink-0 text-sm">└</span>
 												<span className={cn("h-[7px] w-[7px] shrink-0 rounded-[2px]", swatchClass(mbIndex))} />
 												<span className="text-foreground/90 min-w-0 flex-1 truncate text-sm font-medium">
-													{mb.model_name || "Select a model…"}
+													{mb.model_name || tShared("ui.providerConfig.selectModelPlaceholder")}
 												</span>
 												<span className="text-muted-foreground shrink-0 text-sm whitespace-nowrap">
-													{budgetLinesLabel(mb.budgets, "No cap")}
+													{budgetLinesLabel(mb.budgets, tShared("ui.providerConfig.noCap"))}
 												</span>
 												<button
 													type="button"
@@ -368,7 +375,7 @@ export function ProviderConfigCard({
 														update({ modelBudgets: modelBudgets.filter((_, i) => i !== mbIndex) });
 														setOpenModelEditor((prev) => (prev === mb.model_name ? null : prev));
 													}}
-													aria-label={`Remove model budget ${mb.model_name || ""}`}
+													aria-label={tShared("ui.providerConfig.removeModelBudgetAria", { model: mb.model_name || "" })}
 													className="text-muted-foreground shrink-0 cursor-pointer rounded-sm p-1 hover:text-red-400"
 												>
 													<Trash2 className="h-3 w-3" />
@@ -384,7 +391,7 @@ export function ProviderConfigCard({
 												<div className="bg-muted/30 space-y-4 border-t py-3 pr-3.5 pl-16">
 													<MultiBudgetLines
 														data-testid={`${tid}-model-budget-lines-${index}-${mbIndex}`}
-														label="Model Budget"
+														label={tShared("ui.providerConfig.modelBudgetAria")}
 														lines={(mb.budgets || []).map((b) => ({
 															max_limit: b.max_limit,
 															reset_duration: b.reset_duration || "1d",
@@ -411,8 +418,8 @@ export function ProviderConfigCard({
 														id={`${tid}-modelTokenLimit-${index}-${mbIndex}`}
 														dataTestId={`${tid}-modelTokenLimit-${index}-${mbIndex}`}
 														labelClassName="font-medium"
-														label="Maximum tokens"
-														placeholder="No limit"
+														label={tShared("ui.providerConfig.maximumTokens")}
+														placeholder={tShared("ui.providerConfig.noLimit")}
 														value={mb.rate_limit?.token_max_limit}
 														selectValue={mb.rate_limit?.token_reset_duration || "1h"}
 														onChangeNumber={(v) => {
@@ -438,14 +445,14 @@ export function ProviderConfigCard({
 																),
 															});
 														}}
-														options={resetDurationOptions}
+														options={localizedResetDurationOptions(tShared)}
 													/>
 													<NumberAndSelect
 														id={`${tid}-modelRequestLimit-${index}-${mbIndex}`}
 														dataTestId={`${tid}-modelRequestLimit-${index}-${mbIndex}`}
 														labelClassName="font-medium"
-														label="Maximum requests"
-														placeholder="No limit"
+														label={tShared("ui.providerConfig.maximumRequests")}
+														placeholder={tShared("ui.providerConfig.noLimit")}
 														value={mb.rate_limit?.request_max_limit}
 														selectValue={mb.rate_limit?.request_reset_duration || "1h"}
 														onChangeNumber={(v) => {
@@ -471,7 +478,7 @@ export function ProviderConfigCard({
 																),
 															});
 														}}
-														options={resetDurationOptions}
+														options={localizedResetDurationOptions(tShared)}
 													/>
 												</div>
 											)}
@@ -497,7 +504,7 @@ export function ProviderConfigCard({
 												});
 												setOpenModelEditor(model);
 											}}
-											placeholder="Add model…"
+											placeholder={tShared("ui.providerConfig.addModel")}
 										/>
 									</div>
 								</div>
@@ -519,7 +526,9 @@ export function ProviderConfigCard({
 						className="hover:bg-accent/30 flex cursor-pointer items-center gap-2.5 border-t py-2.5 pr-3.5 pl-10"
 					>
 						<span className="text-muted-foreground/50 text-sm">└</span>
-						<span className="text-muted-foreground text-sm font-medium whitespace-nowrap">Access & rate limits</span>
+						<span className="text-muted-foreground text-sm font-medium whitespace-nowrap">
+							{tShared("ui.providerConfig.accessRateLimits")}
+						</span>
 						<span className="text-muted-foreground/60 min-w-0 flex-1 truncate text-sm">
 							{keysSummary} · {modelsSummary} · {rlSummary}
 						</span>
@@ -538,14 +547,18 @@ export function ProviderConfigCard({
 									const configKeyIds = value.keyIds;
 									const hasWildcard = configKeyIds.includes("*");
 									const allKeyOptions: KeyOption[] = [
-										{ label: "Allow All Keys", value: "*", description: "Allow all current and future keys for this provider" },
+										{
+											label: tShared("ui.providerConfig.allowAllKeys"),
+											value: "*",
+											description: tShared("ui.providerConfig.allowAllKeysDescription"),
+										},
 										...keys.map((key) => ({
 											label: key.name,
 											value: key.key_id,
 											description:
 												key.models == null || key.models.includes("*")
-													? "All models"
-													: key.models.filter((m) => m !== "*").join(", ") || "No models (deny all)",
+													? tShared("ui.providerConfig.allModels")
+													: key.models.filter((m) => m !== "*").join(", ") || tShared("ui.providerConfig.noModelsDenyAll"),
 										})),
 									];
 									const selectedProviderKeys = hasWildcard
@@ -557,13 +570,13 @@ export function ProviderConfigCard({
 													value: key.key_id,
 													description:
 														key.models == null || key.models.includes("*")
-															? "All models"
-															: key.models.filter((m) => m !== "*").join(", ") || "No models (deny all)",
+															? tShared("ui.providerConfig.allModels")
+															: key.models.filter((m) => m !== "*").join(", ") || tShared("ui.providerConfig.noModelsDenyAll"),
 												}));
 									return (
 										<div className="w-[260px] shrink-0 space-y-1.5">
 											<div className="flex h-5 items-center">
-												<Label>Provider keys</Label>
+												<Label>{tShared("ui.providerConfig.providerKeys")}</Label>
 											</div>
 											<AsyncMultiSelect
 												hideSelectedOptions
@@ -621,7 +634,13 @@ export function ProviderConfigCard({
 														);
 													},
 												}}
-												placeholder={hasWildcard ? "All keys allowed" : configKeyIds.length === 0 ? "No keys selected" : "Select keys..."}
+												placeholder={
+													hasWildcard
+														? tShared("ui.providerConfig.allKeysAllowed")
+														: configKeyIds.length === 0
+															? tShared("ui.providerConfig.noKeysSelected")
+															: tShared("ui.providerConfig.selectKeys")
+												}
 												className="hover:bg-accent w-full"
 												menuClassName="z-[60] max-h-[300px] overflow-y-auto w-full cursor-pointer custom-scrollbar"
 											/>
@@ -635,7 +654,7 @@ export function ProviderConfigCard({
 									return (
 										<div className="min-w-0 flex-1 space-y-1.5">
 											<div className="flex h-5 items-center">
-												<Label>Allowed models</Label>
+												<Label>{tShared("ui.providerConfig.allowedModels")}</Label>
 											</div>
 											<ModelMultiselect
 												allowAllOption
@@ -649,9 +668,9 @@ export function ProviderConfigCard({
 												}}
 												placeholder={
 													hasWildcardModels
-														? "All models allowed"
+														? tShared("ui.providerConfig.allModelsAllowed")
 														: value.allowedModels.length === 0
-															? "No models (deny all)"
+															? tShared("ui.providerConfig.noModelsDenyAll")
 															: "Add model…"
 												}
 											/>
@@ -664,7 +683,7 @@ export function ProviderConfigCard({
 							<div className="flex items-start gap-3.5">
 								<div className="w-[260px] shrink-0 space-y-1.5">
 									<div className="flex h-5 items-center">
-										<Label htmlFor={`${tid}-weight-${index}`}>Weight</Label>
+										<Label htmlFor={`${tid}-weight-${index}`}>{tShared("ui.providerConfig.weight")}</Label>
 									</div>
 									<WeightInput
 										id={`${tid}-weight-${index}`}
@@ -675,7 +694,7 @@ export function ProviderConfigCard({
 								</div>
 								<div className="min-w-0 flex-1 space-y-1.5">
 									<div className="flex h-5 items-center">
-										<Label>Blocked models</Label>
+										<Label>{tShared("ui.providerConfig.blockedModels")}</Label>
 									</div>
 									{(() => {
 										const hasWildcardBlocked = value.blacklistedModels.includes("*");
@@ -692,10 +711,10 @@ export function ProviderConfigCard({
 												}}
 												placeholder={
 													hasWildcardBlocked
-														? "All models blocked"
+														? tShared("ui.providerConfig.allModelsBlocked")
 														: value.blacklistedModels.length === 0
-															? "No blocked models"
-															: "Search models..."
+															? tShared("ui.providerConfig.noBlockedModels")
+															: tShared("ui.providerConfig.searchModels")
 												}
 											/>
 										);
@@ -708,8 +727,8 @@ export function ProviderConfigCard({
 								id={`${tid}-providerTokenLimit-${index}`}
 								dataTestId={`${tid}-providerTokenLimit-${index}`}
 								labelClassName="font-medium"
-								label="Maximum tokens"
-								placeholder="No limit"
+								label={tShared("ui.providerConfig.maximumTokens")}
+								placeholder={tShared("ui.providerConfig.noLimit")}
 								value={value.rateLimit?.token_max_limit}
 								selectValue={value.rateLimit?.token_reset_duration || "1h"}
 								onChangeNumber={(v) => {
@@ -720,14 +739,14 @@ export function ProviderConfigCard({
 									const current = value.rateLimit || {};
 									update({ rateLimit: { ...current, token_reset_duration: v } });
 								}}
-								options={resetDurationOptions}
+								options={localizedResetDurationOptions(tShared)}
 							/>
 							<NumberAndSelect
 								id={`${tid}-providerRequestLimit-${index}`}
 								dataTestId={`${tid}-providerRequestLimit-${index}`}
 								labelClassName="font-medium"
-								label="Maximum requests"
-								placeholder="No limit"
+								label={tShared("ui.providerConfig.maximumRequests")}
+								placeholder={tShared("ui.providerConfig.noLimit")}
 								value={value.rateLimit?.request_max_limit}
 								selectValue={value.rateLimit?.request_reset_duration || "1h"}
 								onChangeNumber={(v) => {
@@ -740,7 +759,7 @@ export function ProviderConfigCard({
 									const current = value.rateLimit || {};
 									update({ rateLimit: { ...current, request_reset_duration: v } });
 								}}
-								options={resetDurationOptions}
+								options={localizedResetDurationOptions(tShared)}
 							/>
 						</div>
 					)}

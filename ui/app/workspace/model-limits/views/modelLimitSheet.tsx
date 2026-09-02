@@ -9,7 +9,7 @@ import MultiBudgetLines from "@/components/ui/multibudgets";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DottedSeparator } from "@/components/ui/separator";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { resetDurationOptions } from "@/lib/constants/governance";
+import { localizedResetDurationOptions } from "@/lib/constants/governance";
 import { budgetSignature } from "@/lib/utils/governance";
 import { RenderProviderIcon } from "@/lib/constants/icons";
 import { ProviderLabels, ProviderName } from "@/lib/constants/logs";
@@ -75,6 +75,7 @@ type FormData = z.infer<ReturnType<typeof createFormSchema>>;
 
 export default function ModelLimitSheet({ modelConfig, onSave, onCancel }: ModelLimitSheetProps) {
 	const { t } = useTranslation("modelLimits");
+	const { t: tShared } = useTranslation("shared");
 	const formSchema = useMemo(() => createFormSchema(t), [t]);
 	const resolver = useMemo(() => zodResolver(formSchema), [formSchema]);
 	const [isOpen, setIsOpen] = useState(true);
@@ -505,7 +506,7 @@ export default function ModelLimitSheet({ modelConfig, onSave, onCancel }: Model
 												selectValue={form.watch("tokenResetDuration") || "1h"}
 												onChangeNumber={(value) => field.onChange(value)}
 												onChangeSelect={(value) => form.setValue("tokenResetDuration", value, { shouldDirty: true })}
-												options={resetDurationOptions}
+												options={localizedResetDurationOptions(tShared)}
 											/>
 											<FormMessage />
 										</FormItem>
@@ -525,7 +526,7 @@ export default function ModelLimitSheet({ modelConfig, onSave, onCancel }: Model
 												selectValue={form.watch("requestResetDuration") || "1h"}
 												onChangeNumber={(value) => field.onChange(value)}
 												onChangeSelect={(value) => form.setValue("requestResetDuration", value, { shouldDirty: true })}
-												options={resetDurationOptions}
+												options={localizedResetDurationOptions(tShared)}
 											/>
 											<FormMessage />
 										</FormItem>

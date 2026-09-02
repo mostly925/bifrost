@@ -1,4 +1,5 @@
 import { useCallback, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { AsyncMultiSelect } from "./asyncMultiselect";
 import { Option } from "./multiselectUtils";
 import { cn } from "./utils";
@@ -107,6 +108,7 @@ export function EntityAssociationSelect({
 	formatCreateLabel,
 	noOptionsMessage,
 }: EntityAssociationSelectProps) {
+	const { t: tShared } = useTranslation("shared");
 	// Convert static options to AsyncMultiSelect format using meta for complex data
 	const defaultOptions = useMemo((): Option<EntityOptionMeta>[] => {
 		return options.map((opt) => ({
@@ -213,7 +215,7 @@ export function EntityAssociationSelect({
 							>
 								<div className="flex items-center justify-between">
 									<span className="text-content-primary font-medium">{data.label}</span>
-									{props.isSelected && <span className="text-primary text-xs">Selected</span>}
+									{props.isSelected && <span className="text-primary text-xs">{tShared("ui.entitySelect.selected")}</span>}
 								</div>
 								{data.meta?.description && <span className="text-content-tertiary line-clamp-1 text-xs">{data.meta.description}</span>}
 							</div>

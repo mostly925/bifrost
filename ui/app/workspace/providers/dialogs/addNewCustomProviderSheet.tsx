@@ -11,23 +11,28 @@ import { allowedRequestsSchema } from "@/lib/types/schemas";
 import { cleanPathOverrides } from "@/lib/utils/validation";
 import { RbacOperation, RbacResource, useRbac } from "@enterprise/lib";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
+import type { TFunction } from "i18next";
+import { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { z } from "zod";
 import { AllowedRequestsFields } from "../fragments/allowedRequestsFields";
 
-const formSchema = z.object({
-	name: z.string().min(1),
-	baseFormat: z.string().min(1),
-	base_url: z.string().min(1, "Base URL is required").url("Must be a valid URL"),
-	allowed_requests: allowedRequestsSchema,
-	request_path_overrides: z.record(z.string(), z.string().optional()).optional(),
-	is_key_less: z.boolean().optional(),
-	allow_private_network: z.boolean().optional(),
-});
+// Built with t at render time so validation messages follow the UI language.
+function createFormSchema(t: TFunction<"providers">) {
+	return z.object({
+		name: z.string().min(1),
+		baseFormat: z.string().min(1),
+		base_url: z.string().min(1, t("customProvider.validation.baseUrlRequired")).url(t("customProvider.validation.urlInvalid")),
+		allowed_requests: allowedRequestsSchema,
+		request_path_overrides: z.record(z.string(), z.string().optional()).optional(),
+		is_key_less: z.boolean().optional(),
+		allow_private_network: z.boolean().optional(),
+	});
+}
 
-type FormData = z.infer<typeof formSchema>;
+type FormData = z.infer<ReturnType<typeof createFormSchema>>;
 
 export interface AddCustomProviderSheetContentProps {
 	show?: boolean;
@@ -40,8 +45,11 @@ interface Props extends AddCustomProviderSheetContentProps {
 }
 
 export function AddCustomProviderSheetContent({ show = true, onClose, onSave }: AddCustomProviderSheetContentProps) {
+	const { t } = useTranslation("providers");
 	const hasProviderCreateAccess = useRbac(RbacResource.ModelProvider, RbacOperation.Create);
 	const [addProvider, { isLoading: isAddingProvider }] = useCreateProviderMutation();
+	// Rebuild the schema when the language changes so validation messages stay localized.
+	const formSchema = useMemo(() => createFormSchema(t), [t]);
 	const form = useForm<FormData>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -121,7 +129,7 @@ export function AddCustomProviderSheetContent({ show = true, onClose, onSave }: 
 				form.reset();
 			})
 			.catch((err) => {
-				toast.error("Failed to add provider", {
+				toast.error(t("customProvider.toasts.addFailed"), {
 					description: getErrorMessage(err),
 				});
 			});
@@ -133,8 +141,8 @@ export function AddCustomProviderSheetContent({ show = true, onClose, onSave }: 
 	return (
 		<>
 			<SheetHeader className="flex shrink-0 flex-col items-start px-8 py-4" headerClassName="mb-0 sticky -top-4 bg-card z-10">
-				<SheetTitle>Add Custom Provider</SheetTitle>
-				<SheetDescription>Enter the details of your custom provider.</SheetDescription>
+				<SheetTitle>{t("customProvider.title")}</SheetTitle>
+				<SheetDescription>{t("customProvider.description")}</SheetDescription>
 			</SheetHeader>
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col">
@@ -144,10 +152,15 @@ export function AddCustomProviderSheetContent({ show = true, onClose, onSave }: 
 							name="name"
 							render={({ field }) => (
 								<FormItem className="flex flex-col gap-3">
-									<FormLabel className="text-right">Name</FormLabel>
+									<FormLabel className="text-right">{t("customProvider.name.label")}</FormLabel>
 									<div className="col-span-3">
 										<FormControl>
-											<Input placeholder="Name" data-testid="custom-provider-name" disabled={!hasProviderCreateAccess} {...field} />
+											<Input
+												placeholder={t("customProvider.name.placeholder")}
+												data-testid="custom-provider-name"
+												disabled={!hasProviderCreateAccess}
+												{...field}
+											/>
 										</FormControl>
 										<FormMessage />
 									</div>
@@ -159,12 +172,12 @@ export function AddCustomProviderSheetContent({ show = true, onClose, onSave }: 
 							name="baseFormat"
 							render={({ field }) => (
 								<FormItem className="flex flex-col gap-3">
-									<FormLabel>Base Format</FormLabel>
+									<FormLabel>{t("customProvider.baseFormat.label")}</FormLabel>
 									<div>
 										<FormControl>
 											<Select onValueChange={field.onChange} value={field.value} disabled={!hasProviderCreateAccess}>
 												<SelectTrigger className="w-full" data-testid="base-provider-select">
-													<SelectValue placeholder="Select base format" />
+													<SelectValue placeholder={t("customProvider.baseFormat.placeholder")} />
 												</SelectTrigger>
 												<SelectContent>
 													<SelectItem value="openai">OpenAI</SelectItem>
@@ -186,7 +199,7 @@ export function AddCustomProviderSheetContent({ show = true, onClose, onSave }: 
 							name="base_url"
 							render={({ field }) => (
 								<FormItem className="flex flex-col gap-3">
-									<FormLabel>Base URL</FormLabel>
+									<FormLabel>{t("customProvider.baseUrl.label")}</FormLabel>
 									<div>
 										<FormControl>
 											<Input
@@ -210,11 +223,9 @@ export function AddCustomProviderSheetContent({ show = true, onClose, onSave }: 
 									<div className="flex items-center justify-between space-x-2 rounded-lg border p-3">
 										<div className="space-y-0.5">
 											<label htmlFor="allow-private-network" className="text-sm font-medium">
-												Allow Private Network
+												{t("customProvider.allowPrivateNetwork.label")}
 											</label>
-											<p className="text-muted-foreground text-sm">
-												Allow connecting to private network IPs (e.g. 192.168.x.x, 10.x.x.x). Link-local addresses remain blocked.
-											</p>
+											<p className="text-muted-foreground text-sm">{t("customProvider.allowPrivateNetwork.description")}</p>
 										</div>
 										<Switch
 											id="allow-private-network"
@@ -237,9 +248,9 @@ export function AddCustomProviderSheetContent({ show = true, onClose, onSave }: 
 										<div className="flex items-center justify-between space-x-2 rounded-lg border p-3">
 											<div className="space-y-0.5">
 												<label htmlFor="drop-excess-requests" className="text-sm font-medium">
-													Is Keyless?
+													{t("customProvider.isKeyless.label")}
 												</label>
-												<p className="text-muted-foreground text-sm">Whether the custom provider requires a key</p>
+												<p className="text-muted-foreground text-sm">{t("customProvider.isKeyless.description")}</p>
 											</div>
 											<Switch
 												id="drop-excess-requests"
@@ -263,10 +274,10 @@ export function AddCustomProviderSheetContent({ show = true, onClose, onSave }: 
 					</div>
 					<div className="bg-card sticky bottom-0 ml-auto flex w-full flex-row gap-2 border-t px-8 py-4">
 						<Button type="button" variant="outline" onClick={onClose} className="ml-auto" data-testid="custom-provider-cancel-btn">
-							Cancel
+							{t("common.cancel")}
 						</Button>
 						<Button type="submit" isLoading={isAddingProvider} disabled={!hasProviderCreateAccess} data-testid="custom-provider-save-btn">
-							Add
+							{t("common.add")}
 						</Button>
 					</div>
 				</form>

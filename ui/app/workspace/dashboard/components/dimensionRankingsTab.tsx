@@ -5,6 +5,7 @@ import type { DimensionRankingEntry, DimensionRankingsResponse } from "@/lib/typ
 import { COMPACT_NUMBER_FORMAT, formatCompactNumber as formatNumber } from "@/lib/utils/numbers";
 import NumberFlow from "@number-flow/react";
 import { memo, useCallback, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { getModelColor } from "../utils/chartUtils";
 import { ChartCard } from "./charts/chartCard";
@@ -47,6 +48,7 @@ function TopDimensionChart({
 	testIdPrefix: string;
 	attributed?: boolean;
 }) {
+	const { t } = useTranslation("dashboard");
 	const { chartData, grandTotal, rankedItems, actualTotal, attributedTotal } = useMemo(() => {
 		if (!data?.rankings?.length) return { chartData: [], grandTotal: null, rankedItems: [], actualTotal: null, attributedTotal: null };
 
@@ -91,19 +93,18 @@ function TopDimensionChart({
 			}
 			totalTooltip={
 				grandTotal === null ? undefined : actualTotal !== null ? (
-					<div className="max-w-[240px] text-xs opacity-80">Actual number of requests sent</div>
+					<div className="max-w-[240px] text-xs opacity-80">{t("rankings.requestsSentDescription")}</div>
 				) : attributed ? (
 					<div className="space-y-1">
 						<div className="max-w-[240px] text-xs opacity-80">
-							Attributed - a request counts toward each {dimensionLabel.toLowerCase()} it belongs to, so this can exceed the actual request
-							count.
+							{t("rankings.attributedDescription", { dimension: dimensionLabel.toLowerCase() })}
 						</div>
 					</div>
 				) : (
 					grandTotal.toLocaleString("en-US")
 				)
 			}
-			secondaryTotalLabel="Attributed Requests"
+			secondaryTotalLabel={t("rankings.attributedRequests")}
 			secondaryTotal={actualTotal !== null ? <NumberFlow value={attributedTotal ?? 0} format={COMPACT_NUMBER_FORMAT} /> : undefined}
 			secondaryTotalTooltip={
 				actualTotal === null ? undefined : (
@@ -160,7 +161,7 @@ function TopDimensionChart({
 						</ResponsiveContainer>
 					</ChartErrorBoundary>
 				) : (
-					<div className="text-muted-foreground flex h-full items-center justify-center text-sm">No data available</div>
+					<div className="text-muted-foreground flex h-full items-center justify-center text-sm">{t("chart.noData")}</div>
 				)}
 			</div>
 			<div className="py-2">
@@ -185,6 +186,7 @@ function TopDimensionChart({
 }
 
 function DimensionRankingsTabImpl({ data, loading, dimensionLabel, testIdPrefix, attributed }: DimensionRankingsTabProps) {
+	const { t } = useTranslation("dashboard");
 	const [sortField, setSortField] = useState<SortField>("total_requests");
 	const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
 
@@ -242,7 +244,7 @@ function DimensionRankingsTabImpl({ data, loading, dimensionLabel, testIdPrefix,
 								<TableHead>{dimensionLabel}</TableHead>
 								<TableHead className="text-right">
 									<SortableHeader
-										label="Requests"
+										label={t("chart.requests")}
 										field="total_requests"
 										currentSort={sortField}
 										currentOrder={sortOrder}
@@ -251,7 +253,7 @@ function DimensionRankingsTabImpl({ data, loading, dimensionLabel, testIdPrefix,
 								</TableHead>
 								<TableHead className="text-right">
 									<SortableHeader
-										label="Tokens"
+										label={t("chart.tokens")}
 										field="total_tokens"
 										currentSort={sortField}
 										currentOrder={sortOrder}
@@ -259,7 +261,13 @@ function DimensionRankingsTabImpl({ data, loading, dimensionLabel, testIdPrefix,
 									/>
 								</TableHead>
 								<TableHead className="text-right">
-									<SortableHeader label="Cost" field="total_cost" currentSort={sortField} currentOrder={sortOrder} onSort={handleSort} />
+									<SortableHeader
+										label={t("chart.cost")}
+										field="total_cost"
+										currentSort={sortField}
+										currentOrder={sortOrder}
+										onSort={handleSort}
+									/>
 								</TableHead>
 							</TableRow>
 						</TableHeader>

@@ -1,0 +1,171 @@
+{
+	"common": {
+		"noChanges": "No changes made",
+		"noChangesAndErrors": "No changes made and validation errors present",
+		"fixValidationErrors": "Please fix validation errors"
+	},
+	"layout": {
+		"noPermissionEntity": "observability settings"
+	},
+	"view": {
+		"providers": "Providers",
+		"comingSoon": "Coming soon"
+	},
+	"otel": {
+		"destination": "the OTEL collector",
+		"toast": {
+			"updated": "OTEL configuration updated successfully",
+			"updateFailed": "Failed to update OTEL configuration"
+		},
+		"configureTracing": "Configure Plugin Tracing",
+		"traceTypes": {
+			"genaiExtension": "OTel GenAI Extension (Recommended)",
+			"vercel": "Vercel AI SDK",
+			"openInference": "Arize OpenInference",
+			"comingSoon": "Coming soon"
+		},
+		"addProfile": "Add Profile",
+		"profile": {
+			"defaultName": "Profile {{index}}",
+			"disabled": "Disabled",
+			"metricsOnly": "Metrics only",
+			"error": "Error",
+			"enableAria": "Enable profile",
+			"removeTitle": "Remove profile"
+		},
+		"connector": {
+			"enabled": "Enabled",
+			"deleteTitle": "Delete connector",
+			"save": "Save OTEL Configuration"
+		},
+		"service": {
+			"label": "Service Name",
+			"description": "If kept empty, the service name will be set to \"bifrost\""
+		},
+		"protocol": {
+			"label": "Protocol",
+			"description": "Transport used for both trace and metrics export.",
+			"placeholder": "Select protocol"
+		},
+		"headers": {
+			"common": "Common Headers",
+			"commonDescription": "Sent to both the trace and metrics endpoints.",
+			"trace": "Trace Headers",
+			"traceDescription": "Sent only to the trace endpoint, in addition to the common headers.",
+			"metrics": "Metrics Headers",
+			"metricsDescription": "Sent only to the metrics endpoint, in addition to the common headers (e.g. a Databricks table name)."
+		},
+		"tls": {
+			"insecureLabel": "Insecure (Skip TLS)",
+			"insecureDescription": "Skip TLS verification. Disable this to use TLS with system root CAs or a custom CA certificate.",
+			"caCertLabel": "TLS CA Certificate Path",
+			"caCertDescription": "File path to the CA certificate on the Bifrost server. Leave empty to use system root CAs."
+		},
+		"tabs": {
+			"traces": "Traces",
+			"metrics": "Metrics"
+		},
+		"traceExport": {
+			"title": "Enable Trace Export",
+			"description": "Export spans to the OTLP collector. Turn off for a metrics-only profile.",
+			"collectorUrl": "OTLP Collector URL",
+			"format": "Format",
+			"typePlaceholder": "Select trace type",
+			"exportTimeout": "Export Timeout (seconds)",
+			"exportTimeoutDescription": "Maximum time for a single trace export (1-60 seconds). Traces are dropped rather than retried past this limit, so an unreachable collector cannot slow down request handling.",
+			"requestHeaders": "Request Headers",
+			"optional": "(Optional)",
+			"requestHeadersDescription": "Comma-separated list of request headers to capture and emit as span attributes. Supports exact names and wildcard patterns (e.g. <1>x-custom-*</1> captures all headers with that prefix, <3>*</3> captures all headers; note that <5>*</5> will capture sensitive headers like Authorization).",
+			"disableContentLogging": "Disable Content Logging",
+			"disableContentLoggingDescription": "When enabled, message content (input/output messages, tool definitions, and tool call arguments/results) is dropped from exported spans. Only metadata such as model, tokens, and latency is sent to the collector.",
+			"groupBySession": "Group Traces by Session",
+			"groupBySessionDescription": "When enabled, requests sharing the same x-bf-session-id header are grouped into a single trace, each request appearing as a top-level sibling span. A request carrying an inbound W3C traceparent stays on its own distributed trace and is unaffected.",
+			"disableRootSpanContent": "Disable Root Span Content",
+			"disableRootSpanContentDescription": "When enabled, input/output message content is dropped from the root span only; the underlying generation (llm.call) span keeps the full content."
+		},
+		"metricsExport": {
+			"title": "Enable Metrics Export",
+			"description": "Push metrics to an OTEL Collector for proper aggregation in cluster deployments",
+			"endpoint": "Metrics Endpoint",
+			"pushInterval": "Push Interval (seconds)",
+			"pushIntervalDescription": "How often to push metrics (1-300 seconds)"
+		}
+	},
+	"prometheus": {
+		"toast": {
+			"updated": "Prometheus configuration updated successfully",
+			"updateFailed": "Failed to update Prometheus configuration"
+		},
+		"tabs": {
+			"pull": "Pull-based",
+			"push": "Push-based"
+		},
+		"actions": {
+			"save": "Save Prometheus Configuration"
+		},
+		"pull": {
+			"title": "Pull-based Scraping",
+			"description": "Prometheus can scrape metrics from the /metrics endpoint",
+			"endpoint": "Metrics Endpoint",
+			"scrapeHint": "Configure your Prometheus server to scrape this endpoint. Served only while Pull-based scraping is enabled."
+		},
+		"push": {
+			"title": "Push-based (Push Gateway)",
+			"description": "Push metrics to a Prometheus Push Gateway for proper aggregation in cluster deployments",
+			"multiNodeWarning": "If you are running multiple Bifrost nodes, use push gateway for accurate metrics. Pull-based /metrics scraping may miss nodes behind a load balancer.",
+			"gatewayUrl": "Push Gateway URL",
+			"gatewayUrlDescription": "URL of your Prometheus Push Gateway",
+			"jobName": "Job Name",
+			"jobNameDescription": "Job label for metrics",
+			"pushInterval": "Push Interval (seconds)",
+			"pushIntervalDescription": "How often to push (1-300s)",
+			"instanceId": "Instance ID",
+			"instanceIdTooltip": "Used to identify this Bifrost instance in metrics. If not set, hostname is used automatically.",
+			"instanceIdPlaceholder": "Auto-generated from hostname",
+			"addBasicAuth": "Add Basic Auth",
+			"basicAuth": "Basic Authentication",
+			"removeBasicAuthAria": "Remove basic auth",
+			"username": "Username",
+			"usernamePlaceholder": "Username or env.PG_USER",
+			"password": "Password",
+			"passwordPlaceholder": "Password or env.PG_PASS"
+		},
+		"tooltips": {
+			"noChangesInTab": "No changes made in this tab",
+			"fixOtherTab": "Fix validation errors in the {{tab}} tab before saving",
+			"fixValidationErrors": "Fix validation errors before saving"
+		}
+	},
+	"maxim": {
+		"toast": {
+			"updated": "Maxim configuration updated successfully",
+			"updateFailed": "Failed to update Maxim configuration"
+		},
+		"view": {
+			"configuration": "Configuration",
+			"repoIdHint": "You can send in header <1>x-bf-log-repo-id</1> with a repository ID to log to a specific repository."
+		},
+		"form": {
+			"apiKey": "API Key",
+			"apiKeyPlaceholder": "Enter your Maxim API key",
+			"logRepoId": "Log Repository ID (Optional)",
+			"logRepoIdPlaceholder": "Enter log repository ID",
+			"requestHeaders": "Request Headers",
+			"optional": "(Optional)",
+			"requestHeadersDescription": "Comma-separated list of request headers to capture and attach as trace tags. Supports exact names and wildcard patterns (e.g. <1>x-custom-*</1> captures all headers with that prefix, <3>*</3> captures all headers; note that <5>*</5> will capture sensitive headers like Authorization).",
+			"save": "Save Maxim Configuration"
+		}
+	},
+	"tracing": {
+		"toast": {
+			"saved": "Plugin tracing configuration saved",
+			"stillLoading": "Plugin list is still loading. Please wait before saving.",
+			"notConfigured": "{{destination}} is not configured yet. Save its configuration before configuring plugin tracing."
+		},
+		"title": "Configure Plugin Tracing",
+		"description": "Choose which plugin hook spans are exported to {{destination}}. Disabling a plugin removes its spans from traces without affecting execution.",
+		"pluginsLabel": "Plugins",
+		"toggleAllAria": "Toggle all plugin tracing",
+		"configPrecedence": "If <1>plugin_span_filter</1> is set in the <3>{{pluginName}}</3> plugin config in config.json, it takes precedence over these settings after restarting Bifrost."
+	}
+}

@@ -38,7 +38,7 @@ export class LogsPage extends BasePage {
     // The filters section is the container with search input and filters button
     this.filtersSection = page.locator('input[placeholder="Search logs"]').locator('..')
     this.filtersButton = page.getByRole('button', { name: /Filters/i })
-    this.statsCards = page.locator('[data-testid="stats-cards"]').or(page.locator('text=Total Requests').locator('..').locator('..'))
+    this.statsCards = page.locator('[data-testid="stats-cards"]')
 
     // Filter elements - filters are inside a popover opened by the Filters button
     this.providerFilter = page.locator('[data-testid="filter-provider"]').or(
@@ -338,8 +338,8 @@ export class LogsPage extends BasePage {
    * Check if stats cards are visible
    */
   async areStatsVisible(): Promise<boolean> {
-    const statsText = this.page.locator('text=Total Requests')
-    return await statsText.isVisible().catch(() => false)
+    const statsCards = this.page.locator('[data-testid="stats-cards"]')
+    return await statsCards.isVisible().catch(() => false)
   }
 
   /**

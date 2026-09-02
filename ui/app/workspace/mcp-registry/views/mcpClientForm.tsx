@@ -20,6 +20,7 @@ import { useGetSCIMProvidersQuery } from "@enterprise/lib/store/apis/scimApi";
 import { Info } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation, Trans } from "react-i18next";
 import { MCPHeadersAuthorizer } from "./mcpHeadersAuthorizer";
 import { OAuthAdvancedFields } from "./oauthAdvancedFields";
 import { OAuth2Authorizer } from "./oauth2Authorizer";
@@ -70,6 +71,7 @@ function isValidOAuthResourceURI(value: string): boolean {
 }
 
 const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSaved }) => {
+	const { t } = useTranslation("mcpRegistry");
 	const hasCreateMCPClientAccess = useRbac(RbacResource.MCPGateway, RbacOperation.Create);
 	const { toast } = useToast();
 	const [createMCPClient] = useCreateMCPClientMutation();
@@ -169,7 +171,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSaved }) => {
 	if ((connectionType === "http" || connectionType === "sse") && (authType === "headers" || authType === "per_user_headers") && headers) {
 		for (const [key, secretVar] of Object.entries(headers)) {
 			if (!secretVar.value && !secretVar.ref) {
-				headersValidationError = `Header "${key}" must have a value`;
+				headersValidationError = t("clientForm.errors.headerValueRequired", { key });
 				break;
 			}
 		}
@@ -201,11 +203,11 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSaved }) => {
 			const connRef = data.connection_string?.ref?.trim() || "";
 			const isSecret = data.connection_string?.type === "env" || data.connection_string?.type === "vault";
 			if (!connVal && !connRef) {
-				setError("connection_string", { message: "Connection URL is required" });
+				setError("connection_string", { message: t("clientForm.errors.connectionUrlRequired") });
 				hasErrors = true;
 			} else if (!isSecret && connVal && !/^https?:\/\/.+/.test(connVal)) {
 				setError("connection_string", {
-					message: "Connection URL must start with http:// or https://",
+					message: t("clientForm.errors.connectionUrlFormat"),
 				});
 				hasErrors = true;
 			}
@@ -214,31 +216,31 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSaved }) => {
 		if (connectionType === "stdio") {
 			const cmd = data.stdio_config?.command || "";
 			if (!cmd.trim()) {
-				setError("stdio_config.command", { message: "Command is required for STDIO connections" });
+				setError("stdio_config.command", { message: t("clientForm.errors.commandRequired") });
 				hasErrors = true;
 			} else if (/[<>|&;]/.test(cmd)) {
-				setError("stdio_config.command", { message: "Command cannot contain special shell characters" });
+				setError("stdio_config.command", { message: t("clientForm.errors.commandSpecialChars") });
 				hasErrors = true;
 			}
 		}
 
 		if (authType === "oauth" || authType === "per_user_oauth") {
 			if (data.oauth_config?.authorize_url && !/^https?:\/\/.+$/.test(data.oauth_config.authorize_url)) {
-				setError("oauth_config.authorize_url", { message: "Authorize URL must start with http:// or https://" });
+				setError("oauth_config.authorize_url", { message: t("clientForm.errors.authorizeUrlFormat") });
 				hasErrors = true;
 			}
 			if (data.oauth_config?.token_url && !/^https?:\/\/.+$/.test(data.oauth_config.token_url)) {
-				setError("oauth_config.token_url", { message: "Token URL must start with http:// or https://" });
+				setError("oauth_config.token_url", { message: t("clientForm.errors.tokenUrlFormat") });
 				hasErrors = true;
 			}
 			if (data.oauth_config?.registration_url && !/^https?:\/\/.+$/.test(data.oauth_config.registration_url)) {
-				setError("oauth_config.registration_url", { message: "Registration URL must start with http:// or https://" });
+				setError("oauth_config.registration_url", { message: t("clientForm.errors.registrationUrlFormat") });
 				hasErrors = true;
 			}
 			if (resourceText.trim() && !isValidOAuthResourceURI(resourceText.trim())) {
 				toast({
-					title: "Invalid resource URI",
-					description: "OAuth resource must be an absolute URI without a fragment.",
+					title: t("clientForm.toasts.invalidResourceTitle"),
+					description: t("clientForm.toasts.invalidResourceDescription"),
 					variant: "destructive",
 				});
 				hasErrors = true;
@@ -248,13 +250,13 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSaved }) => {
 		if (authType === "token_exchange") {
 			const audience = data.token_exchange?.audience?.trim() || "";
 			if (!audience) {
-				setError("token_exchange.audience", { message: "Audience is required for token exchange" });
+				setError("token_exchange.audience", { message: t("clientForm.errors.audienceRequired") });
 				hasErrors = true;
 			}
 			if (!data.token_exchange?.use_idp_credentials) {
 				const exchangeClientId = data.token_exchange?.client_id;
 				if (!exchangeClientId?.value && !exchangeClientId?.ref) {
-					setError("token_exchange.client_id", { message: "Exchange client ID is required for token exchange" });
+					setError("token_exchange.client_id", { message: t("clientForm.errors.exchangeClientIdRequired") });
 					hasErrors = true;
 				}
 			}
@@ -263,8 +265,8 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSaved }) => {
 		if (authType === "per_user_headers") {
 			if (perUserHeaderKeys.length === 0) {
 				toast({
-					title: "Header keys required",
-					description: "Declare at least one header name users must supply.",
+					title: t("clientForm.toasts.headerKeysRequiredTitle"),
+					description: t("clientForm.toasts.headerKeysRequiredDescription"),
 					variant: "destructive",
 				});
 				hasErrors = true;
@@ -363,7 +365,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSaved }) => {
 				});
 			} else {
 				setIsLoading(false);
-				toast({ title: "Success", description: "Server created" });
+				toast({ title: t("common.success"), description: t("clientForm.toasts.created") });
 				onSaved();
 				onClose();
 			}
@@ -373,7 +375,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSaved }) => {
 				setError("name", { message: getErrorMessage(error) });
 				return;
 			}
-			toast({ title: "Error", description: getErrorMessage(error), variant: "destructive" });
+			toast({ title: t("common.error"), description: getErrorMessage(error), variant: "destructive" });
 		}
 	};
 
@@ -381,8 +383,8 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSaved }) => {
 		<Sheet open={open} onOpenChange={(open) => !open && !oauthFlow && onClose()}>
 			<SheetContent className="flex w-full flex-col gap-4 overflow-x-hidden p-0 pt-4">
 				<SheetHeader className="flex flex-col items-start px-0 py-4" headerClassName="mb-0 sticky -top-4 bg-card z-10 px-8">
-					<SheetTitle>New MCP Server</SheetTitle>
-					<SheetDescription>Configure and connect to a new Model Context Protocol server.</SheetDescription>
+					<SheetTitle>{t("clientForm.title")}</SheetTitle>
+					<SheetDescription>{t("clientForm.description")}</SheetDescription>
 				</SheetHeader>
 
 				<Form {...methods}>
@@ -393,19 +395,25 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSaved }) => {
 								control={control}
 								name="name"
 								rules={{
-									required: "Server name is required",
-									minLength: { value: 3, message: "Server name must be at least 3 characters" },
-									maxLength: { value: 50, message: "Server name cannot exceed 50 characters" },
+									required: t("clientForm.name.required"),
+									minLength: { value: 3, message: t("clientForm.name.minLength") },
+									maxLength: { value: 50, message: t("clientForm.name.maxLength") },
 									validate: {
-										format: (v) => /^[a-zA-Z0-9_]+$/.test(v) || "Server name can only contain letters, numbers, and underscores",
-										noLeadingDigit: (v) => !/^[0-9]/.test(v) || "Server name cannot start with a number",
+										format: (v) => /^[a-zA-Z0-9_]+$/.test(v) || t("clientForm.name.format"),
+										noLeadingDigit: (v) => !/^[0-9]/.test(v) || t("clientForm.name.noLeadingDigit"),
 									},
 								}}
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Name</FormLabel>
+										<FormLabel>{t("clientForm.name.label")}</FormLabel>
 										<FormControl>
-											<Input id="client-name" data-testid="client-name-input" placeholder="Server name" maxLength={50} {...field} />
+											<Input
+												id="client-name"
+												data-testid="client-name-input"
+												placeholder={t("clientForm.name.placeholder")}
+												maxLength={50}
+												{...field}
+											/>
 										</FormControl>
 										<FormMessage />
 									</FormItem>
@@ -416,7 +424,10 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSaved }) => {
 
 							{/* Server Behavior */}
 							<div className="space-y-4">
-								<SectionHeader title="Server Behavior" description="Control how this server participates in code mode and health checks." />
+								<SectionHeader
+									title={t("clientForm.sections.serverBehavior.title")}
+									description={t("clientForm.sections.serverBehavior.description")}
+								/>
 								<div className="divide-y rounded-md border">
 									<FormField
 										control={control}
@@ -424,7 +435,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSaved }) => {
 										render={({ field }) => (
 											<FormItem className="flex flex-row items-center justify-between gap-4 px-4 py-3">
 												<div className="flex items-center gap-2">
-													<FormLabel htmlFor="code-mode">Code Mode Server</FormLabel>
+													<FormLabel htmlFor="code-mode">{t("clientForm.labels.codeModeServer")}</FormLabel>
 													<TooltipProvider>
 														<Tooltip>
 															<TooltipTrigger asChild>
@@ -434,13 +445,13 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSaved }) => {
 																	rel="noopener noreferrer"
 																	data-testid="code-mode-link-help"
 																	className="text-muted-foreground hover:text-foreground focus-visible:ring-ring rounded focus-visible:ring-2 focus-visible:outline-none"
-																	aria-label="Learn more about Code Mode"
+																	aria-label={t("clientForm.labels.codeModeAria")}
 																>
 																	<Info className="h-4 w-4 cursor-help" />
 																</a>
 															</TooltipTrigger>
 															<TooltipContent>
-																<p>Click to learn more about Code Mode</p>
+																<p>{t("clientForm.labels.codeModeTooltip")}</p>
 															</TooltipContent>
 														</Tooltip>
 													</TooltipProvider>
@@ -462,17 +473,14 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSaved }) => {
 										render={({ field }) => (
 											<FormItem className="flex flex-row items-center justify-between gap-4 px-4 py-3">
 												<div className="flex items-center gap-2">
-													<FormLabel htmlFor="ping-available">Ping Available for Health Check</FormLabel>
+													<FormLabel htmlFor="ping-available">{t("clientForm.labels.pingAvailable")}</FormLabel>
 													<TooltipProvider>
 														<Tooltip>
 															<TooltipTrigger asChild>
 																<Info className="text-muted-foreground h-4 w-4 cursor-help" />
 															</TooltipTrigger>
 															<TooltipContent className="max-w-xs">
-																<p>
-																	Enable to use lightweight ping method for health checks. Disable if your MCP server doesn't support ping -
-																	will use listTools instead.
-																</p>
+																<p>{t("clientForm.tooltips.ping")}</p>
 															</TooltipContent>
 														</Tooltip>
 													</TooltipProvider>
@@ -498,18 +506,14 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSaved }) => {
 												render={({ field }) => (
 													<FormItem className="flex flex-row items-center justify-between gap-4 px-4 py-3">
 														<div className="flex items-center gap-2">
-															<FormLabel htmlFor="needs-session-stickiness">Maintain Persistent Connection</FormLabel>
+															<FormLabel htmlFor="needs-session-stickiness">{t("clientForm.labels.persistentConnection")}</FormLabel>
 															<TooltipProvider>
 																<Tooltip>
 																	<TooltipTrigger asChild>
 																		<Info className="text-muted-foreground h-4 w-4 cursor-help" />
 																	</TooltipTrigger>
 																	<TooltipContent className="max-w-xs">
-																		<p>
-																			Enable to keep one shared connection open and reused across every caller. Disable to connect fresh on
-																			every call instead, same as per-user auth types. Only applies to HTTP connections; SSE and STDIO
-																			always keep a persistent connection.
-																		</p>
+																		<p>{t("clientForm.tooltips.persistentConnection")}</p>
 																	</TooltipContent>
 																</Tooltip>
 															</TooltipProvider>
@@ -534,8 +538,8 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSaved }) => {
 							{/* Connection & Authentication */}
 							<div className="space-y-4">
 								<SectionHeader
-									title="Connection & Authentication"
-									description="Choose how Bifrost connects to this server and, for network transports, how requests are authenticated."
+									title={t("clientForm.sections.connection.title")}
+									description={t("clientForm.sections.connection.description")}
 								/>
 								<div className="space-y-4 rounded-md border p-4">
 									<FormField
@@ -543,7 +547,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSaved }) => {
 										name="connection_type"
 										render={({ field }) => (
 											<FormItem className="w-full">
-												<FormLabel>Connection Type</FormLabel>
+												<FormLabel>{t("clientForm.labels.connectionType")}</FormLabel>
 												<Select
 													value={field.value}
 													onValueChange={(value: MCPConnectionType) => {
@@ -565,24 +569,22 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSaved }) => {
 												>
 													<FormControl>
 														<SelectTrigger className="w-full" data-testid="connection-type-select">
-															<SelectValue placeholder="Select connection type" />
+															<SelectValue placeholder={t("clientForm.selects.connectionTypePlaceholder")} />
 														</SelectTrigger>
 													</FormControl>
 													<SelectContent>
 														<SelectItem value="http" data-testid="connection-type-http">
-															HTTP (Streamable)
+															{t("clientForm.selects.http")}
 														</SelectItem>
 														<SelectItem value="sse" data-testid="connection-type-sse">
-															Server-Sent Events (SSE)
+															{t("clientForm.selects.sse")}
 														</SelectItem>
 														<SelectItem value="stdio" data-testid="connection-type-stdio">
-															STDIO
+															{t("clientForm.selects.stdio")}
 														</SelectItem>
 													</SelectContent>
 												</Select>
-												<p className="text-muted-foreground text-xs">
-													Connection type and authentication settings cannot be changed later.
-												</p>
+												<p className="text-muted-foreground text-xs">{t("clientForm.notes.connectionLocked")}</p>
 												<FormMessage />
 											</FormItem>
 										)}
@@ -596,7 +598,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSaved }) => {
 												name="connection_string"
 												render={({ field }) => (
 													<FormItem>
-														<FormLabel>Connection URL</FormLabel>
+														<FormLabel>{t("clientForm.labels.connectionUrl")}</FormLabel>
 														<SecretVarInput
 															value={field.value}
 															onChange={(value) => {
@@ -613,26 +615,26 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSaved }) => {
 
 											{/* Auth Type */}
 											<FormItem className="w-full">
-												<FormLabel>Authentication Type</FormLabel>
+												<FormLabel>{t("clientForm.labels.authType")}</FormLabel>
 												<Select value={authKind} onValueChange={(value: "none" | "headers" | "oauth") => applyAuthKind(value)}>
 													<FormControl>
 														<SelectTrigger className="w-full" data-testid="auth-type-select">
-															<SelectValue placeholder="Select authentication type" />
+															<SelectValue placeholder={t("clientForm.selects.authTypePlaceholder")} />
 														</SelectTrigger>
 													</FormControl>
 													<SelectContent>
 														<SelectItem value="none" data-testid="auth-type-none">
-															None
+															{t("clientForm.selects.none")}
 														</SelectItem>
 														<SelectItem value="headers" data-testid="auth-type-headers">
-															Headers
+															{t("clientForm.selects.headers")}
 														</SelectItem>
 														<SelectItem value="oauth" data-testid="auth-type-oauth">
-															OAuth 2.0
+															{t("clientForm.selects.oauth")}
 														</SelectItem>
 														{IS_ENTERPRISE && idpConfigured && (
 															<SelectItem value="token_exchange" data-testid="auth-type-token-exchange">
-																Token Exchange (On-Behalf-Of)
+																{t("clientForm.selects.tokenExchange")}
 															</SelectItem>
 														)}
 													</SelectContent>
@@ -643,19 +645,19 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSaved }) => {
 											    shared variant; token exchange is inherently per-caller */}
 											{authKind !== "none" && authKind !== "token_exchange" && (
 												<FormItem className="w-full">
-													<FormLabel>Auth Scope</FormLabel>
+													<FormLabel>{t("clientForm.labels.authScope")}</FormLabel>
 													<Select value={authScope} onValueChange={(value: "shared" | "per_user") => applyAuthScope(value)}>
 														<FormControl>
 															<SelectTrigger className="w-full" data-testid="auth-scope-select">
-																<SelectValue placeholder="Select auth scope" />
+																<SelectValue placeholder={t("clientForm.selects.authScopePlaceholder")} />
 															</SelectTrigger>
 														</FormControl>
 														<SelectContent>
 															<SelectItem value="shared" data-testid="auth-scope-shared">
-																Shared
+																{t("clientForm.selects.shared")}
 															</SelectItem>
 															<SelectItem value="per_user" data-testid="auth-scope-per-user">
-																Per-User
+																{t("clientForm.selects.perUser")}
 															</SelectItem>
 														</SelectContent>
 													</Select>
@@ -672,7 +674,10 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSaved }) => {
 										<>
 											<DottedSeparator />
 											<div className="space-y-4">
-												<SectionHeader title="Headers" description="Static headers sent with every request to this server." />
+												<SectionHeader
+													title={t("clientForm.sections.headers.title")}
+													description={t("clientForm.sections.headers.description")}
+												/>
 												<FormField
 													control={control}
 													name="headers"
@@ -681,8 +686,8 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSaved }) => {
 															<HeadersTable
 																value={field.value || {}}
 																onChange={field.onChange}
-																keyPlaceholder="Header name"
-																valuePlaceholder="Header value"
+																keyPlaceholder={t("clientForm.labels.headerName")}
+																valuePlaceholder={t("clientForm.labels.headerValue")}
 																label=""
 																useSecretVarInput
 															/>
@@ -705,8 +710,8 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSaved }) => {
 												    consistent. End users supply values per-user at first
 												    tool use via the inline auth landing page. */}
 												<SectionHeader
-													title="Required Headers"
-													description="Comma-separated header names each caller must supply on first use, e.g. X-API-Key, X-Tenant-ID. Values are submitted per user, not stored on this server config."
+													title={t("clientForm.sections.requiredHeaders.title")}
+													description={t("clientForm.sections.requiredHeaders.description")}
 												/>
 												<div className="rounded-md border p-4">
 													<Textarea
@@ -725,7 +730,10 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSaved }) => {
 
 											{/* Optional static admin headers (e.g. a fixed tenant header) */}
 											<div className="space-y-4">
-												<SectionHeader title="Static Headers" description="Optional, applied alongside the values each caller supplies." />
+												<SectionHeader
+													title={t("clientForm.sections.staticHeaders.title")}
+													description={t("clientForm.sections.staticHeaders.description")}
+												/>
 												<FormField
 													control={control}
 													name="headers"
@@ -734,8 +742,8 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSaved }) => {
 															<HeadersTable
 																value={field.value || {}}
 																onChange={field.onChange}
-																keyPlaceholder="Header name"
-																valuePlaceholder="Header value"
+																keyPlaceholder={t("clientForm.labels.headerName")}
+																valuePlaceholder={t("clientForm.labels.headerValue")}
 																label=""
 																useSecretVarInput
 															/>
@@ -758,8 +766,8 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSaved }) => {
 											<DottedSeparator />
 											<div className="space-y-4" data-testid="token-exchange-fields">
 												<SectionHeader
-													title="Token Exchange Configuration"
-													description="Credentials and scopes used to exchange caller identity tokens for access to this server."
+													title={t("clientForm.sections.tokenExchange.title")}
+													description={t("clientForm.sections.tokenExchange.description")}
 													testId="token-exchange-heading"
 												/>
 												<div className="space-y-4 rounded-md border p-4">
@@ -768,66 +776,59 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSaved }) => {
 														gridClassName="space-y-4"
 														audienceLabel={
 															<>
-																Audience <span className="text-destructive">*</span>
+																{t("clientForm.tokenExchange.audience")} <span className="text-destructive">*</span>
 															</>
 														}
 														audienceTooltip={
 															isEntraIdp
-																? "The resource app's Application (client) ID at your identity provider - a bare GUID, not the api://... Application ID URI shown under Expose an API. Exchanged tokens are scoped to it."
-																: "The resource identifier this server is registered as at your identity provider. Exchanged tokens are scoped to it."
+																? t("clientForm.tokenExchange.audienceTooltipEntra")
+																: t("clientForm.tokenExchange.audienceTooltipDefault")
 														}
 														audienceTestId="token-exchange-audience-input"
 														onAudienceTouched={() => clearErrors("token_exchange.audience")}
-														useIdPCredentialsLabel="Exchange application"
-														useIdPCredentialsDedicatedDescription="A separate identity-provider app, scoped only to this server. Recommended for most providers."
-														useIdPCredentialsIdPDescription="Reuses your SSO login application's own credentials. Required for Microsoft Entra ID."
-														useIdPCredentialsRequiredWarning={
-															isEntraIdp &&
-															"Your identity provider is Microsoft Entra ID - a dedicated application might not work, switch to Identity provider application."
-														}
+														useIdPCredentialsLabel={t("clientForm.tokenExchange.exchangeApplication")}
+														useIdPCredentialsDedicatedDescription={t("clientForm.tokenExchange.dedicatedDescription")}
+														useIdPCredentialsIdPDescription={t("clientForm.tokenExchange.idpDescription")}
+														useIdPCredentialsRequiredWarning={isEntraIdp && t("clientForm.tokenExchange.entraWarning")}
 														onUseIdPCredentialsToggled={(checked) => {
 															if (checked) clearErrors(["token_exchange.client_id", "token_exchange.client_secret"]);
 														}}
 														clientIdLabel={
 															<>
-																Exchange Client ID <span className="text-destructive">*</span>
+																{t("clientForm.tokenExchange.exchangeClientId")} <span className="text-destructive">*</span>
 															</>
 														}
-														clientIdTooltip="A dedicated application at your identity provider with the token exchange (or on-behalf-of) grant enabled and permission to request this audience. Not the SSO login application. Ignored when using identity provider credentials above."
-														clientIdPlaceholder="bifrost-exchange or env.EXCHANGE_CLIENT_ID"
+														clientIdTooltip={t("clientForm.tokenExchange.clientIdTooltip")}
+														clientIdPlaceholder={t("clientForm.tokenExchange.clientIdPlaceholder")}
 														clientIdTestId="token-exchange-client-id-input"
 														onClientIdTouched={() => clearErrors("token_exchange.client_id")}
 														clientIdRedactNonEnvValue={false}
-														clientSecretLabel="Exchange Client Secret (optional)"
-														clientSecretPlaceholder="env.EXCHANGE_CLIENT_SECRET"
-														clientSecretHelperText="Omit for public clients."
+														clientSecretLabel={t("clientForm.tokenExchange.exchangeClientSecretOptional")}
+														clientSecretPlaceholder={t("clientForm.tokenExchange.clientSecretPlaceholder")}
+														clientSecretHelperText={t("clientForm.tokenExchange.clientSecretHelper")}
 														clientSecretTestId="token-exchange-client-secret-input"
 														clientSecretHideValueWhenEnv={false}
 														clientSecretMaskNonEnvValue={true}
 														clientSecretRedactNonEnvValue={false}
-														authServerUrlLabel="Authorization Server URL (optional)"
-														authServerUrlTooltip={
-															<>
-																Only needed when the audience above is registered on a different authorization server than the one your SSO
-																login uses - for example, Okta&apos;s per-resource Custom Authorization Servers. Leave blank to use your SSO
-																login&apos;s issuer, which is correct for most providers.
-															</>
-														}
+														authServerUrlLabel={t("clientForm.tokenExchange.authServerUrlOptional")}
+														authServerUrlTooltip={t("clientForm.tokenExchange.authServerUrlTooltip")}
 														authServerUrlTestId="token-exchange-authorization-server-url-input"
 														scopes={{
 															variant: "textarea",
 															value: tokenExchangeScopesText,
 															onChange: setTokenExchangeScopesText,
-															label: "Scopes (optional)",
+															label: t("clientForm.tokenExchange.scopesOptional"),
 															helperText: (
 																<>
-																	Comma-separated scopes to request on exchanged tokens. Include <code>offline_access</code> (where your
-																	identity provider supports it) so the retained discovery credential can renew itself in the background.
+																	<Trans ns="mcpRegistry" i18nKey="clientForm.tokenExchange.scopesHelper" components={{ code: <code /> }} />
 																	{isEntraIdp && (
 																		<>
 																			{" "}
-																			<code>offline_access</code> alone is the only scope combined with the audience&apos;s default resource
-																			access - any other scope replaces the default entirely instead of adding to it.
+																			<Trans
+																				ns="mcpRegistry"
+																				i18nKey="clientForm.tokenExchange.scopesHelperEntra"
+																				components={{ code: <code /> }}
+																			/>
 																		</>
 																	)}
 																</>
@@ -845,8 +846,8 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSaved }) => {
 											<DottedSeparator />
 											<div className="space-y-4">
 												<SectionHeader
-													title="OAuth Configuration"
-													description="Credentials and endpoints this server uses to authenticate via OAuth."
+													title={t("clientForm.sections.oauth.title")}
+													description={t("clientForm.sections.oauth.description")}
 													testId="oauth-advanced-heading"
 												/>
 												<div className="space-y-4 rounded-md border p-4">
@@ -854,25 +855,25 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSaved }) => {
 														control={control}
 														scopesRaw={scopesText}
 														onScopesRawChange={setScopesText}
-														scopesLabel="Scopes (optional, comma-separated)"
+														scopesLabel={t("clientForm.oauthFields.scopesOptional")}
 														scopesTestId="mcp-oauth-scopes-input"
 														resource={{ mode: "raw", value: resourceText, onChange: setResourceText }}
-														resourceLabel="Resource"
+														resourceLabel={t("clientForm.oauthFields.resource")}
 														resourceTestId="mcp-oauth-resource-input"
-														clientIdLabel="OAuth Client ID (optional)"
-														clientIdPlaceholder="your-client-id (auto-generated if empty)"
-														clientIdHelperText="Will be auto-generated via dynamic registration if left empty and provider supports it"
-														clientIdTooltip="Leave empty to use Dynamic Client Registration (RFC 7591). Bifrost will automatically register with the OAuth provider if supported."
+														clientIdLabel={t("clientForm.oauthFields.clientIdOptional")}
+														clientIdPlaceholder={t("clientForm.oauthFields.clientIdPlaceholder")}
+														clientIdHelperText={t("clientForm.oauthFields.clientIdHelper")}
+														clientIdTooltip={t("clientForm.oauthFields.clientIdTooltip")}
 														clientIdTestId="mcp-oauth-client-id"
-														clientSecretLabel="OAuth Client Secret (optional for PKCE)"
-														clientSecretPlaceholder="your-client-secret"
-														clientSecretHelperText="Leave empty for public clients using PKCE"
+														clientSecretLabel={t("clientForm.oauthFields.clientSecretOptional")}
+														clientSecretPlaceholder={t("clientForm.oauthFields.clientSecretPlaceholder")}
+														clientSecretHelperText={t("clientForm.oauthFields.clientSecretHelper")}
 														clientSecretTestId="mcp-oauth-client-secret"
-														authorizeUrlLabel="Authorization URL (optional, auto-discovered)"
+														authorizeUrlLabel={t("clientForm.oauthFields.authorizeUrlOptional")}
 														authorizeUrlTestId="mcp-oauth-authorize-url"
-														tokenUrlLabel="Token URL (optional, auto-discovered)"
+														tokenUrlLabel={t("clientForm.oauthFields.tokenUrlOptional")}
 														tokenUrlTestId="mcp-oauth-token-url"
-														registrationUrlLabel="Registration URL (optional, auto-discovered)"
+														registrationUrlLabel={t("clientForm.oauthFields.registrationUrlOptional")}
 														registrationUrlTestId="mcp-oauth-registration-url"
 														onFieldTouched={(field) => clearErrors(`oauth_config.${field}`)}
 													/>
@@ -886,8 +887,8 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSaved }) => {
 									{/* TLS / Certificate */}
 									<div className="space-y-4">
 										<SectionHeader
-											title="TLS / Certificate"
-											description="Configure certificate verification for HTTPS connections to this server."
+											title={t("clientForm.sections.tls.title")}
+											description={t("clientForm.sections.tls.description")}
 											testId="tls-config-heading"
 										/>
 										<div className="space-y-4 rounded-md border p-4">
@@ -903,12 +904,8 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSaved }) => {
 										<div className="flex items-start gap-2">
 											<Info className="mt-0.5 h-4 w-4 flex-shrink-0 text-amber-700" />
 											<div className="flex-1">
-												<p className="text-xs font-medium text-amber-900">Docker Notice</p>
-												<p className="mt-0.5 text-xs text-amber-800">
-													If not using the official Bifrost Docker image, STDIO connections may not work if required commands (npx, python,
-													etc.) aren't installed. You can safely ignore this if running locally or using a custom image with the necessary
-													dependencies.
-												</p>
+												<p className="text-xs font-medium text-amber-900">{t("clientForm.notes.dockerTitle")}</p>
+												<p className="mt-0.5 text-xs text-amber-800">{t("clientForm.notes.dockerBody")}</p>
 											</div>
 										</div>
 									</div>
@@ -919,7 +916,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSaved }) => {
 										name="stdio_config.command"
 										render={({ field }) => (
 											<FormItem>
-												<FormLabel>Command</FormLabel>
+												<FormLabel>{t("clientForm.labels.command")}</FormLabel>
 												<FormControl>
 													<Input
 														{...field}
@@ -939,7 +936,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSaved }) => {
 
 									{/* Args (local state) */}
 									<div className="space-y-2">
-										<Label htmlFor="stdio-args-input">Arguments (comma-separated)</Label>
+										<Label htmlFor="stdio-args-input">{t("clientForm.labels.args")}</Label>
 										<Input
 											id="stdio-args-input"
 											value={argsText}
@@ -952,16 +949,14 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSaved }) => {
 									{/* Envs (local state) */}
 									<div className="space-y-2" role="group" aria-labelledby="stdio-envs-label">
 										<div className="flex items-center gap-2">
-											<Label id="stdio-envs-label">Environment Variables</Label>
+											<Label id="stdio-envs-label">{t("clientForm.labels.envVars")}</Label>
 											<TooltipProvider>
 												<Tooltip>
 													<TooltipTrigger asChild>
 														<Info className="text-muted-foreground h-4 w-4 cursor-help" />
 													</TooltipTrigger>
 													<TooltipContent className="max-w-xs">
-														<p>
-															Add a value for each variable, or leave it blank to read the value from the environment where Bifrost runs.
-														</p>
+														<p>{t("clientForm.tooltips.envVars")}</p>
 													</TooltipContent>
 												</Tooltip>
 											</TooltipProvider>
@@ -970,7 +965,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSaved }) => {
 											value={envVars}
 											onChange={setEnvVars}
 											keyPlaceholder="API_KEY"
-											valuePlaceholder="Value (or leave blank to use host env)"
+											valuePlaceholder={t("clientForm.envValuePlaceholder")}
 											label=""
 										/>
 									</div>
@@ -981,7 +976,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSaved }) => {
 						{/* Form Footer */}
 						<div className="bg-card sticky bottom-0 z-10 flex justify-end gap-2 border-t px-8 py-4">
 							<Button type="button" variant="outline" onClick={onClose} disabled={isLoading} data-testid="cancel-client-btn">
-								Cancel
+								{t("common.cancel")}
 							</Button>
 							<TooltipProvider>
 								<Tooltip>
@@ -993,13 +988,13 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSaved }) => {
 												isLoading={isLoading}
 												data-testid="save-client-btn"
 											>
-												Create
+												{t("clientForm.labels.create")}
 											</Button>
 										</span>
 									</TooltipTrigger>
 									{!hasCreateMCPClientAccess && (
 										<TooltipContent>
-											<p>You don't have permission to perform this action</p>
+											<p>{t("common.noPermission")}</p>
 										</TooltipContent>
 									)}
 								</Tooltip>
@@ -1017,13 +1012,13 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSaved }) => {
 						setOauthFlow(null);
 					}}
 					onSuccess={() => {
-						toast({ title: "Success", description: "MCP server connected with OAuth" });
+						toast({ title: t("common.success"), description: t("clientForm.toasts.oauthConnected") });
 						setOauthFlow(null);
 						onClose();
 						onSaved();
 					}}
 					onError={(error) => {
-						toast({ title: "OAuth Error", description: error, variant: "destructive" });
+						toast({ title: t("clientForm.toasts.oauthErrorTitle"), description: error, variant: "destructive" });
 					}}
 					onConflict={(error) => {
 						setOauthFlow(null);
@@ -1049,7 +1044,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSaved }) => {
 					}}
 					onSuccess={() => {
 						setHeadersFlow(null);
-						toast({ title: "Success", description: "MCP server connected with per-user headers" });
+						toast({ title: t("common.success"), description: t("clientForm.toasts.perUserHeadersConnected") });
 						onSaved();
 						onClose();
 					}}

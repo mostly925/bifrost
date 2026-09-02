@@ -1,4 +1,6 @@
+import { beforeAll } from "vitest";
 import { describe, expect, it } from "vitest";
+import i18n from "@/lib/i18n";
 import { periodRank, shortPeriod } from "@/lib/budgetOutline";
 import {
 	budgetResetDurationOptions,
@@ -7,7 +9,6 @@ import {
 	formatQuarterPreview,
 	nextQuarterReset,
 	quarterRanges,
-	resetDurationLabels,
 	resetDurationOptions,
 	supportsCalendarAlignment,
 } from "@/lib/constants/governance";
@@ -19,6 +20,14 @@ import {
 	parseResetPeriod,
 	validateBudgetOverride,
 } from "./governance";
+
+// Month-name helpers follow the active UI language; pin it so assertions on
+// English labels hold regardless of the machine locale running the tests.
+beforeAll(async () => {
+	await i18n.changeLanguage("en");
+	// shared is lazily loaded in the app; the quarter note renders through it.
+	await i18n.loadNamespaces("shared");
+});
 
 describe("budget overrides", () => {
 	it("adds active finite and permanent overrides to the base limit", () => {
@@ -80,7 +89,7 @@ describe("quarterly budgets", () => {
 	it("keeps the budget list ordered with Quarterly after Monthly", () => {
 		const values = budgetResetDurationOptions.map((o) => o.value);
 		expect(values.indexOf("1Q")).toBeGreaterThan(values.indexOf("1M"));
-		expect(resetDurationLabels["1Q"]).toBe("Quarterly");
+		expect(budgetResetDurationOptions.find((o) => o.value === "1Q")?.labelKey).toBe("resetPeriods.quarterly");
 	});
 
 	it("treats a quarter as calendar-alignable", () => {

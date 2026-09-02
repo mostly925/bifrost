@@ -1,6 +1,7 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import { CheckIcon, ChevronDown, XCircle, XIcon } from "lucide-react";
 import * as React from "react";
+import { useTranslation } from "react-i18next";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -314,6 +315,7 @@ export const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(
 		const [selectedValues, setSelectedValues] = React.useState<string[]>(defaultValue);
 		const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
 		const [searchValue, setSearchValue] = React.useState("");
+		const { t } = useTranslation("shared");
 
 		const [politeMessage, setPoliteMessage] = React.useState("");
 		const [assertiveMessage, setAssertiveMessage] = React.useState("");
@@ -833,7 +835,7 @@ export const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(
 						id={listboxId}
 						role="listbox"
 						aria-multiselectable="true"
-						aria-label="Available options"
+						aria-label={t("ui.multiSelect.availableOptions")}
 						className={cn("w-full overflow-hidden p-0", popoverClassName)}
 						style={{
 							touchAction: "manipulation",
@@ -847,11 +849,11 @@ export const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(
 						<Command className={cn("flex w-full flex-col", commandClassName)}>
 							{searchable && (
 								<CommandInput
-									placeholder="Search options..."
+									placeholder={t("ui.multiSelect.searchOptions")}
 									onKeyDown={handleInputKeyDown}
 									value={searchValue}
 									onValueChange={setSearchValue}
-									aria-label="Search through available options"
+									aria-label={t("ui.multiSelect.searchThroughOptions")}
 									aria-describedby={`${multiSelectId}-search-help`}
 								/>
 							)}

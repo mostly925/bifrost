@@ -8,6 +8,7 @@ import { isRequestTypeDisabled } from "@/lib/utils/validation";
 import { Settings2 } from "lucide-react";
 import { useEffect, useMemo } from "react";
 import { Control, useFormContext } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 interface AllowedRequestsFieldsProps {
 	control: Control<any>;
@@ -62,30 +63,30 @@ const getPlaceholder = (providerType: BaseProvider | undefined, requestKey: Requ
 	return ProviderEndpoints["openai"]?.[requestKey] ?? "";
 };
 
-const RequestTypes: Array<{ key: RequestType; label: string }> = [
-	{ key: "list_models", label: "List Models" },
-	{ key: "text_completion", label: "Text Completion" },
-	{ key: "text_completion_stream", label: "Text Completion Stream" },
-	{ key: "chat_completion", label: "Chat Completion" },
-	{ key: "chat_completion_stream", label: "Chat Completion Stream" },
-	{ key: "responses", label: "Responses" },
-	{ key: "responses_stream", label: "Responses Stream" },
-	{ key: "responses_retrieve", label: "Responses Retrieve" },
-	{ key: "responses_delete", label: "Responses Delete" },
-	{ key: "responses_cancel", label: "Responses Cancel" },
-	{ key: "responses_input_items", label: "Responses Input Items" },
-	{ key: "embedding", label: "Embedding" },
-	{ key: "speech", label: "Speech" },
-	{ key: "speech_stream", label: "Speech Stream" },
-	{ key: "transcription", label: "Transcription" },
-	{ key: "transcription_stream", label: "Transcription Stream" },
-	{ key: "image_generation", label: "Image Generation" },
-	{ key: "image_generation_stream", label: "Image Generation Stream" },
-	{ key: "image_edit", label: "Image Edit" },
-	{ key: "image_edit_stream", label: "Image Edit Stream" },
-	{ key: "image_variation", label: "Image Variation" },
-	{ key: "count_tokens", label: "Count Tokens" },
-];
+const RequestTypes = [
+	{ key: "list_models", labelKey: "allowedRequests.types.list_models" },
+	{ key: "text_completion", labelKey: "allowedRequests.types.text_completion" },
+	{ key: "text_completion_stream", labelKey: "allowedRequests.types.text_completion_stream" },
+	{ key: "chat_completion", labelKey: "allowedRequests.types.chat_completion" },
+	{ key: "chat_completion_stream", labelKey: "allowedRequests.types.chat_completion_stream" },
+	{ key: "responses", labelKey: "allowedRequests.types.responses" },
+	{ key: "responses_stream", labelKey: "allowedRequests.types.responses_stream" },
+	{ key: "responses_retrieve", labelKey: "allowedRequests.types.responses_retrieve" },
+	{ key: "responses_delete", labelKey: "allowedRequests.types.responses_delete" },
+	{ key: "responses_cancel", labelKey: "allowedRequests.types.responses_cancel" },
+	{ key: "responses_input_items", labelKey: "allowedRequests.types.responses_input_items" },
+	{ key: "embedding", labelKey: "allowedRequests.types.embedding" },
+	{ key: "speech", labelKey: "allowedRequests.types.speech" },
+	{ key: "speech_stream", labelKey: "allowedRequests.types.speech_stream" },
+	{ key: "transcription", labelKey: "allowedRequests.types.transcription" },
+	{ key: "transcription_stream", labelKey: "allowedRequests.types.transcription_stream" },
+	{ key: "image_generation", labelKey: "allowedRequests.types.image_generation" },
+	{ key: "image_generation_stream", labelKey: "allowedRequests.types.image_generation_stream" },
+	{ key: "image_edit", labelKey: "allowedRequests.types.image_edit" },
+	{ key: "image_edit_stream", labelKey: "allowedRequests.types.image_edit_stream" },
+	{ key: "image_variation", labelKey: "allowedRequests.types.image_variation" },
+	{ key: "count_tokens", labelKey: "allowedRequests.types.count_tokens" },
+] as const satisfies readonly { key: RequestType; labelKey: string }[];
 
 // Path overrides replace the default path verbatim; these request paths embed the
 // response ID, so an override can never produce a valid URL for them.
@@ -103,6 +104,7 @@ export function AllowedRequestsFields({
 	providerType,
 	disabled = false,
 }: AllowedRequestsFieldsProps) {
+	const { t } = useTranslation("providers");
 	const leftColumn = RequestTypes.slice(0, RequestTypes.length / 2);
 	const rightColumn = RequestTypes.slice(RequestTypes.length / 2);
 	const { getValues, setValue } = useFormContext();
@@ -117,7 +119,7 @@ export function AllowedRequestsFields({
 
 	const isPathOverrideDisabled = useMemo(() => providerType === "gemini" || providerType === "bedrock", [providerType]);
 
-	const renderRequestField = (requestType: { key: RequestType; label: string }) => {
+	const renderRequestField = (requestType: (typeof RequestTypes)[number]) => {
 		const isDisabled = isRequestTypeDisabled(providerType, requestType.key);
 		const placeholder = getPlaceholder(providerType, requestType.key);
 
@@ -131,7 +133,7 @@ export function AllowedRequestsFields({
 						className={`flex flex-row items-center justify-between rounded-lg border p-3 ${isDisabled ? "bg-muted/30 opacity-60" : ""}`}
 					>
 						<div className="space-y-0.5">
-							<FormLabel className={isDisabled ? "cursor-not-allowed" : ""}>{requestType.label}</FormLabel>
+							<FormLabel className={isDisabled ? "cursor-not-allowed" : ""}>{t(requestType.labelKey)}</FormLabel>
 						</div>
 						<div className="flex items-center gap-2">
 							{/* Settings icon for path override - only show when enabled */}
@@ -149,17 +151,15 @@ export function AllowedRequestsFields({
 													<button
 														type="button"
 														className="text-muted-foreground hover:text-foreground transition-colors"
-														aria-label="Customize endpoint path"
+														aria-label={t("allowedRequests.customizePathAria")}
 													>
 														<Settings2 className="h-4 w-4" />
 													</button>
 												</PopoverTrigger>
 												<PopoverContent className="w-80" align="end" onOpenAutoFocus={(e) => e.preventDefault()}>
 													<div className="space-y-2">
-														<h4 className="text-sm font-medium">Custom Path or URL</h4>
-														<p className="text-muted-foreground text-xs">
-															Override with a path (e.g., /v1/chat) or a full URL (e.g., https://api.example.com/chat) to bypass base_url
-														</p>
+														<h4 className="text-sm font-medium">{t("allowedRequests.customPath.title")}</h4>
+														<p className="text-muted-foreground text-xs">{t("allowedRequests.customPath.description")}</p>
 														<Input placeholder={placeholder} {...pathField} value={pathField.value || ""} className="h-9" />
 													</div>
 												</PopoverContent>
@@ -178,7 +178,7 @@ export function AllowedRequestsFields({
 												</div>
 											</TooltipTrigger>
 											<TooltipContent>
-												<p>Not supported by {providerType}</p>
+												<p>{t("allowedRequests.notSupported", { provider: providerType })}</p>
 											</TooltipContent>
 										</Tooltip>
 									</TooltipProvider>
@@ -196,10 +196,10 @@ export function AllowedRequestsFields({
 	return (
 		<div className="space-y-4">
 			<div>
-				<div className="text-sm font-medium">Allowed Request Types</div>
+				<div className="text-sm font-medium">{t("allowedRequests.title")}</div>
 				<p className="text-muted-foreground text-xs">
-					Select which request types this custom provider can handle.{" "}
-					{!isPathOverrideDisabled ? "Click the settings icon to customize endpoint paths or use full URLs." : ""}
+					{t("allowedRequests.description")}
+					{!isPathOverrideDisabled ? ` ${t("allowedRequests.descriptionHint")}` : ""}
 				</p>
 			</div>
 

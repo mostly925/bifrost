@@ -1,6 +1,7 @@
 import type { CoreConfig } from "@/lib/types/config";
 import type { VirtualKey } from "@/lib/types/governance";
 import type { MCPClient } from "@/lib/types/mcp";
+import type { TFunction } from "i18next";
 import type { HarnessPlatform, ServerScope } from "./types";
 
 /** Default port Bifrost serves on; used when guessing the gateway URL in local dev. */
@@ -79,9 +80,9 @@ export function maskSecret(value?: string): string {
 }
 
 /** Human-readable label describing how many servers a command registers. */
-export function getRegistrationLabel(serverScope: ServerScope, selectedServers: MCPClient[]): string {
+export function getRegistrationLabel(serverScope: ServerScope, selectedServers: MCPClient[], t: TFunction<"mcpRegistry">): string {
 	if (serverScope === "selected" && selectedServers.length > 0) {
-		return `${selectedServers.length} ${selectedServers.length === 1 ? "server" : "servers"}`;
+		return t("usageGuide.registrationServers", { count: selectedServers.length });
 	}
 	return "bifrost";
 }

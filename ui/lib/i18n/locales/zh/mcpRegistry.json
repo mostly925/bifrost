@@ -128,5 +128,466 @@
 			"dedicatedApplication": "专用应用程序",
 			"identityProviderApplication": "身份提供方应用程序"
 		}
+	},
+	"common": {
+		"success": "成功",
+		"error": "错误",
+		"cancel": "取消",
+		"delete": "删除",
+		"continue": "继续",
+		"noPermission": "你没有权限执行此操作"
+	},
+	"table": {
+		"actionsMenuAria": "MCP 服务器操作",
+		"menu": {
+			"edit": "编辑",
+			"authorize": "授权",
+			"reconnect": "重新连接",
+			"reauthorize": "重新授权",
+			"refreshAdminCredential": "刷新管理员凭据",
+			"reverifyAsMe": "以我的身份重新验证"
+		},
+		"toasts": {
+			"reconnectedTitle": "已重新连接",
+			"reconnectedDescription": "客户端 {{name}} 重新连接成功。",
+			"authorizationFailedTitle": "授权失败",
+			"unexpectedResponse": "服务器返回意外响应。请重试。",
+			"reauthorizationFailedTitle": "重新授权失败",
+			"verifiedTitle": "已验证",
+			"verificationFailedTitle": "验证失败",
+			"deletedTitle": "已删除",
+			"deletedDescription": "客户端 {{name}} 已成功移除。",
+			"serverEnabled": "服务器启用成功",
+			"serverDisabled": "服务器禁用成功",
+			"oauthVerifiedPerUser": "OAuth 配置验证成功。每个用户将各自单独认证。",
+			"oauthVerifiedShared": "MCP 客户端连接成功",
+			"headersVerified": "请求头验证成功。使用此 MCP 服务器时，每个用户将提交自己的值。",
+			"alreadyVerifiedTitle": "已通过验证",
+			"adminCredentialRefreshed": "管理员发现凭据刷新成功。",
+			"reauthorizedShared": "MCP 客户端重新授权成功"
+		},
+		"authScope": {
+			"perUser": "按用户",
+			"shared": "共享"
+		},
+		"vkAccess": {
+			"all": "全部",
+			"none": "无",
+			"count_one": "{{count}} 个虚拟密钥",
+			"count_other": "{{count}} 个虚拟密钥"
+		},
+		"deleteDialog": {
+			"title": "移除 MCP 服务器",
+			"description": "确定要移除 MCP 服务器 {{name}} 吗？继续使用时需要重新连接该服务器。"
+		},
+		"exchange": {
+			"verifyTitle": "以我的身份验证",
+			"reverifyTitle": "以我的身份重新验证",
+			"verifyDescription": "使用你的身份建立 Bifrost 的发现凭据。",
+			"reverifyDescription": "使用你的身份续期 Bifrost 自身的发现凭据。",
+			"infoEstablish": "此操作将使用你当前登录的身份，为 <strong>{{name}}</strong> 建立 Bifrost 的发现凭据。",
+			"infoRenew": "此操作将使用你当前登录的身份，为 <strong>{{name}}</strong> 续期 Bifrost 的发现凭据。",
+			"infoDetail": "该凭据仅用于定期获取此服务器的工具列表，不用于真实用户请求；真实用户请求的令牌会在每次请求时自动交换。",
+			"infoDetailReverify": "该凭据仅用于定期获取此服务器的工具列表，不用于真实用户请求；真实用户请求的令牌会在每次请求时自动交换。仅当凭据徽章显示已过期时才需要执行此操作，但任何时候执行都是安全的。"
+		},
+		"title": "MCP 服务器目录",
+		"subtitle": "管理可连接到 MCP 工具端点的服务器。",
+		"libraryBtn": "库",
+		"newServer": "新建 MCP 服务器",
+		"newServerAria": "新建 MCP 服务器",
+		"searchAria": "按名称搜索 MCP 服务器",
+		"searchPlaceholder": "按名称搜索...",
+		"serverFilter": "服务器筛选",
+		"columns": {
+			"name": "名称",
+			"connectionType": "连接类型",
+			"authType": "认证类型",
+			"authScope": "认证范围",
+			"codeMode": "代码模式",
+			"vkAccess": "虚拟密钥访问",
+			"enabledTools": "已启用工具",
+			"autoExecuteTools": "自动执行工具",
+			"state": "状态",
+			"status": "启用状态"
+		},
+		"columnAria": "{{label}} 列说明",
+		"stateTooltip": {
+			"description": "客户端的连接状态（正常、不稳定、需要重新授权等）。“不稳定”反映的是 Bifrost 自身对该服务器的连接检查结果，而不是通过它执行的工具调用的结果：它会自我恢复，并且永远不会阻止工具调用。对于按用户客户端（OAuth、请求头、令牌交换），这反映的是 Bifrost 自己保留的管理员凭据（仅用于定期刷新工具列表），而不是任何单个用户自己的会话，后者无论如何都不受影响。",
+			"seeAll": "查看所有连接状态"
+		},
+		"emptyRow": "未找到匹配的 MCP 服务器。",
+		"pagination": {
+			"range": "第 {{from}}-{{to}} 条，共 {{total}} 条",
+			"pageOf": "第 {{current}} / {{total}} 页",
+			"prevAria": "上一页",
+			"nextAria": "下一页"
+		},
+		"nodeStates": {
+			"disagree": "各实例对此客户端的状态不一致：",
+			"line_one": "{{count}} 个实例：{{state}}",
+			"line_other": "{{count}} 个实例：{{state}}"
+		}
+	},
+	"clientSheet": {
+		"description": {
+			"pendingTokenExchange": "此服务器需要一次性验证：Bifrost 会交换你当前登录的身份令牌、测试连接并发现工具。之后，调用方自己的身份令牌会在每次工具调用时自动交换。",
+			"pendingPerUserOauth": "此客户端在 config.json 中声明。需要管理员登录以验证 OAuth 配置并发现工具；Bifrost 会保存该凭据用于定期刷新工具列表。每个用户使用此服务器时仍需单独认证。",
+			"pendingOauth": "此客户端在 config.json 中声明，需要完成一次 OAuth 授权后才能使用。",
+			"needsReauthPerUser": "Bifrost 保存用于刷新此服务器工具列表的管理员凭据需要修复。最终用户凭据和工具调用不受影响。请使用服务器操作菜单中的“刷新管理员凭据”来修复。",
+			"needsReauth": "此连接的凭据需要重新授权。请使用服务器操作菜单中的“重新授权”重做 OAuth 同意流程。",
+			"default": "MCP 服务器配置与可用工具"
+		},
+		"tabs": {
+			"general": "通用",
+			"authentication": "认证",
+			"tools": "工具",
+			"access": "访问"
+		},
+		"sections": {
+			"basicInformation": {
+				"title": "基本信息",
+				"description": "识别此服务器并查看其连接详情。"
+			},
+			"serverBehavior": {
+				"title": "服务器行为",
+				"description": "控制此服务器在代码模式和健康检查中的参与方式。"
+			},
+			"syncTimeouts": {
+				"title": "同步与超时",
+				"description": "覆盖此服务器的全局工具同步间隔和执行超时。"
+			},
+			"headers": {
+				"title": "请求头",
+				"description": "随发送到此服务器的每个请求一起发送的静态请求头与基于请求头的访问规则。"
+			},
+			"requiredHeaders": {
+				"title": "必需请求头",
+				"description": "以逗号分隔的请求头名称，每个调用方首次使用时必须提供，例如 X-API-Key、X-Tenant-ID。这些值按用户提交，不会存储在此服务器配置中。",
+				"tooltip": "修改此列表会将现有的按用户请求头提交标记为需要更新，调用方会在下次使用时重新提交值。"
+			},
+			"allowedExtraHeaders": {
+				"title": "允许的额外请求头",
+				"description": "以逗号分隔的动态请求头名称，或使用 * 允许全部。留空则阻止所有额外请求头。"
+			},
+			"tls": {
+				"title": "TLS / 证书",
+				"description": "为连接此服务器的 HTTPS 连接配置证书验证。"
+			},
+			"oauth": {
+				"title": "OAuth 配置",
+				"description": "此服务器通过 OAuth 认证所使用的凭据与端点。"
+			},
+			"tokenExchange": {
+				"title": "令牌交换配置",
+				"description": "用于交换调用方身份令牌以访问此服务器的凭据与作用域。"
+			},
+			"access": {
+				"title": "访问控制",
+				"description": "控制此服务器是否可以被所有虚拟密钥访问，而无需逐个显式分配。"
+			},
+			"virtualKeyAccess": {
+				"title": "虚拟密钥访问权限",
+				"description": "控制哪些虚拟密钥可以使用此服务器，以及允许它们调用哪些工具。"
+			}
+		},
+		"labels": {
+			"name": "名称",
+			"namePlaceholder": "客户端名称",
+			"connection": "连接",
+			"envVars": "环境变量",
+			"codeModeServer": "代码模式服务器",
+			"codeModeAria": "了解代码模式",
+			"codeModeTooltip": "点击了解代码模式的更多信息",
+			"pingAvailable": "健康检查使用 Ping",
+			"persistentConnection": "保持持久连接",
+			"syncInterval": "工具同步间隔（分钟）",
+			"executionTimeout": "工具执行超时（秒）",
+			"usingGlobal": "使用全局设置",
+			"disableClient": "禁用客户端",
+			"headerName": "请求头名称",
+			"headerValue": "请求头值",
+			"scopes": "作用域",
+			"resource": "资源",
+			"clientId": "客户端 ID",
+			"clientSecret": "客户端密钥",
+			"authorizeUrl": "授权 URL",
+			"tokenUrl": "令牌 URL",
+			"registrationUrl": "注册 URL",
+			"audience": "受众",
+			"exchangeApplication": "交换应用程序",
+			"exchangeClientId": "交换客户端 ID",
+			"exchangeClientSecret": "交换客户端密钥",
+			"authServerUrl": "授权服务器 URL",
+			"addVirtualKey": "添加虚拟密钥",
+			"virtualKey": "虚拟密钥",
+			"allowedTools": "允许的工具",
+			"saveChanges": "保存更改"
+		},
+		"tooltips": {
+			"name": "请使用能清晰标识服务器的描述性名称。例如用 \"google_drive\" 而不是 \"gdrive\"，或用 \"hacker_news\" 而不是 \"hn\"。在代码模式下，此名称将用作 Python 模块名。",
+			"ping": "启用后使用轻量级 ping 方法进行健康检查。如果你的 MCP 服务器不支持 ping，请禁用 —— 将改用 listTools。",
+			"persistentConnection": "启用后保持一个共享连接打开并供所有调用方复用。禁用后每次调用都会建立新连接。",
+			"syncInterval": "覆盖此服务器的全局工具同步间隔。留空则使用全局设置。设置为 -1 可禁用此服务器的同步。",
+			"executionTimeout": "覆盖此服务器的全局工具执行超时。留空或设置为 0 则使用全局设置。",
+			"disableClient": "启用后，该客户端的连接、健康监控和工具同步器都会关闭。在重新启用之前，此客户端的工具将不可用于推理。",
+			"allowAllVirtualKeys": "启用后，此 MCP 服务器对所有虚拟密钥可用，无需逐个显式分配。默认允许所有工具。如果某个虚拟密钥对此服务器有显式 MCP 配置，该配置优先生效并覆盖此行为。"
+		},
+		"warnings": {
+			"stickinessOpen": "切换此项将在保存时立即生效：共享连接将立即打开。",
+			"stickinessClose": "切换此项将在保存时立即生效：现有共享连接将立即关闭。",
+			"oauthDisabled": "客户端被禁用期间无法轮换 OAuth 配置。请重新启用客户端后再更新。",
+			"oauthRotation": "更改任何 OAuth 配置字段都会立即让此 MCP 客户端上的所有当前会话（共享和按用户）退出登录。所有人都需要重新认证。",
+			"tokenExchangeEviction": "更改任何令牌交换字段都会立即清除此服务器的所有缓存交换令牌。每个调用方的下一次工具调用会重新交换新令牌。"
+		},
+		"oauthFields": {
+			"clientIdPlaceholder": "输入新的 OAuth 客户端 ID",
+			"clientIdHelper": "留空则保持现有凭据不变。",
+			"clientSecretPlaceholder": "输入新的 OAuth 客户端密钥"
+		},
+		"tokenExchange": {
+			"audienceTooltipEntra": "你在身份提供方注册的资源应用的应用程序（客户端）ID —— 一个纯 GUID，而不是“公开 API”下显示的 api://... 应用程序 ID URI。交换得到的令牌将以它为作用域。",
+			"audienceTooltipDefault": "此服务器在你的身份提供方注册时所用的资源标识符。交换得到的令牌将以它为作用域。",
+			"dedicatedDescription": "独立的身份提供方应用，仅针对此服务器。适用于大多数提供方。",
+			"idpDescription": "复用你的 SSO 登录应用自身的凭据。Microsoft Entra ID 必须使用此项。",
+			"entraWarning": "你的身份提供方是 Microsoft Entra ID —— 专用应用程序可能不可用，请切换到身份提供方应用程序。",
+			"clientIdPlaceholder": "bifrost-exchange or env.EXCHANGE_CLIENT_ID",
+			"clientSecretPlaceholder": "env.EXCHANGE_CLIENT_SECRET",
+			"clientSecretHelper": "公共客户端可省略。",
+			"authServerUrlHelper": "留空则使用当前部署的 SSO 登录 issuer。",
+			"scopesHelperDefault": "以逗号分隔。",
+			"scopesHelperEntra": "以逗号分隔。仅单独的 offline_access 会与受众的默认访问合并 —— 其他任何作用域都会完全替换默认值，而不是叠加。"
+		},
+		"tools": {
+			"allowAllLabel": "允许所有工具",
+			"allowAllDescription": "允许所有当前和未来的工具",
+			"availableTools": "可用工具（{{count}}）",
+			"description": "启用、自动执行此服务器提供的各个工具并为其设置价格。",
+			"allEnabled": "全部启用",
+			"noneEnabled": "未启用任何工具",
+			"enabledCount": "已启用 {{count}} 个",
+			"enableAllAria": "启用所有工具（{{status}}）",
+			"allAutoExecute": "全部自动执行",
+			"noneAutoExecute": "未设置自动执行",
+			"autoExecuteCount": "自动执行 {{count}} 个",
+			"autoExecuteAllAria": "自动执行所有工具（{{status}}）",
+			"toolName": "工具名称",
+			"enabled": "已启用",
+			"autoExecute": "自动执行",
+			"cost": "成本（USD）",
+			"autoExecuteAria": "了解自动执行与智能体模式",
+			"autoExecuteTooltip": "仅当 Bifrost 在智能体模式（Agent Mode）下运行 LLM 循环时生效。在 MCP 网关模式下，由所连接的客户端（Claude Desktop、Cursor 等）控制工具审批，此设置会被忽略。点击了解更多。",
+			"enableToolAria": "启用 {{name}}",
+			"disableToolAria": "禁用 {{name}}",
+			"enableAutoExecuteAria": "为 {{name}} 启用自动执行",
+			"disableAutoExecuteAria": "为 {{name}} 禁用自动执行",
+			"parametersSchema": "参数 Schema",
+			"noParameters": "未定义参数",
+			"noTools": "暂无可用工具"
+		},
+		"access": {
+			"allowAllVirtualKeys": "允许所有虚拟密钥",
+			"overrideNote": "在此处为某个虚拟密钥配置访问权限，将覆盖该密钥的 <span>允许所有虚拟密钥</span> 设置。",
+			"allToolsAllowed": "允许所有工具",
+			"noToolsAllowed": "不允许任何工具",
+			"selectTools": "选择工具...",
+			"allKeysAccess": "除非某个密钥有显式覆盖，否则所有虚拟密钥都可以访问此 MCP 服务器。",
+			"noKeysAccess": "没有虚拟密钥可以访问此 MCP 服务器"
+		},
+		"footer": {
+			"noChanges": "没有可保存的更改"
+		},
+		"unsavedDialog": {
+			"title": "未保存的更改",
+			"description": "你有未保存的更改。确定要离开吗？更改将会丢失。",
+			"discard": "放弃更改"
+		},
+		"toasts": {
+			"headerKeysRequiredTitle": "需要请求头名称",
+			"headerKeysRequiredDescription": "请至少声明一个用户必须提供的请求头名称。",
+			"updatedDescription": "MCP 客户端更新成功"
+		}
+	},
+	"clientForm": {
+		"title": "新建 MCP 服务器",
+		"description": "配置并连接到新的 Model Context Protocol 服务器。",
+		"name": {
+			"label": "名称",
+			"placeholder": "服务器名称",
+			"required": "请输入服务器名称",
+			"minLength": "服务器名称至少需要 3 个字符",
+			"maxLength": "服务器名称不能超过 50 个字符",
+			"format": "服务器名称只能包含字母、数字和下划线",
+			"noLeadingDigit": "服务器名称不能以数字开头"
+		},
+		"sections": {
+			"serverBehavior": {
+				"title": "服务器行为",
+				"description": "控制此服务器在代码模式和健康检查中的参与方式。"
+			},
+			"connection": {
+				"title": "连接与认证",
+				"description": "选择 Bifrost 如何连接到此服务器，以及（对于网络传输）请求如何认证。"
+			},
+			"headers": {
+				"title": "请求头",
+				"description": "随发送到此服务器的每个请求一起发送的静态请求头。"
+			},
+			"requiredHeaders": {
+				"title": "必需请求头",
+				"description": "以逗号分隔的请求头名称，每个调用方首次使用时必须提供，例如 X-API-Key、X-Tenant-ID。这些值按用户提交，不会存储在此服务器配置中。"
+			},
+			"staticHeaders": {
+				"title": "静态请求头",
+				"description": "可选，与每个调用方提供的值一起应用。"
+			},
+			"tokenExchange": {
+				"title": "令牌交换配置",
+				"description": "用于交换调用方身份令牌以访问此服务器的凭据与作用域。"
+			},
+			"oauth": {
+				"title": "OAuth 配置",
+				"description": "此服务器通过 OAuth 认证所使用的凭据与端点。"
+			},
+			"tls": {
+				"title": "TLS / 证书",
+				"description": "为连接此服务器的 HTTPS 连接配置证书验证。"
+			}
+		},
+		"labels": {
+			"codeModeServer": "代码模式服务器",
+			"codeModeAria": "了解代码模式",
+			"codeModeTooltip": "点击了解代码模式的更多信息",
+			"pingAvailable": "健康检查使用 Ping",
+			"persistentConnection": "保持持久连接",
+			"connectionType": "连接类型",
+			"connectionUrl": "连接 URL",
+			"authType": "认证类型",
+			"authScope": "认证范围",
+			"headerName": "请求头名称",
+			"headerValue": "请求头值",
+			"command": "命令",
+			"args": "参数（以逗号分隔）",
+			"envVars": "环境变量",
+			"create": "创建"
+		},
+		"selects": {
+			"connectionTypePlaceholder": "选择连接类型",
+			"http": "HTTP（Streamable）",
+			"sse": "服务器发送事件（SSE）",
+			"stdio": "STDIO",
+			"authTypePlaceholder": "选择认证类型",
+			"none": "无",
+			"headers": "请求头",
+			"oauth": "OAuth 2.0",
+			"tokenExchange": "令牌交换（On-Behalf-Of）",
+			"authScopePlaceholder": "选择认证范围",
+			"shared": "共享",
+			"perUser": "按用户"
+		},
+		"notes": {
+			"connectionLocked": "连接类型和认证设置后续无法更改。",
+			"dockerTitle": "Docker 提示",
+			"dockerBody": "如果不使用官方 Bifrost Docker 镜像，当所需命令（npx、python 等）未安装时，STDIO 连接可能无法工作。如果你在本地运行或使用包含必要依赖的自定义镜像，可以放心忽略此提示。"
+		},
+		"tooltips": {
+			"ping": "启用后使用轻量级 ping 方法进行健康检查。如果你的 MCP 服务器不支持 ping，请禁用 —— 将改用 listTools。",
+			"persistentConnection": "启用后保持一个共享连接打开并供所有调用方复用。禁用后每次调用都会建立新连接，与按用户认证类型相同。仅适用于 HTTP 连接；SSE 和 STDIO 始终保持持久连接。",
+			"envVars": "为每个变量添加值，或留空以从 Bifrost 运行所在的环境中读取值。"
+		},
+		"envValuePlaceholder": "值（留空则使用宿主环境）",
+		"tokenExchange": {
+			"audience": "受众",
+			"audienceTooltipEntra": "你在身份提供方注册的资源应用的应用程序（客户端）ID —— 一个纯 GUID，而不是“公开 API”下显示的 api://... 应用程序 ID URI。交换得到的令牌将以它为作用域。",
+			"audienceTooltipDefault": "此服务器在你的身份提供方注册时所用的资源标识符。交换得到的令牌将以它为作用域。",
+			"exchangeApplication": "交换应用程序",
+			"dedicatedDescription": "独立的身份提供方应用，仅针对此服务器。适用于大多数提供方。",
+			"idpDescription": "复用你的 SSO 登录应用自身的凭据。Microsoft Entra ID 必须使用此项。",
+			"entraWarning": "你的身份提供方是 Microsoft Entra ID —— 专用应用程序可能无法工作，请切换到身份提供方应用程序。",
+			"exchangeClientId": "交换客户端 ID",
+			"clientIdTooltip": "你在身份提供方的一个专用应用程序，已启用令牌交换（或代表用户）授权，并有权限请求此受众。不是 SSO 登录应用。使用上方身份提供方凭据时将被忽略。",
+			"clientIdPlaceholder": "bifrost-exchange or env.EXCHANGE_CLIENT_ID",
+			"clientSecretPlaceholder": "env.EXCHANGE_CLIENT_SECRET",
+			"exchangeClientSecretOptional": "交换客户端密钥（可选）",
+			"clientSecretHelper": "公共客户端可省略。",
+			"authServerUrlOptional": "授权服务器 URL（可选）",
+			"authServerUrlTooltip": "仅当上方受众注册在不同于你 SSO 登录所用授权服务器的另一个授权服务器时才需要填写 —— 例如 Okta 按资源划分的自定义授权服务器。留空则使用你 SSO 登录的 issuer，这对大多数提供方是正确的。",
+			"scopesOptional": "作用域（可选）",
+			"scopesHelper": "以逗号分隔、在交换令牌上请求的作用域。包含 <code>offline_access</code>（如果你的身份提供方支持），以便保留的发现凭据能在后台自行续期。",
+			"scopesHelperEntra": "仅单独的 <code>offline_access</code> 会与受众的默认资源访问合并 —— 其他任何作用域都会完全替换默认值，而不是叠加。"
+		},
+		"oauthFields": {
+			"scopesOptional": "作用域（可选，以逗号分隔）",
+			"resource": "资源",
+			"clientIdOptional": "OAuth 客户端 ID（可选）",
+			"clientIdPlaceholder": "your-client-id（留空则自动生成）",
+			"clientIdHelper": "留空且提供方支持时，将通过动态注册自动生成",
+			"clientIdTooltip": "留空以使用动态客户端注册（RFC 7591）。如果 OAuth 提供方支持，Bifrost 会自动完成注册。",
+			"clientSecretOptional": "OAuth 客户端密钥（PKCE 时可选）",
+			"clientSecretPlaceholder": "your-client-secret",
+			"clientSecretHelper": "使用 PKCE 的公共客户端可留空",
+			"authorizeUrlOptional": "授权 URL（可选，自动发现）",
+			"tokenUrlOptional": "令牌 URL（可选，自动发现）",
+			"registrationUrlOptional": "注册 URL（可选，自动发现）"
+		},
+		"errors": {
+			"connectionUrlRequired": "请输入连接 URL",
+			"connectionUrlFormat": "连接 URL 必须以 http:// 或 https:// 开头",
+			"commandRequired": "STDIO 连接必须提供命令",
+			"commandSpecialChars": "命令不能包含特殊 shell 字符",
+			"authorizeUrlFormat": "授权 URL 必须以 http:// 或 https:// 开头",
+			"tokenUrlFormat": "令牌 URL 必须以 http:// 或 https:// 开头",
+			"registrationUrlFormat": "注册 URL 必须以 http:// 或 https:// 开头",
+			"audienceRequired": "令牌交换必须提供受众",
+			"exchangeClientIdRequired": "令牌交换必须提供交换客户端 ID",
+			"headerValueRequired": "请求头 \"{{key}}\" 必须有值"
+		},
+		"toasts": {
+			"invalidResourceTitle": "资源 URI 无效",
+			"invalidResourceDescription": "OAuth 资源必须是不带 fragment 的绝对 URI。",
+			"headerKeysRequiredTitle": "需要请求头名称",
+			"headerKeysRequiredDescription": "请至少声明一个用户必须提供的请求头名称。",
+			"created": "服务器已创建",
+			"oauthConnected": "MCP 服务器已通过 OAuth 连接",
+			"oauthErrorTitle": "OAuth 错误",
+			"perUserHeadersConnected": "MCP 服务器已通过按用户请求头连接"
+		}
+	},
+	"usageGuide": {
+		"trigger": "连接智能体",
+		"title": "安装 Bifrost MCP",
+		"description": "为你的智能体客户端（harness）生成可直接复制的命令或配置。",
+		"harness": "客户端",
+		"virtualKey": "虚拟密钥",
+		"searchVirtualKeys": "搜索虚拟密钥",
+		"noVirtualKeys": "未找到处于启用状态的虚拟密钥。",
+		"serverAccess": "服务器访问",
+		"allServers": "所有服务器",
+		"selectedServers": "选定服务器",
+		"loadingServers": "正在加载可用服务器...",
+		"selectServers": "选择允许的 MCP 服务器",
+		"noServers": "未找到允许的 MCP 服务器。",
+		"platform": "平台",
+		"scope": {
+			"local": "本地",
+			"project": "项目",
+			"user": "用户",
+			"global": "全局",
+			"workspace": "工作区"
+		},
+		"commandCopied": "命令已复制",
+		"configCopied": "配置已复制",
+		"install": "安装",
+		"command": "命令",
+		"config": "配置",
+		"copied": "已复制",
+		"copy": "复制",
+		"copiedAria": "{{label}} 已复制",
+		"copyAria": "复制 {{label}}",
+		"finishSelections": "请先完成上述选择",
+		"emptyServers": "请选择服务器，或使用网关根路径。",
+		"emptyCommand": "选择一个虚拟密钥以生成命令。",
+		"emptyConfig": "选择一个虚拟密钥以生成配置。",
+		"registrationServers_one": "{{count}} 个服务器",
+		"registrationServers_other": "{{count}} 个服务器"
 	}
 }

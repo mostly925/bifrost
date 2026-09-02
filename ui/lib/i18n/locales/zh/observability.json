@@ -1,0 +1,171 @@
+{
+	"common": {
+		"noChanges": "没有更改",
+		"noChangesAndErrors": "没有更改，且存在校验错误",
+		"fixValidationErrors": "请先修正校验错误"
+	},
+	"layout": {
+		"noPermissionEntity": "可观测性设置"
+	},
+	"view": {
+		"providers": "服务提供方",
+		"comingSoon": "即将推出"
+	},
+	"otel": {
+		"destination": "OTEL collector",
+		"toast": {
+			"updated": "OTEL 配置更新成功",
+			"updateFailed": "更新 OTEL 配置失败"
+		},
+		"configureTracing": "配置插件追踪",
+		"traceTypes": {
+			"genaiExtension": "OTel GenAI 扩展（推荐）",
+			"vercel": "Vercel AI SDK",
+			"openInference": "Arize OpenInference",
+			"comingSoon": "即将推出"
+		},
+		"addProfile": "添加配置",
+		"profile": {
+			"defaultName": "配置 {{index}}",
+			"disabled": "已禁用",
+			"metricsOnly": "仅指标",
+			"error": "错误",
+			"enableAria": "启用配置",
+			"removeTitle": "移除配置"
+		},
+		"connector": {
+			"enabled": "启用",
+			"deleteTitle": "删除连接器",
+			"save": "保存 OTEL 配置"
+		},
+		"service": {
+			"label": "服务名称",
+			"description": "如果留空，服务名称将被设置为 \"bifrost\""
+		},
+		"protocol": {
+			"label": "协议",
+			"description": "追踪与指标导出共同使用的传输协议。",
+			"placeholder": "选择协议"
+		},
+		"headers": {
+			"common": "公共请求头",
+			"commonDescription": "同时发送到追踪与指标端点。",
+			"trace": "追踪请求头",
+			"traceDescription": "在公共请求头之外，仅发送到追踪端点。",
+			"metrics": "指标请求头",
+			"metricsDescription": "在公共请求头之外，仅发送到指标端点（例如 Databricks 表名）。"
+		},
+		"tls": {
+			"insecureLabel": "不安全（跳过 TLS）",
+			"insecureDescription": "跳过 TLS 校验。关闭此项以使用带系统根证书或自定义 CA 证书的 TLS。",
+			"caCertLabel": "TLS CA 证书路径",
+			"caCertDescription": "Bifrost 服务器上 CA 证书的文件路径。留空则使用系统根证书。"
+		},
+		"tabs": {
+			"traces": "追踪",
+			"metrics": "指标"
+		},
+		"traceExport": {
+			"title": "启用追踪导出",
+			"description": "将 span 导出到 OTLP collector。仅指标场景可关闭此项。",
+			"collectorUrl": "OTLP Collector URL",
+			"format": "格式",
+			"typePlaceholder": "选择追踪格式",
+			"exportTimeout": "导出超时（秒）",
+			"exportTimeoutDescription": "单次追踪导出的最长时间（1-60 秒）。超过该时限后追踪会被丢弃而非重试，因此 collector 不可用不会拖慢请求处理。",
+			"requestHeaders": "请求头",
+			"optional": "（可选）",
+			"requestHeadersDescription": "以逗号分隔的请求头列表，将捕获并作为 span 属性导出。支持精确名称与通配符模式（例如 <1>x-custom-*</1> 捕获该前缀的所有请求头，<3>*</3> 捕获所有请求头；注意 <5>*</5> 会捕获 Authorization 等敏感请求头）。",
+			"disableContentLogging": "禁用内容记录",
+			"disableContentLoggingDescription": "启用后，导出的 span 将不包含消息内容（输入/输出消息、工具定义以及工具调用的参数/结果），仅向 collector 发送模型、Token、延迟等元数据。",
+			"groupBySession": "按会话分组追踪",
+			"groupBySessionDescription": "启用后，携带相同 x-bf-session-id 请求头的请求会被归入同一条追踪，每个请求作为一个顶层同级 span。携带入站 W3C traceparent 的请求保持在其自身的分布式追踪中，不受影响。",
+			"disableRootSpanContent": "禁用根 span 内容",
+			"disableRootSpanContentDescription": "启用后，仅根 span 中的输入/输出消息内容会被丢弃；底层生成（llm.call）span 仍保留完整内容。"
+		},
+		"metricsExport": {
+			"title": "启用指标导出",
+			"description": "将指标推送到 OTEL Collector，以便在集群部署中正确聚合",
+			"endpoint": "指标端点",
+			"pushInterval": "推送间隔（秒）",
+			"pushIntervalDescription": "推送指标的频率（1-300 秒）"
+		}
+	},
+	"prometheus": {
+		"toast": {
+			"updated": "Prometheus 配置更新成功",
+			"updateFailed": "更新 Prometheus 配置失败"
+		},
+		"tabs": {
+			"pull": "拉取模式",
+			"push": "推送模式"
+		},
+		"actions": {
+			"save": "保存 Prometheus 配置"
+		},
+		"pull": {
+			"title": "拉取式抓取",
+			"description": "Prometheus 可以从 /metrics 端点抓取指标",
+			"endpoint": "指标端点",
+			"scrapeHint": "请配置你的 Prometheus 服务器抓取该端点。仅在启用拉取式抓取时提供该端点。"
+		},
+		"push": {
+			"title": "推送模式（Push Gateway）",
+			"description": "将指标推送到 Prometheus Push Gateway，以便在集群部署中正确聚合",
+			"multiNodeWarning": "如果你运行多个 Bifrost 节点，请使用 Push Gateway 以获得准确的指标。拉取式 /metrics 抓取可能会遗漏负载均衡器背后的节点。",
+			"gatewayUrl": "Push Gateway URL",
+			"gatewayUrlDescription": "你的 Prometheus Push Gateway 地址",
+			"jobName": "Job 名称",
+			"jobNameDescription": "指标的 Job 标签",
+			"pushInterval": "推送间隔（秒）",
+			"pushIntervalDescription": "推送频率（1-300 秒）",
+			"instanceId": "实例 ID",
+			"instanceIdTooltip": "用于在指标中标识该 Bifrost 实例。未设置时自动使用主机名。",
+			"instanceIdPlaceholder": "根据主机名自动生成",
+			"addBasicAuth": "添加 Basic Auth",
+			"basicAuth": "Basic 认证",
+			"removeBasicAuthAria": "移除 Basic Auth",
+			"username": "用户名",
+			"usernamePlaceholder": "用户名或 env.PG_USER",
+			"password": "密码",
+			"passwordPlaceholder": "密码或 env.PG_PASS"
+		},
+		"tooltips": {
+			"noChangesInTab": "当前标签页没有更改",
+			"fixOtherTab": "请先修正“{{tab}}”标签页中的校验错误再保存",
+			"fixValidationErrors": "请先修正校验错误再保存"
+		}
+	},
+	"maxim": {
+		"toast": {
+			"updated": "Maxim 配置更新成功",
+			"updateFailed": "更新 Maxim 配置失败"
+		},
+		"view": {
+			"configuration": "配置",
+			"repoIdHint": "你可以在请求头中携带 <1>x-bf-log-repo-id</1> 并指定仓库 ID，从而记录到特定仓库。"
+		},
+		"form": {
+			"apiKey": "API Key",
+			"apiKeyPlaceholder": "输入你的 Maxim API key",
+			"logRepoId": "日志仓库 ID（可选）",
+			"logRepoIdPlaceholder": "输入日志仓库 ID",
+			"requestHeaders": "请求头",
+			"optional": "（可选）",
+			"requestHeadersDescription": "以逗号分隔的请求头列表，将捕获并作为追踪标签附加。支持精确名称与通配符模式（例如 <1>x-custom-*</1> 捕获该前缀的所有请求头，<3>*</3> 捕获所有请求头；注意 <5>*</5> 会捕获 Authorization 等敏感请求头）。",
+			"save": "保存 Maxim 配置"
+		}
+	},
+	"tracing": {
+		"toast": {
+			"saved": "插件追踪配置已保存",
+			"stillLoading": "插件列表仍在加载中，请稍后再保存。",
+			"notConfigured": "{{destination}}尚未配置。请先保存其配置，再配置插件追踪。"
+		},
+		"title": "配置插件追踪",
+		"description": "选择哪些插件 hook 的 span 会导出到{{destination}}。禁用某个插件只会将其 span 从追踪中移除，不影响其执行。",
+		"pluginsLabel": "插件",
+		"toggleAllAria": "切换所有插件追踪",
+		"configPrecedence": "如果在 config.json 的 <3>{{pluginName}}</3> 插件配置中设置了 <1>plugin_span_filter</1>，重启 Bifrost 后它将优先于这些设置。"
+	}
+}

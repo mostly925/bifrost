@@ -1,0 +1,168 @@
+{
+	"common": {
+		"viewLogs": "查看日志",
+		"deleting": "删除中...",
+		"noPermission": "你没有执行此操作的权限",
+		"fixValidationErrors": "请先修正校验错误",
+		"noChanges": "没有需要保存的更改"
+	},
+	"pagination": {
+		"entries": "第 {{from}}-{{to}} 条，共 {{total}} 条",
+		"page": "第",
+		"of": "页，共 {{total}} 页",
+		"prevAria": "上一页",
+		"nextAria": "下一页"
+	},
+	"rateLimit": {
+		"tokens": "{{value}} tokens",
+		"tokensUsed": "{{current}} / {{max}} tokens",
+		"requests": "{{value}} 次请求",
+		"requestsUsed": "{{current}} / {{max}} 次请求"
+	},
+	"errors": {
+		"load": {
+			"governance": "加载治理数据失败。",
+			"teams": "加载团队失败：{{error}}",
+			"customers": "加载客户失败：{{error}}"
+		},
+		"limits": {
+			"tokenMin": "最大 Token 数必须至少为 1",
+			"tokenDurationRequired": "Token 重置周期为必填项",
+			"requestMin": "最大请求数必须至少为 1",
+			"requestDurationRequired": "请求重置周期为必填项"
+		}
+	},
+	"calendar": {
+		"title": "按日历周期对齐",
+		"description": "在每个周期开始时（例如每月 1 日）重置预算和速率限制，而不是从创建日期起滚动计算。季度预算始终对齐到财季起始日。仅适用于一天及以上的周期。",
+		"warningTitle": "重置预算和速率限制用量？",
+		"warningDescription": "启用日历对齐将把该{{owner}}的预算用量重置为 <1>$0.00</1>，并把 token/请求速率限制计数器重置为 <3>0</3>，然后将各重置日期对齐到其当前周期的起点（例如一天、一周、一个月或一年的开始）。用量重置无法撤销，但日历对齐之后可以关闭。此更改将在保存时生效。",
+		"warningConfirm": "启用日历对齐"
+	},
+	"teams": {
+		"owner": "团队",
+		"title": "团队",
+		"description": "以共享预算和访问控制将用户组织为团队。",
+		"add": "添加团队",
+		"searchAria": "按名称搜索团队",
+		"searchPlaceholder": "按名称搜索...",
+		"table": {
+			"name": "名称",
+			"customer": "客户",
+			"budget": "预算",
+			"rateLimit": "速率限制",
+			"virtualKeys": "虚拟密钥"
+		},
+		"noMatches": "未找到匹配的团队。",
+		"limitReached": "已达限额",
+		"unknownCustomer": "未知客户",
+		"keysCount_one": "{{count}} 个虚拟密钥",
+		"keysCount_other": "{{count}} 个虚拟密钥",
+		"actionsAria": "团队 {{name}} 的操作",
+		"empty": {
+			"title": "团队通过共享预算和访问控制来组织用户",
+			"description": "创建团队以对用户分组、分配客户账户，并在团队级别设置预算和速率限制。",
+			"readMoreAria": "了解更多团队信息（在新标签页打开）",
+			"readMore": "了解更多",
+			"addAria": "添加你的第一个团队",
+			"add": "添加团队"
+		},
+		"deleteDialog": {
+			"title": "删除团队",
+			"description": "确定要删除 \"{{name}}\" 吗？这也会将该团队关联的所有虚拟密钥取消分配。此操作无法撤销。"
+		},
+		"toasts": {
+			"deleted": "团队已删除",
+			"updated": "团队已更新",
+			"created": "团队已创建"
+		},
+		"sheet": {
+			"titleEdit": "编辑团队",
+			"titleCreate": "创建团队",
+			"descriptionEdit": "更新团队信息和设置。",
+			"descriptionCreate": "创建新团队以组织用户并管理共享资源。",
+			"nameLabel": "团队名称 *",
+			"namePlaceholder": "例如：工程团队",
+			"customerLabel": "客户（可选）",
+			"customerPlaceholder": "选择客户...",
+			"customerHint": "可分配给客户，也可保持独立。",
+			"budgets": "预算",
+			"addBudget": "+ 添加预算",
+			"noBudgets": "暂无预算。点击\"添加预算\"以设置消费限额。",
+			"budgetRowLabel": "预算 #{{index}}：最大消费额（USD）",
+			"maximumTokens": "最大 Token 数",
+			"maximumRequests": "最大请求数",
+			"currentUsage": "当前用量",
+			"budgetWithDuration": "预算（{{duration}}）",
+			"tokens": "Token",
+			"requests": "请求",
+			"lastReset": "上次重置：{{time}}",
+			"saveEdit": "更新团队",
+			"saveCreate": "创建团队",
+			"errors": {
+				"nameRequired": "团队名称为必填项",
+				"budgetMin": "预算 #{{index}} 的上限必须大于 $0.01",
+				"budgetDurationRequired": "预算 #{{index}} 的重置周期为必填项",
+				"budgetDistinctDurations": "每个预算的重置周期必须唯一"
+			}
+		}
+	},
+	"customers": {
+		"owner": "客户",
+		"title": "客户",
+		"description": "管理客户账户及其专属团队、预算和访问控制。",
+		"add": "添加客户",
+		"searchAria": "按名称搜索客户",
+		"searchPlaceholder": "按名称搜索...",
+		"table": {
+			"name": "名称",
+			"teams": "团队",
+			"budget": "预算",
+			"rateLimit": "速率限制",
+			"virtualKeys": "虚拟密钥"
+		},
+		"noMatches": "未找到匹配的客户。",
+		"limitReached": "已达限额",
+		"teamsCount_one": "{{count}} 个团队",
+		"teamsCount_other": "{{count}} 个团队",
+		"keysCount_one": "{{count}} 个虚拟密钥",
+		"keysCount_other": "{{count}} 个虚拟密钥",
+		"actionsAria": "客户 {{name}} 的操作",
+		"empty": {
+			"title": "客户拥有自己的团队、预算和访问控制",
+			"description": "创建客户账户以管理多租户用量、分配团队，并按客户设置消费与速率限制。",
+			"readMoreAria": "了解更多客户信息（在新标签页打开）",
+			"readMore": "了解更多",
+			"addAria": "添加你的第一个客户",
+			"add": "添加客户"
+		},
+		"deleteDialog": {
+			"title": "删除客户",
+			"description": "确定要删除 \"{{name}}\" 吗？这也会删除所有关联的团队并取消分配其虚拟密钥。此操作无法撤销。"
+		},
+		"toasts": {
+			"deleted": "客户已删除",
+			"updated": "客户已更新",
+			"created": "客户已创建"
+		},
+		"sheet": {
+			"titleEdit": "编辑客户",
+			"titleCreate": "创建客户",
+			"descriptionEdit": "更新客户信息和设置。",
+			"descriptionCreate": "创建新客户账户以组织团队并管理资源。",
+			"nameLabel": "客户名称 *",
+			"namePlaceholder": "例如：Acme 公司",
+			"nameHint": "此名称将用于标识该客户账户。",
+			"budgetLimits": "预算上限",
+			"maximumTokens": "最大 Token 数",
+			"maximumRequests": "最大请求数",
+			"saveEdit": "更新客户",
+			"saveCreate": "创建客户",
+			"errors": {
+				"nameRequired": "客户名称为必填项",
+				"budgetMin": "预算上限必须大于 $0.01",
+				"budgetUniquePeriods": "每个预算的重置周期必须唯一"
+			}
+		}
+	}
+}

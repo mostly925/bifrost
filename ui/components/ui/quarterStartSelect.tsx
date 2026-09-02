@@ -50,7 +50,7 @@ export default function QuarterStartSelect({ "data-testid": testId, value, onCha
 						<SelectValue />
 					</SelectTrigger>
 					<SelectContent>
-						{quarterStartMonthOptions.map((month) => (
+						{quarterStartMonthOptions().map((month) => (
 							<SelectItem key={month.value} value={month.value} data-testid={testId ? `${testId}-option-${month.value}` : undefined}>
 								{monthFormatter.format(new Date(Date.UTC(2026, Number(month.value) - 1, 1)))}
 							</SelectItem>

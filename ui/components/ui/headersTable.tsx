@@ -6,6 +6,7 @@ import { SecretVar } from "@/lib/types/mcp";
 import { cn } from "@/lib/utils";
 import { Trash } from "lucide-react";
 import React, { useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 // Support both plain string values and SecretVar objects
 type HeaderValue = string | SecretVar;
@@ -75,6 +76,7 @@ export function HeadersTable<T extends HeaderValue>({
 	renderKeyInput,
 	renderValueInput,
 }: HeadersTableProps<T>) {
+	const { t } = useTranslation("shared");
 	// Use explicit prop if provided, otherwise detect from existing values
 	const isSecretVarMode = useSecretVarInput ?? Object.values(value || {}).some((v) => isSecretVar(v));
 
@@ -214,11 +216,11 @@ export function HeadersTable<T extends HeaderValue>({
 				<Table className="table-fixed">
 					<TableHeader>
 						<TableRow>
-							<TableHead className="w-[40%] px-4 py-2">Name</TableHead>
-							<TableHead className="px-4 py-2">Value</TableHead>
+							<TableHead className="w-[40%] px-4 py-2">{t("ui.headersTable.name")}</TableHead>
+							<TableHead className="px-4 py-2">{t("ui.headersTable.value")}</TableHead>
 							{!isFixedKeys && (
 								<TableHead className="w-10 p-0">
-									<span className="sr-only">Actions</span>
+									<span className="sr-only">{t("ui.headersTable.actions")}</span>
 								</TableHead>
 							)}
 						</TableRow>
@@ -272,7 +274,7 @@ export function HeadersTable<T extends HeaderValue>({
 													disabled={disabled}
 												/>
 											)}
-											{hasConflict && <span className="text-destructive px-3 text-xs">Duplicate key</span>}
+											{hasConflict && <span className="text-destructive px-3 text-xs">{t("ui.headersTable.duplicateKey")}</span>}
 										</div>
 									</TableCell>
 									<TableCell className="p-2">

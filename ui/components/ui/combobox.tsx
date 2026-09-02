@@ -1,6 +1,7 @@
 import { Command as CommandPrimitive } from "cmdk";
 import { CheckIcon, ChevronDownIcon, XIcon } from "lucide-react";
 import * as React from "react";
+import { useTranslation } from "react-i18next";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -53,6 +54,7 @@ function Combobox({
 	defaultOpen = false,
 }: ComboboxRootProps) {
 	const [internalOpen, setInternalOpen] = React.useState(defaultOpen);
+	const { t } = useTranslation("shared");
 	const [inputValue, setInputValueState] = React.useState("");
 
 	const open = controlledOpen !== undefined ? controlledOpen : internalOpen;
@@ -121,6 +123,7 @@ function ComboboxInput({
 	autoFocus?: boolean;
 }) {
 	const { value, itemToStringLabel, onValueChange } = useComboboxContext();
+	const { t } = useTranslation("shared");
 
 	const displayValue = React.useMemo(() => {
 		if (Array.isArray(value)) return "";
@@ -141,12 +144,12 @@ function ComboboxInput({
 					className,
 				)}
 			>
-				<span className="truncate">{displayValue || placeholder || "Select..."}</span>
+				<span className="truncate">{displayValue || placeholder || t("ui.selectPlaceholder")}</span>
 				<div className="ml-2 flex shrink-0 items-center gap-1">
 					{showClear && value && (
 						<button
 							type="button"
-							aria-label="Clear selection"
+							aria-label={t("ui.clearSelection")}
 							data-testid="combobox-clear-button"
 							className="rounded-sm opacity-50 hover:opacity-100"
 							onClick={(e) => {
@@ -206,12 +209,13 @@ function ComboboxContent({
 
 function ComboboxList({ className, ...props }: React.ComponentProps<typeof CommandPrimitive.List>) {
 	const { inputValue, setInputValue } = useComboboxContext();
+	const { t } = useTranslation("shared");
 
 	return (
 		<>
 			<div className="flex items-center border-b px-3">
 				<CommandPrimitive.Input
-					placeholder="Search..."
+					placeholder={t("ui.searchPlaceholder")}
 					className="placeholder:text-muted-foreground flex h-8 w-full bg-transparent py-3 text-sm outline-none disabled:cursor-not-allowed disabled:opacity-50"
 					value={inputValue}
 					autoFocus
@@ -460,6 +464,7 @@ function ComboboxSelect(props: ComboboxSelectProps) {
 
 	const [open, setOpen] = React.useState(false);
 	const [query, setQuery] = React.useState("");
+	const { t } = useTranslation("shared");
 
 	const filtered = React.useMemo(() => {
 		if (disableSearch || !query) return options;
@@ -610,7 +615,7 @@ function ComboboxSelect(props: ComboboxSelectProps) {
 						{!props.hideClear && props.value && (
 							<button
 								type="button"
-								aria-label="Clear selection"
+								aria-label={t("ui.clearSelection")}
 								data-testid="combobox-select-clear-button"
 								className="rounded-sm opacity-50 hover:opacity-100"
 								onClick={(e) => {

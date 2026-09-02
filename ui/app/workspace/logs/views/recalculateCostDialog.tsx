@@ -5,6 +5,7 @@ import type { LogFilters as LogFiltersType } from "@/lib/types/logs";
 import { formatCompactNumber } from "@/lib/utils/numbers";
 import { Check, Info } from "lucide-react";
 import { useCallback, useState } from "react";
+import { useTranslation, Trans } from "react-i18next";
 
 export type RecalculateCostMode = "missing" | "all";
 
@@ -19,6 +20,7 @@ interface RecalculateCostDialogProps {
 }
 
 export function RecalculateCostDialog({ open, onOpenChange, filters, totalLogs, onConfirm }: RecalculateCostDialogProps) {
+	const { t } = useTranslation("logs");
 	const [mode, setMode] = useState<RecalculateCostMode>("missing");
 	// Lazy query for the missing-cost count: triggered imperatively on open and on
 	// selecting "Missing cost only", so there is no data-fetching effect to manage.
@@ -50,58 +52,60 @@ export function RecalculateCostDialog({ open, onOpenChange, filters, totalLogs, 
 				}}
 			>
 				<DialogHeader className="pb-2">
-					<DialogTitle>Recalculate costs</DialogTitle>
-					<DialogDescription>
-						The current time window and filters will be applied. Choose which logs to recompute cost for.
-					</DialogDescription>
+					<DialogTitle>{t("recalculate.title")}</DialogTitle>
+					<DialogDescription>{t("recalculate.description")}</DialogDescription>
 				</DialogHeader>
 
 				<div className="flex flex-col gap-2">
 					<RecalculateModeOption
 						selected={mode === "missing"}
 						onSelect={() => selectMode("missing")}
-						title="Missing cost only"
-						description="Only recompute logs that don't have a cost yet."
+						title={t("recalculate.missingTitle")}
+						description={t("recalculate.missingDescription")}
 					/>
 					<RecalculateModeOption
 						selected={mode === "all"}
 						onSelect={() => selectMode("all")}
-						title="All selected logs"
-						description="Recompute cost for every log matching the current filters."
+						title={t("recalculate.allTitle")}
+						description={t("recalculate.allDescription")}
 					/>
 				</div>
 
 				<p className="text-muted-foreground text-xs">
 					{mode === "all" ? (
-						<>
-							<span className="text-foreground font-medium">{formatCompactNumber(totalLogs)}</span> logs match the current filters and will
-							be recalculated.
-						</>
+						<Trans
+							ns="logs"
+							i18nKey="recalculate.allSummary"
+							values={{ count: formatCompactNumber(totalLogs) }}
+							components={{ 1: <span className="text-foreground font-medium" /> }}
+						/>
 					) : isFetching ? (
-						"Checking how many logs are missing a cost…"
+						t("recalculate.checking")
 					) : isError || missingCount === null ? (
-						"Logs in the current window that don't have a cost yet will be recalculated."
+						t("recalculate.missingFallback")
 					) : missingCount === 0 ? (
-						"All logs in the current window already have a cost."
+						t("recalculate.allHaveCost")
 					) : (
-						<>
-							<span className="text-foreground font-medium">{formatCompactNumber(missingCount)}</span> {missingCount === 1 ? "log" : "logs"}{" "}
-							in the current window {missingCount === 1 ? "doesn't have" : "don't have"} a cost yet and will be recalculated.
-						</>
+						<Trans
+							ns="logs"
+							i18nKey={missingCount === 1 ? "recalculate.missingSummary_one" : "recalculate.missingSummary_other"}
+							values={{ count: formatCompactNumber(missingCount) }}
+							components={{ 1: <span className="text-foreground font-medium" /> }}
+						/>
 					)}
 				</p>
 
 				<div className="text-muted-foreground flex items-start gap-2 rounded-md border border-amber-500/30 bg-amber-500/10 p-3 text-xs">
 					<Info className="mt-0.5 size-4 shrink-0 text-amber-600 dark:text-amber-500" />
-					<span>Affects the logs dashboard only. Governance budgets and usage tracking remain unchanged.</span>
+					<span>{t("recalculate.dashboardOnlyWarning")}</span>
 				</div>
 
 				<DialogFooter className="pt-0">
 					<Button variant="outline" size="sm" onClick={() => onOpenChange(false)}>
-						Cancel
+						{t("recalculate.cancel")}
 					</Button>
 					<Button size="sm" onClick={() => onConfirm(mode)} disabled={confirmDisabled}>
-						Recalculate
+						{t("recalculate.confirm")}
 					</Button>
 				</DialogFooter>
 			</DialogContent>
