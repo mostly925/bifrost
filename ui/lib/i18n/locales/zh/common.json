@@ -11,6 +11,7 @@
 		"models": {
 			"label": "模型",
 			"catalog": "模型目录",
+			"marketplace": "模型市场",
 			"providers": "模型供应商",
 			"budgetsLimits": "预算与限额",
 			"routingRules": "路由规则",

@@ -1,0 +1,53 @@
+{
+	"title": "Model Marketplace",
+	"subtitle_one": "{{count}} model available",
+	"subtitle_other": "{{count}} models available",
+	"searchPlaceholder": "Search models...",
+	"noPermissionEntity": "model marketplace",
+	"vkSelector": {
+		"placeholder": "All models",
+		"scoped": "Allowed by \"{{name}}\"",
+		"loading": "Resolving virtual key..."
+	},
+	"filters": {
+		"inputModality": "Input modality",
+		"outputModality": "Output modality",
+		"contextLength": "Context length",
+		"provider": "Provider",
+		"none": "Nothing available",
+		"clear": "Clear filters",
+		"modality": {
+			"text": "Text",
+			"image": "Image",
+			"audio": "Audio",
+			"video": "Video",
+			"file": "File",
+			"other": "Other"
+		},
+		"buckets": {
+			"le64k": "≤64K",
+			"64k-128k": "64K–128K",
+			"128k-256k": "128K–256K",
+			"256k-1m": "256K–1M",
+			"ge1m": "≥1M"
+		}
+	},
+	"card": {
+		"input": "Input",
+		"output": "Output",
+		"context": "Context",
+		"modalities": "Modalities",
+		"perMillion": " / 1M",
+		"copyModelId": "Copy model ID",
+		"copied": "Copied"
+	},
+	"empty": {
+		"title": "No models found",
+		"description": "Try adjusting your search or filters."
+	},
+	"emptyWhitelist": {
+		"title": "No models allowed",
+		"description": "This virtual key's whitelist does not allow any model in the catalog."
+	},
+	"error": "Failed to load models"
+}

@@ -26,6 +26,7 @@ declare module "i18next" {
 			mcpRegistry: typeof import("./locales/en/mcpRegistry.json");
 			modelLimits: typeof import("./locales/en/modelLimits.json");
 			modelCatalog: typeof import("./locales/en/modelCatalog.json");
+			modelMarketplace: typeof import("./locales/en/modelMarketplace.json");
 			oauth: typeof import("./locales/en/oauth.json");
 			oauthGrants: typeof import("./locales/en/oauthGrants.json");
 			observability: typeof import("./locales/en/observability.json");

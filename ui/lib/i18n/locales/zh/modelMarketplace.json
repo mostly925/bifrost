@@ -1,0 +1,53 @@
+{
+	"title": "模型市场",
+	"subtitle_one": "可用 {{count}} 个模型",
+	"subtitle_other": "可用 {{count}} 个模型",
+	"searchPlaceholder": "搜索模型...",
+	"noPermissionEntity": "模型市场",
+	"vkSelector": {
+		"placeholder": "全部模型",
+		"scoped": "仅显示「{{name}}」白名单允许的模型",
+		"loading": "正在解析虚拟密钥..."
+	},
+	"filters": {
+		"inputModality": "输入模态",
+		"outputModality": "输出模态",
+		"contextLength": "上下文长度",
+		"provider": "厂商",
+		"none": "暂无可用项",
+		"clear": "清除筛选",
+		"modality": {
+			"text": "文本",
+			"image": "图像",
+			"audio": "音频",
+			"video": "视频",
+			"file": "文件",
+			"other": "其他"
+		},
+		"buckets": {
+			"le64k": "≤64K",
+			"64k-128k": "64K–128K",
+			"128k-256k": "128K–256K",
+			"256k-1m": "256K–1M",
+			"ge1m": "≥1M"
+		}
+	},
+	"card": {
+		"input": "输入",
+		"output": "输出",
+		"context": "上下文",
+		"modalities": "模态",
+		"perMillion": " / 百万 tokens",
+		"copyModelId": "复制模型 ID",
+		"copied": "已复制"
+	},
+	"empty": {
+		"title": "未找到模型",
+		"description": "请调整搜索词或筛选条件。"
+	},
+	"emptyWhitelist": {
+		"title": "没有可用模型",
+		"description": "该虚拟密钥的白名单未允许目录中的任何模型。"
+	},
+	"error": "加载模型失败"
+}

@@ -11,6 +11,7 @@
 		"models": {
 			"label": "Models",
 			"catalog": "Model Catalog",
+			"marketplace": "Model Marketplace",
 			"providers": "Model Providers",
 			"budgetsLimits": "Budgets & Limits",
 			"routingRules": "Routing Rules",

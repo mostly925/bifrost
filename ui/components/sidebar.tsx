@@ -44,6 +44,7 @@ import {
 	Shuffle,
 	Siren,
 	SlidersHorizontal,
+	Store,
 	Telescope,
 	ToolCase,
 	TrendingUp,
@@ -678,6 +679,13 @@ export default function AppSidebar() {
 						url: "/workspace/model-catalog",
 						icon: LayoutGrid,
 						description: "Overview of providers, keys, and usage",
+						hasAccess: hasModelProvidersAccess,
+					},
+					{
+						title: t("nav.models.marketplace"),
+						url: "/workspace/model-marketplace",
+						icon: Store,
+						description: "Models available to your virtual keys",
 						hasAccess: hasModelProvidersAccess,
 					},
 					{

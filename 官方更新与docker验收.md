@@ -48,6 +48,7 @@ docker images bifrost
 
 # 启动容器验证
 docker run -d --name bifrost -p 8080:8080 -v F:\bifrost\data:/app/data bifrost
+或者docker run -d --name bifrost -p 8080:8080 -v F:\bifrost\data:/app/data -e HTTP_PROXY="http://host.docker.internal:7890" -e HTTPS_PROXY="http://host.docker.internal:7890" bifrost
 docker logs -f bifrost
 ```
 
